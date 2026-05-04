@@ -2,20 +2,542 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scool</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg: #0d0d0f;
+            --surface: #18181c;
+            --card: #1f1f25;
+            --border: #2e2e38;
+            --accent: #f0c040;
+            --accent2: #e05a2b;
+            --text: #f0ede8;
+            --muted: #7a7a8a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background-color: rgb(255, 255, 255);
-            color: rgb(0, 0, 0);
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 2px solid var(--accent);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            color: var(--accent);
+        }
+
+        .logo span { color: var(--accent2); }
+
+        .upload-btn {
+            background: var(--accent);
+            color: #0d0d0f;
+            border: none;
+            padding: 0.55rem 1.4rem;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: background 0.2s, transform 0.1s;
+            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+        }
+
+        .upload-btn:hover { background: #f7d165; transform: translateY(-1px); }
+
+        /* Upload area */
+        .upload-zone {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-zone.active { display: flex; }
+
+        .upload-box {
+            background: var(--card);
+            border: 2px dashed var(--accent);
+            width: min(520px, 92vw);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-box h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-box p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+
+        .file-input-label {
+            display: inline-block;
+            background: var(--accent);
+            color: #0d0d0f;
+            padding: 0.7rem 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+            transition: background 0.2s;
+        }
+        .file-input-label:hover { background: #f7d165; }
+
+        #fileInput { display: none; }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .close-btn:hover { color: var(--text); }
+
+        /* Main content */
+        main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--muted);
+        }
+        .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.4; }
+        .empty-state p { font-size: 1.1rem; }
+
+        /* Video grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: border-color 0.2s, transform 0.2s;
+            cursor: pointer;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .video-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .video-thumb {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #111;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.4);
+            transition: background 0.2s;
+        }
+        .video-card:hover .play-overlay { background: rgba(0,0,0,0.2); }
+
+        .play-icon {
+            width: 52px; height: 52px;
+            background: var(--accent);
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+            margin-left: 6px;
+        }
+
+        .video-info { padding: 1rem; }
+
+        .video-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.3rem;
+        }
+
+        .video-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.9rem; }
+
+        .card-actions { display: flex; gap: 0.5rem; }
+
+        .btn-watch, .btn-download, .btn-delete {
+            flex: 1;
+            padding: 0.45rem 0;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+        }
+        .btn-watch { background: var(--accent); color: #0d0d0f; }
+        .btn-download { background: var(--border); color: var(--text); }
+        .btn-delete { background: #3a1818; color: #e06060; }
+        .btn-watch:hover, .btn-download:hover, .btn-delete:hover { opacity: 0.8; }
+
+        /* Video player modal */
+        .player-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .player-modal.active { display: flex; }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: min(900px, 96vw);
+            padding: 0 0 0.75rem;
+        }
+
+        .player-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+        }
+
+        .player-close {
+            background: none;
+            border: 2px solid var(--border);
+            color: var(--muted);
+            width: 36px; height: 36px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .player-close:hover { border-color: var(--accent2); color: var(--text); }
+
+        .player-video {
+            width: min(900px, 96vw);
+            max-height: 70vh;
+            background: #000;
+            display: block;
+        }
+
+        /* Upload progress */
+        .progress-bar-wrap {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin-top: 1.2rem;
+            display: none;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        .upload-status {
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            color: var(--muted);
         }
     </style>
 </head>
 <body>
 
-    <h1>Fun</h1>
-    <p>This is a simple paragraph of text on a basic HTML page.</p>
-    
-    <a href="https://google.com">Visit Google</a>
+<header>
+    <div class="logo">SC<span>OO</span>L</div>
+    <button class="upload-btn" onclick="openUpload()">+ UPLOAD VIDEO</button>
+</header>
 
+<!-- Upload Modal -->
+<div class="upload-zone" id="uploadZone">
+    <div class="upload-box" id="dropArea">
+        <button class="close-btn" onclick="closeUpload()">✕</button>
+        <h2>Upload Video</h2>
+        <p>Drop a video file here or click to browse</p>
+        <label class="file-input-label" for="fileInput">Choose File</label>
+        <input type="file" id="fileInput" accept="video/*" onchange="handleFile(this.files[0])">
+        <div class="progress-bar-wrap" id="progressWrap">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="upload-status" id="uploadStatus"></div>
+    </div>
+</div>
+
+<!-- Player Modal -->
+<div class="player-modal" id="playerModal">
+    <div class="player-header">
+        <div class="player-title" id="playerTitle">Video</div>
+        <button class="player-close" onclick="closePlayer()">✕</button>
+    </div>
+    <video class="player-video" id="playerVideo" controls></video>
+</div>
+
+<main>
+    <div class="section-title">YOUR VIDEOS</div>
+    <div id="emptyState" class="empty-state">
+        <div class="icon">🎬</div>
+        <p>No videos yet — upload one to get started!</p>
+    </div>
+    <div class="video-grid" id="videoGrid"></div>
+</main>
+
+<script>
+    // Storage: store video metadata in localStorage, blobs as object URLs (session only)
+    // Since localStorage can't hold video files, we store them as IndexedDB blobs.
+
+    const DB_NAME = 'scoolVideos';
+    const STORE = 'videos';
+    let db;
+
+    function openDB() {
+        return new Promise((res, rej) => {
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onupgradeneeded = e => {
+                e.target.result.createObjectStore(STORE, { keyPath: 'id' });
+            };
+            req.onsuccess = e => { db = e.target.result; res(db); };
+            req.onerror = rej;
+        });
+    }
+
+    function dbGetAll() {
+        return new Promise((res, rej) => {
+            const tx = db.transaction(STORE, 'readonly');
+            const req = tx.objectStore(STORE).getAll();
+            req.onsuccess = () => res(req.result);
+            req.onerror = rej;
+        });
+    }
+
+    function dbPut(obj) {
+        return new Promise((res, rej) => {
+            const tx = db.transaction(STORE, 'readwrite');
+            tx.objectStore(STORE).put(obj);
+            tx.oncomplete = res;
+            tx.onerror = rej;
+        });
+    }
+
+    function dbDelete(id) {
+        return new Promise((res, rej) => {
+            const tx = db.transaction(STORE, 'readwrite');
+            tx.objectStore(STORE).delete(id);
+            tx.oncomplete = res;
+            tx.onerror = rej;
+        });
+    }
+
+    function formatSize(bytes) {
+        if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+        return (bytes/(1024*1024)).toFixed(1) + ' MB';
+    }
+
+    function formatDate(ts) {
+        return new Date(ts).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+    }
+
+    async function renderVideos() {
+        const videos = await dbGetAll();
+        const grid = document.getElementById('videoGrid');
+        const empty = document.getElementById('emptyState');
+        grid.innerHTML = '';
+        if (!videos.length) { empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+
+        videos.sort((a,b) => b.date - a.date).forEach(v => {
+            const url = URL.createObjectURL(new Blob([v.data], { type: v.type }));
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `
+                <div class="video-thumb">
+                    <video src="${url}" muted preload="metadata"></video>
+                    <div class="play-overlay"><div class="play-icon"></div></div>
+                </div>
+                <div class="video-info">
+                    <div class="video-name" title="${v.name}">${v.name}</div>
+                    <div class="video-meta">${formatSize(v.size)} &nbsp;·&nbsp; ${formatDate(v.date)}</div>
+                    <div class="card-actions">
+                        <button class="btn-watch" onclick="watchVideo('${v.id}')">▶ WATCH</button>
+                        <button class="btn-download" onclick="downloadVideo('${v.id}')">⬇ SAVE</button>
+                        <button class="btn-delete" onclick="deleteVideo('${v.id}')">✕ DEL</button>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    async function watchVideo(id) {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).get(id);
+        req.onsuccess = () => {
+            const v = req.result;
+            const url = URL.createObjectURL(new Blob([v.data], { type: v.type }));
+            document.getElementById('playerTitle').textContent = v.name;
+            const player = document.getElementById('playerVideo');
+            player.src = url;
+            player.play();
+            document.getElementById('playerModal').classList.add('active');
+        };
+    }
+
+    async function downloadVideo(id) {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).get(id);
+        req.onsuccess = () => {
+            const v = req.result;
+            const url = URL.createObjectURL(new Blob([v.data], { type: v.type }));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = v.name;
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        };
+    }
+
+    async function deleteVideo(id) {
+        if (!confirm('Delete this video?')) return;
+        await dbDelete(id);
+        renderVideos();
+    }
+
+    function closePlayer() {
+        const player = document.getElementById('playerVideo');
+        player.pause();
+        player.src = '';
+        document.getElementById('playerModal').classList.remove('active');
+    }
+
+    function openUpload() {
+        document.getElementById('uploadZone').classList.add('active');
+    }
+    function closeUpload() {
+        document.getElementById('uploadZone').classList.remove('active');
+        document.getElementById('fileInput').value = '';
+        document.getElementById('progressWrap').style.display = 'none';
+        document.getElementById('uploadStatus').textContent = '';
+    }
+
+    function handleFile(file) {
+        if (!file || !file.type.startsWith('video/')) {
+            alert('Please select a video file.');
+            return;
+        }
+        const status = document.getElementById('uploadStatus');
+        const progressWrap = document.getElementById('progressWrap');
+        const progressFill = document.getElementById('progressFill');
+
+        progressWrap.style.display = 'block';
+        progressFill.style.width = '0%';
+        status.textContent = 'Reading file...';
+
+        const reader = new FileReader();
+        reader.onprogress = e => {
+            if (e.lengthComputable) {
+                const pct = Math.round((e.loaded / e.total) * 100);
+                progressFill.style.width = pct + '%';
+            }
+        };
+        reader.onload = async e => {
+            progressFill.style.width = '100%';
+            status.textContent = 'Saving...';
+            const videoObj = {
+                id: 'v_' + Date.now() + '_' + Math.random().toString(36).slice(2),
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                date: Date.now(),
+                data: e.target.result
+            };
+            await dbPut(videoObj);
+            status.textContent = '✓ Uploaded!';
+            setTimeout(() => {
+                closeUpload();
+                renderVideos();
+            }, 800);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Drag & drop
+    const dropArea = document.getElementById('dropArea');
+    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.style.borderColor = 'var(--accent2)'; });
+    dropArea.addEventListener('dragleave', () => { dropArea.style.borderColor = 'var(--accent)'; });
+    dropArea.addEventListener('drop', e => {
+        e.preventDefault();
+        dropArea.style.borderColor = 'var(--accent)';
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
+    });
+
+    // Close modals on backdrop click
+    document.getElementById('uploadZone').addEventListener('click', e => {
+        if (e.target === document.getElementById('uploadZone')) closeUpload();
+    });
+    document.getElementById('playerModal').addEventListener('click', e => {
+        if (e.target === document.getElementById('playerModal')) closePlayer();
+    });
+
+    // Init
+    openDB().then(renderVideos);
+</script>
 </body>
 </html>
