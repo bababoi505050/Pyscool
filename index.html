@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scool</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
 
@@ -17,7 +16,6 @@
             --accent2: #e05a2b;
             --text: #f0ede8;
             --muted: #7a7a8a;
-            --green: #3ecf6e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -27,7 +25,6 @@
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
         header {
@@ -41,219 +38,281 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            gap: 1rem;
         }
 
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 4px; color: var(--accent); flex-shrink: 0; }
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            color: var(--accent);
+        }
+
         .logo span { color: var(--accent2); }
 
-        nav { display: flex; gap: 0; height: 100%; align-items: flex-end; }
-
-        .nav-tab {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            font-size: 1rem;
-            color: var(--muted);
-            padding: 0 1.2rem;
-            height: 42px;
-            line-height: 42px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            border-bottom: 3px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
-            white-space: nowrap;
-        }
-        .nav-tab:hover { color: var(--text); }
-        .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-        .header-btn {
+        .upload-btn {
             background: var(--accent);
             color: #0d0d0f;
             border: none;
-            padding: 0.5rem 1.2rem;
+            padding: 0.55rem 1.4rem;
             font-family: 'DM Sans', sans-serif;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             cursor: pointer;
             letter-spacing: 1px;
             transition: background 0.2s, transform 0.1s;
             clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
-            white-space: nowrap;
-            flex-shrink: 0;
         }
-        .header-btn:hover { background: #f7d165; transform: translateY(-1px); }
-        .header-btn.hidden { display: none; }
 
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
+        .upload-btn:hover { background: #f7d165; transform: translateY(-1px); }
 
+        /* Upload area */
+        .upload-zone {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-zone.active { display: flex; }
+
+        .upload-box {
+            background: var(--card);
+            border: 2px dashed var(--accent);
+            width: min(520px, 92vw);
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .upload-box h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-box p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
+
+        .file-input-label {
+            display: inline-block;
+            background: var(--accent);
+            color: #0d0d0f;
+            padding: 0.7rem 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
+            transition: background 0.2s;
+        }
+        .file-input-label:hover { background: #f7d165; }
+
+        #fileInput { display: none; }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .close-btn:hover { color: var(--text); }
+
+        /* Main content */
         main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
 
-        .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: var(--muted); margin-bottom: 1.5rem; }
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
 
-        .empty-state { text-align: center; padding: 5rem 2rem; color: var(--muted); }
+        .empty-state {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--muted);
+        }
         .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.4; }
         .empty-state p { font-size: 1.1rem; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        /* Video grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
 
-        .upload-zone { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; }
-        .upload-zone.active { display: flex; }
+        .video-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: border-color 0.2s, transform 0.2s;
+            cursor: pointer;
+            animation: fadeIn 0.35s ease;
+        }
 
-        .upload-box { background: var(--card); border: 2px dashed var(--accent); width: min(520px, 92vw); padding: 3rem 2rem; text-align: center; position: relative; }
-        .upload-box h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 0.5rem; }
-        .upload-box p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
-
-        .file-input-label { display: inline-block; background: var(--accent); color: #0d0d0f; padding: 0.7rem 2rem; font-weight: 600; cursor: pointer; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; }
-        .file-input-label:hover { background: #f7d165; }
-        #fileInput { display: none; }
-
-        .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
-        .close-btn:hover { color: var(--text); }
-
-        .progress-bar-wrap { width: 100%; height: 4px; background: var(--border); margin-top: 1.2rem; display: none; }
-        .progress-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
-        .upload-status { margin-top: 0.6rem; font-size: 0.85rem; color: var(--muted); }
-
-        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-
-        .video-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s, transform 0.2s; animation: fadeIn 0.35s ease; }
         .video-card:hover { border-color: var(--accent); transform: translateY(-3px); }
 
-        .video-thumb { width: 100%; aspect-ratio: 16/9; background: #111; position: relative; overflow: hidden; cursor: pointer; }
-        .video-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); transition: background 0.2s; }
+        .video-thumb {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #111;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.4);
+            transition: background 0.2s;
+        }
         .video-card:hover .play-overlay { background: rgba(0,0,0,0.2); }
 
-        .play-icon { width: 52px; height: 52px; background: var(--accent); clip-path: polygon(0% 0%, 100% 50%, 0% 100%); margin-left: 6px; }
+        .play-icon {
+            width: 52px; height: 52px;
+            background: var(--accent);
+            clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+            margin-left: 6px;
+        }
 
         .video-info { padding: 1rem; }
-        .video-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.3rem; }
+
+        .video-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0.3rem;
+        }
+
         .video-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.9rem; }
+
         .card-actions { display: flex; gap: 0.5rem; }
 
-        .btn-watch, .btn-download, .btn-delete { flex: 1; padding: 0.45rem 0; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s; }
+        .btn-watch, .btn-download, .btn-delete {
+            flex: 1;
+            padding: 0.45rem 0;
+            border: none;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: opacity 0.2s;
+        }
         .btn-watch { background: var(--accent); color: #0d0d0f; }
         .btn-download { background: var(--border); color: var(--text); }
         .btn-delete { background: #3a1818; color: #e06060; }
         .btn-watch:hover, .btn-download:hover, .btn-delete:hover { opacity: 0.8; }
 
-        .player-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 300; align-items: center; justify-content: center; flex-direction: column; }
+        /* Video player modal */
+        .player-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
         .player-modal.active { display: flex; }
 
-        .player-header { display: flex; align-items: center; justify-content: space-between; width: min(900px, 96vw); padding: 0 0 0.75rem; }
-        .player-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80%; }
-        .player-close { background: none; border: 2px solid var(--border); color: var(--muted); width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; transition: border-color 0.2s, color 0.2s; }
+        .player-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: min(900px, 96vw);
+            padding: 0 0 0.75rem;
+        }
+
+        .player-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            color: var(--accent);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 80%;
+        }
+
+        .player-close {
+            background: none;
+            border: 2px solid var(--border);
+            color: var(--muted);
+            width: 36px; height: 36px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            transition: border-color 0.2s, color 0.2s;
+        }
         .player-close:hover { border-color: var(--accent2); color: var(--text); }
-        .player-video { width: min(900px, 96vw); max-height: 70vh; background: #000; display: block; }
 
-        .clips-toolbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
-        .clip-input-row { display: flex; gap: 0.7rem; flex: 1; min-width: 260px; }
+        .player-video {
+            width: min(900px, 96vw);
+            max-height: 70vh;
+            background: #000;
+            display: block;
+        }
 
-        .clip-input { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
-        .clip-input:focus { border-color: var(--accent); }
-        .clip-input::placeholder { color: var(--muted); }
-
-        .btn-add-clip { background: var(--accent); color: #0d0d0f; border: none; padding: 0.6rem 1.4rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; letter-spacing: 1px; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; white-space: nowrap; }
-        .btn-add-clip:hover { background: #f7d165; }
-
-        .clips-feed { display: flex; flex-direction: column; gap: 1.2rem; max-width: 700px; }
-
-        .clip-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s; animation: fadeIn 0.3s ease; }
-        .clip-card:hover { border-color: var(--accent); }
-
-        .clip-header { display: flex; align-items: center; padding: 0.75rem 1rem; gap: 0.7rem; border-bottom: 1px solid var(--border); }
-
-        .clip-platform-badge { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 2px; flex-shrink: 0; }
-        .badge-yt { background: #ff0000; color: #fff; }
-        .badge-tt { background: #010101; color: #fff; border: 1px solid #333; }
-        .badge-reddit { background: #ff4500; color: #fff; }
-        .badge-twitch { background: #9146ff; color: #fff; }
-        .badge-link { background: var(--border); color: var(--text); }
-
-        .clip-title { font-weight: 600; font-size: 0.9rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .clip-date { font-size: 0.75rem; color: var(--muted); flex-shrink: 0; }
-        .clip-del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; flex-shrink: 0; padding: 0.2rem 0.4rem; transition: color 0.2s; }
-        .clip-del-btn:hover { color: #e06060; }
-
-        .clip-embed { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
-        .clip-embed iframe { width: 100%; height: 100%; border: none; display: block; }
-
-        .clip-url-display { padding: 0.6rem 1rem; font-size: 0.78rem; color: var(--muted); word-break: break-all; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
-        .clip-open-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; padding: 0.2rem 0.5rem; cursor: pointer; white-space: nowrap; transition: border-color 0.2s, color 0.2s; }
-        .clip-open-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-        .test-panel { max-width: 800px; }
-        .test-hero { background: var(--card); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
-        .test-hero h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 0.4rem; }
-        .test-hero p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-
-        .test-input-row { display: flex; gap: 0.7rem; }
-
-        .test-url-input { flex: 1; background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
-        .test-url-input:focus { border-color: var(--accent); }
-        .test-url-input::placeholder { color: var(--muted); }
-
-        .btn-test-load { background: var(--accent); color: #0d0d0f; border: none; padding: 0.75rem 1.6rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; white-space: nowrap; }
-        .btn-test-load:hover { background: #f7d165; }
-
-        .test-platform-pills { display: flex; gap: 0.5rem; margin-top: 0.9rem; flex-wrap: wrap; }
-        .platform-pill { font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 20px; background: var(--border); color: var(--muted); }
-        .pill-yt { background: rgba(255,0,0,0.15); color: #ff6060; }
-        .pill-tt { background: rgba(0,0,0,0.5); color: #aaa; border: 1px solid #333; }
-        .pill-twitch { background: rgba(145,70,255,0.15); color: #b07fff; }
-        .pill-reddit { background: rgba(255,69,0,0.15); color: #ff8050; }
-
-        .test-result { margin-top: 0; }
-        .test-result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
-        .test-result-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: var(--text); }
-        .test-result-actions { display: flex; gap: 0.5rem; }
-
-        .btn-result-action { border: none; padding: 0.45rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .btn-open-new { background: var(--border); color: var(--text); }
-        .btn-result-action:hover { opacity: 0.8; }
-
-        .test-embed-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); }
-        .test-embed-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
-
-        .test-empty { text-align: center; padding: 4rem 2rem; color: var(--muted); border: 1px dashed var(--border); }
-        .test-empty .icon { font-size: 3rem; margin-bottom: 0.8rem; opacity: 0.35; }
-
-        .test-info-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
-        .test-info-box a { color: var(--accent); text-decoration: none; }
-        .test-info-box a:hover { text-decoration: underline; }
-        .test-info-title { font-weight: 700; color: var(--green); margin-bottom: 0.4rem; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; }
-        .dl-service-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; }
-        .dl-service-item a { color: var(--accent); font-weight: 600; }
-
-        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--text); padding: 0.7rem 1.5rem; font-size: 0.9rem; font-weight: 600; z-index: 999; transition: transform 0.3s ease; pointer-events: none; }
-        .toast.show { transform: translateX(-50%) translateY(0); }
-
-        .spinner { text-align: center; padding: 3rem; color: var(--muted); font-size: 0.9rem; letter-spacing: 1px; }
-        .spinner::before { content: ''; display: block; width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* Upload progress */
+        .progress-bar-wrap {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            margin-top: 1.2rem;
+            display: none;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        .upload-status {
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">SC<span>OO</span>L</div>
-    <nav>
-        <button class="nav-tab active" onclick="switchTab('videos', this)">📁 MY VIDEOS</button>
-        <button class="nav-tab" onclick="switchTab('clips', this)">🎞 CLIPS</button>
-        <button class="nav-tab" onclick="switchTab('test', this)">🔗 TEST</button>
-    </nav>
-    <button class="header-btn" id="uploadHeaderBtn" onclick="openUpload()">+ UPLOAD</button>
+    <button class="upload-btn" onclick="openUpload()">+ UPLOAD VIDEO</button>
 </header>
 
-<!-- UPLOAD MODAL -->
+<!-- Upload Modal -->
 <div class="upload-zone" id="uploadZone">
     <div class="upload-box" id="dropArea">
         <button class="close-btn" onclick="closeUpload()">✕</button>
         <h2>Upload Video</h2>
-        <p>Drop a video file here or click to browse.<br><small>Everyone on Scool can see it! 🌍</small></p>
+        <p>Drop a video file here or click to browse</p>
         <label class="file-input-label" for="fileInput">Choose File</label>
         <input type="file" id="fileInput" accept="video/*" onchange="handleFile(this.files[0])">
         <div class="progress-bar-wrap" id="progressWrap">
@@ -263,7 +322,7 @@
     </div>
 </div>
 
-<!-- PLAYER MODAL -->
+<!-- Player Modal -->
 <div class="player-modal" id="playerModal">
     <div class="player-header">
         <div class="player-title" id="playerTitle">Video</div>
@@ -272,332 +331,213 @@
     <video class="player-video" id="playerVideo" controls></video>
 </div>
 
-<div class="toast" id="toast"></div>
-
 <main>
-
-    <!-- TAB: VIDEOS -->
-    <div class="tab-panel active" id="tab-videos">
-        <div class="section-title">ALL VIDEOS</div>
-        <div id="videosLoading" class="spinner">Loading videos…</div>
-        <div id="emptyState" class="empty-state" style="display:none;">
-            <div class="icon">🎬</div>
-            <p>No videos yet — upload one to get started!</p>
-        </div>
-        <div class="video-grid" id="videoGrid"></div>
+    <div class="section-title">YOUR VIDEOS</div>
+    <div id="emptyState" class="empty-state">
+        <div class="icon">🎬</div>
+        <p>No videos yet — upload one to get started!</p>
     </div>
-
-    <!-- TAB: CLIPS -->
-    <div class="tab-panel" id="tab-clips">
-        <div class="section-title">CLIPS &amp; LINKS</div>
-        <div class="clips-toolbar">
-            <div class="clip-input-row">
-                <input class="clip-input" id="clipUrlInput" type="text" placeholder="Paste a YouTube, TikTok, Twitch, Reddit or any link…" />
-                <input class="clip-input" id="clipTitleInput" type="text" placeholder="Title (optional)" style="max-width:200px;" />
-                <button class="btn-add-clip" onclick="addClip()">+ ADD</button>
-            </div>
-        </div>
-        <div id="clipsLoading" class="spinner">Loading clips…</div>
-        <div id="clipsEmpty" class="empty-state" style="display:none;">
-            <div class="icon">🎞️</div>
-            <p>No clips yet — paste a link above!</p>
-        </div>
-        <div class="clips-feed" id="clipsFeed"></div>
-    </div>
-
-    <!-- TAB: TEST -->
-    <div class="tab-panel" id="tab-test">
-        <div class="test-panel">
-            <div class="section-title">TEST PLAYER</div>
-            <div class="test-hero">
-                <h2>PASTE &amp; WATCH</h2>
-                <p>Paste a YouTube or TikTok link and watch it right here. Download info included.</p>
-                <div class="test-input-row">
-                    <input class="test-url-input" id="testUrlInput" type="text" placeholder="Paste YouTube or TikTok link here…" />
-                    <button class="btn-test-load" onclick="loadTestVideo()">▶ LOAD</button>
-                </div>
-                <div class="test-platform-pills">
-                    <span class="platform-pill pill-yt">YouTube</span>
-                    <span class="platform-pill pill-tt">TikTok</span>
-                    <span class="platform-pill pill-twitch">Twitch</span>
-                    <span class="platform-pill pill-reddit">Reddit</span>
-                    <span class="platform-pill">Other</span>
-                </div>
-            </div>
-            <div class="test-result" id="testResult">
-                <div class="test-empty">
-                    <div class="icon">📺</div>
-                    <p>Your video will appear here</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <div class="video-grid" id="videoGrid"></div>
 </main>
 
 <script>
-// ── SUPABASE ──
-const SUPABASE_URL = 'https://xptnaevvrwnsfklpqbhl.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-const BUCKET = 'videos';
+    // Storage: store video metadata in localStorage, blobs as object URLs (session only)
+    // Since localStorage can't hold video files, we store them as IndexedDB blobs.
 
-// ── HELPERS ──
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2800);
-}
-function formatSize(b) {
-    if (!b) return '';
-    return b < 1048576 ? (b/1024).toFixed(1)+' KB' : (b/1048576).toFixed(1)+' MB';
-}
-function formatDate(ts) {
-    return new Date(ts).toLocaleDateString(undefined, {year:'numeric',month:'short',day:'numeric'});
-}
-function switchTab(name, btn) {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
-    document.getElementById('tab-'+name).classList.add('active');
-    btn.classList.add('active');
-    document.getElementById('uploadHeaderBtn').classList.toggle('hidden', name !== 'videos');
-}
+    const DB_NAME = 'scoolVideos';
+    const STORE = 'videos';
+    let db;
 
-// ── VIDEOS TAB ──
-async function renderVideos() {
-    document.getElementById('videosLoading').style.display = 'block';
-    document.getElementById('emptyState').style.display = 'none';
-    document.getElementById('videoGrid').innerHTML = '';
+    function openDB() {
+        return new Promise((res, rej) => {
+            const req = indexedDB.open(DB_NAME, 1);
+            req.onupgradeneeded = e => {
+                e.target.result.createObjectStore(STORE, { keyPath: 'id' });
+            };
+            req.onsuccess = e => { db = e.target.result; res(db); };
+            req.onerror = rej;
+        });
+    }
 
-    const { data, error } = await sb.storage.from(BUCKET).list('', { sortBy: { column:'created_at', order:'desc' } });
-    document.getElementById('videosLoading').style.display = 'none';
+    function dbGetAll() {
+        return new Promise((res, rej) => {
+            const tx = db.transaction(STORE, 'readonly');
+            const req = tx.objectStore(STORE).getAll();
+            req.onsuccess = () => res(req.result);
+            req.onerror = rej;
+        });
+    }
 
-    if (error) { showToast('Error: ' + error.message); return; }
+    function dbPut(obj) {
+        return new Promise((res, rej) => {
+            const tx = db.transaction(STORE, 'readwrite');
+            tx.objectStore(STORE).put(obj);
+            tx.oncomplete = res;
+            tx.onerror = rej;
+        });
+    }
 
-    const files = (data||[]).filter(f => f.name && f.name !== '.emptyFolderPlaceholder');
-    if (!files.length) { document.getElementById('emptyState').style.display = 'block'; return; }
+    function dbDelete(id) {
+        return new Promise((res, rej) => {
+            const tx = db.transaction(STORE, 'readwrite');
+            tx.objectStore(STORE).delete(id);
+            tx.oncomplete = res;
+            tx.onerror = rej;
+        });
+    }
 
-    const grid = document.getElementById('videoGrid');
-    files.forEach(file => {
-        const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(file.name);
-        const url = urlData.publicUrl;
-        const safeName = file.name.replace(/'/g,"\\'");
-        const safeUrl = url.replace(/'/g,"\\'");
-        const card = document.createElement('div');
-        card.className = 'video-card';
-        card.innerHTML = `
-            <div class="video-thumb" onclick="watchVideo('${safeUrl}','${safeName}')">
-                <video src="${url}" muted preload="metadata"></video>
-                <div class="play-overlay"><div class="play-icon"></div></div>
-            </div>
-            <div class="video-info">
-                <div class="video-name" title="${file.name}">${file.name}</div>
-                <div class="video-meta">${formatSize(file.metadata?.size)} &nbsp;·&nbsp; ${formatDate(file.created_at)}</div>
-                <div class="card-actions">
-                    <button class="btn-watch" onclick="watchVideo('${safeUrl}','${safeName}')">▶ WATCH</button>
-                    <button class="btn-download" onclick="downloadVideo('${safeUrl}','${safeName}')">⬇ SAVE</button>
-                    <button class="btn-delete" onclick="deleteVideo('${safeName}',this)">✕ DEL</button>
+    function formatSize(bytes) {
+        if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+        return (bytes/(1024*1024)).toFixed(1) + ' MB';
+    }
+
+    function formatDate(ts) {
+        return new Date(ts).toLocaleDateString(undefined, { year:'numeric', month:'short', day:'numeric' });
+    }
+
+    async function renderVideos() {
+        const videos = await dbGetAll();
+        const grid = document.getElementById('videoGrid');
+        const empty = document.getElementById('emptyState');
+        grid.innerHTML = '';
+        if (!videos.length) { empty.style.display = 'block'; return; }
+        empty.style.display = 'none';
+
+        videos.sort((a,b) => b.date - a.date).forEach(v => {
+            const url = URL.createObjectURL(new Blob([v.data], { type: v.type }));
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `
+                <div class="video-thumb">
+                    <video src="${url}" muted preload="metadata"></video>
+                    <div class="play-overlay"><div class="play-icon"></div></div>
                 </div>
-            </div>`;
-        grid.appendChild(card);
+                <div class="video-info">
+                    <div class="video-name" title="${v.name}">${v.name}</div>
+                    <div class="video-meta">${formatSize(v.size)} &nbsp;·&nbsp; ${formatDate(v.date)}</div>
+                    <div class="card-actions">
+                        <button class="btn-watch" onclick="watchVideo('${v.id}')">▶ WATCH</button>
+                        <button class="btn-download" onclick="downloadVideo('${v.id}')">⬇ SAVE</button>
+                        <button class="btn-delete" onclick="deleteVideo('${v.id}')">✕ DEL</button>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    async function watchVideo(id) {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).get(id);
+        req.onsuccess = () => {
+            const v = req.result;
+            const url = URL.createObjectURL(new Blob([v.data], { type: v.type }));
+            document.getElementById('playerTitle').textContent = v.name;
+            const player = document.getElementById('playerVideo');
+            player.src = url;
+            player.play();
+            document.getElementById('playerModal').classList.add('active');
+        };
+    }
+
+    async function downloadVideo(id) {
+        const tx = db.transaction(STORE, 'readonly');
+        const req = tx.objectStore(STORE).get(id);
+        req.onsuccess = () => {
+            const v = req.result;
+            const url = URL.createObjectURL(new Blob([v.data], { type: v.type }));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = v.name;
+            a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 5000);
+        };
+    }
+
+    async function deleteVideo(id) {
+        if (!confirm('Delete this video?')) return;
+        await dbDelete(id);
+        renderVideos();
+    }
+
+    function closePlayer() {
+        const player = document.getElementById('playerVideo');
+        player.pause();
+        player.src = '';
+        document.getElementById('playerModal').classList.remove('active');
+    }
+
+    function openUpload() {
+        document.getElementById('uploadZone').classList.add('active');
+    }
+    function closeUpload() {
+        document.getElementById('uploadZone').classList.remove('active');
+        document.getElementById('fileInput').value = '';
+        document.getElementById('progressWrap').style.display = 'none';
+        document.getElementById('uploadStatus').textContent = '';
+    }
+
+    function handleFile(file) {
+        if (!file || !file.type.startsWith('video/')) {
+            alert('Please select a video file.');
+            return;
+        }
+        const status = document.getElementById('uploadStatus');
+        const progressWrap = document.getElementById('progressWrap');
+        const progressFill = document.getElementById('progressFill');
+
+        progressWrap.style.display = 'block';
+        progressFill.style.width = '0%';
+        status.textContent = 'Reading file...';
+
+        const reader = new FileReader();
+        reader.onprogress = e => {
+            if (e.lengthComputable) {
+                const pct = Math.round((e.loaded / e.total) * 100);
+                progressFill.style.width = pct + '%';
+            }
+        };
+        reader.onload = async e => {
+            progressFill.style.width = '100%';
+            status.textContent = 'Saving...';
+            const videoObj = {
+                id: 'v_' + Date.now() + '_' + Math.random().toString(36).slice(2),
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                date: Date.now(),
+                data: e.target.result
+            };
+            await dbPut(videoObj);
+            status.textContent = '✓ Uploaded!';
+            setTimeout(() => {
+                closeUpload();
+                renderVideos();
+            }, 800);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    // Drag & drop
+    const dropArea = document.getElementById('dropArea');
+    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.style.borderColor = 'var(--accent2)'; });
+    dropArea.addEventListener('dragleave', () => { dropArea.style.borderColor = 'var(--accent)'; });
+    dropArea.addEventListener('drop', e => {
+        e.preventDefault();
+        dropArea.style.borderColor = 'var(--accent)';
+        const file = e.dataTransfer.files[0];
+        if (file) handleFile(file);
     });
-}
 
-function watchVideo(url, name) {
-    document.getElementById('playerTitle').textContent = name;
-    const p = document.getElementById('playerVideo');
-    p.src = url; p.play();
-    document.getElementById('playerModal').classList.add('active');
-}
-function downloadVideo(url, name) {
-    const a = document.createElement('a');
-    a.href = url; a.download = name; a.target = '_blank'; a.click();
-}
-async function deleteVideo(name, btn) {
-    if (!confirm('Delete "'+name+'"?')) return;
-    btn.textContent = '...';
-    const { error } = await sb.storage.from(BUCKET).remove([name]);
-    if (error) { showToast('Error: '+error.message); btn.textContent='✕ DEL'; return; }
-    showToast('Deleted!'); renderVideos();
-}
-function closePlayer() {
-    const p = document.getElementById('playerVideo');
-    p.pause(); p.src = '';
-    document.getElementById('playerModal').classList.remove('active');
-}
-function openUpload() { document.getElementById('uploadZone').classList.add('active'); }
-function closeUpload() {
-    document.getElementById('uploadZone').classList.remove('active');
-    document.getElementById('fileInput').value = '';
-    document.getElementById('progressWrap').style.display = 'none';
-    document.getElementById('uploadStatus').textContent = '';
-    document.getElementById('progressFill').style.width = '0%';
-}
-async function handleFile(file) {
-    if (!file || !file.type.startsWith('video/')) { alert('Please select a video file.'); return; }
-    const status = document.getElementById('uploadStatus');
-    const wrap = document.getElementById('progressWrap');
-    const fill = document.getElementById('progressFill');
-    wrap.style.display = 'block'; fill.style.width = '5%';
-    status.textContent = 'Uploading to cloud…';
-    const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-    const { error } = await sb.storage.from(BUCKET).upload(safeName, file, { cacheControl:'3600', upsert:false, contentType:file.type });
-    if (error) { status.textContent = '❌ ' + error.message; fill.style.width='0%'; return; }
-    fill.style.width = '100%';
-    status.textContent = '✓ Done! Your friends can see it now 🎉';
-    setTimeout(() => { closeUpload(); renderVideos(); }, 1200);
-}
-const dropArea = document.getElementById('dropArea');
-dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.style.borderColor='var(--accent2)'; });
-dropArea.addEventListener('dragleave', () => { dropArea.style.borderColor='var(--accent)'; });
-dropArea.addEventListener('drop', e => { e.preventDefault(); dropArea.style.borderColor='var(--accent)'; handleFile(e.dataTransfer.files[0]); });
-
-// ── CLIPS TAB ──
-function detectPlatform(url) {
-    if (/youtube\.com|youtu\.be/.test(url)) return 'youtube';
-    if (/tiktok\.com/.test(url)) return 'tiktok';
-    if (/twitch\.tv/.test(url)) return 'twitch';
-    if (/reddit\.com/.test(url)) return 'reddit';
-    return 'link';
-}
-function platformBadge(p) {
-    const cls = {youtube:'badge-yt',tiktok:'badge-tt',twitch:'badge-twitch',reddit:'badge-reddit',link:'badge-link'};
-    const lbl = {youtube:'YouTube',tiktok:'TikTok',twitch:'Twitch',reddit:'Reddit',link:'Link'};
-    return `<span class="clip-platform-badge ${cls[p]}">${lbl[p]}</span>`;
-}
-function buildEmbedUrl(url, platform) {
-    if (platform==='youtube') {
-        const m = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
-        if (m) return `https://www.youtube.com/embed/${m[1]}`;
-    }
-    if (platform==='twitch') {
-        const m = url.match(/twitch\.tv\/(?:videos\/)?(\w+)/);
-        if (m) return /videos/.test(url)
-            ? `https://player.twitch.tv/?video=${m[1]}&parent=${location.hostname||'localhost'}`
-            : `https://player.twitch.tv/?channel=${m[1]}&parent=${location.hostname||'localhost'}`;
-    }
-    return null;
-}
-async function addClip() {
-    let url = document.getElementById('clipUrlInput').value.trim();
-    const title = document.getElementById('clipTitleInput').value.trim();
-    if (!url) { showToast('Paste a link first!'); return; }
-    if (!/^https?:\/\//.test(url)) url = 'https://' + url;
-    const { error } = await sb.from('clips').insert([{ url, platform: detectPlatform(url), title: title||url, date: new Date().toISOString() }]);
-    if (error) { showToast('Error: '+error.message); return; }
-    document.getElementById('clipUrlInput').value = '';
-    document.getElementById('clipTitleInput').value = '';
-    showToast('Clip saved for everyone! 🎉');
-    renderClips();
-}
-async function renderClips() {
-    document.getElementById('clipsLoading').style.display = 'block';
-    document.getElementById('clipsEmpty').style.display = 'none';
-    document.getElementById('clipsFeed').innerHTML = '';
-    const { data, error } = await sb.from('clips').select('*').order('date', { ascending:false });
-    document.getElementById('clipsLoading').style.display = 'none';
-    if (error) { showToast('Error: '+error.message); return; }
-    if (!data||!data.length) { document.getElementById('clipsEmpty').style.display='block'; return; }
-    const feed = document.getElementById('clipsFeed');
-    data.forEach(c => {
-        const embedUrl = buildEmbedUrl(c.url, c.platform);
-        const noEmbed = c.platform==='tiktok'
-            ? '<div style="padding:1rem;color:var(--muted);font-size:0.85rem;">⚠️ TikTok blocks embedding — open in new tab to watch.</div>'
-            : c.platform==='reddit'
-            ? '<div style="padding:1rem;color:var(--muted);font-size:0.85rem;">⚠️ Reddit videos — open in new tab.</div>'
-            : '';
-        const safeUrl = c.url.replace(/'/g,"\\'");
-        const card = document.createElement('div');
-        card.className = 'clip-card';
-        card.innerHTML = `
-            <div class="clip-header">
-                ${platformBadge(c.platform)}
-                <div class="clip-title" title="${c.title}">${c.title}</div>
-                <div class="clip-date">${formatDate(c.date)}</div>
-                <button class="clip-del-btn" onclick="deleteClip(${c.id})">✕</button>
-            </div>
-            ${embedUrl ? `<div class="clip-embed"><iframe src="${embedUrl}" allowfullscreen allow="autoplay; encrypted-media"></iframe></div>` : noEmbed}
-            <div class="clip-url-display">
-                <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.url}</span>
-                <button class="clip-open-btn" onclick="window.open('${safeUrl}','_blank')">Open ↗</button>
-            </div>`;
-        feed.appendChild(card);
+    // Close modals on backdrop click
+    document.getElementById('uploadZone').addEventListener('click', e => {
+        if (e.target === document.getElementById('uploadZone')) closeUpload();
     });
-}
-async function deleteClip(id) {
-    if (!confirm('Remove this clip?')) return;
-    const { error } = await sb.from('clips').delete().eq('id', id);
-    if (error) { showToast('Error: '+error.message); return; }
-    showToast('Clip removed!'); renderClips();
-}
+    document.getElementById('playerModal').addEventListener('click', e => {
+        if (e.target === document.getElementById('playerModal')) closePlayer();
+    });
 
-// ── TEST TAB ──
-function loadTestVideo() {
-    let url = document.getElementById('testUrlInput').value.trim();
-    if (!url) { showToast('Paste a link first!'); return; }
-    if (!/^https?:\/\//.test(url)) url = 'https://' + url;
-    const platform = detectPlatform(url);
-    const embedUrl = buildEmbedUrl(url, platform);
-    const result = document.getElementById('testResult');
-    const safeUrl = url.replace(/'/g,"\\'");
-
-    const dlBox = `<div class="test-info-box">
-        <div class="test-info-title">⬇ How to download this video</div>
-        <p>Browsers can't directly download YouTube/TikTok. Use these free sites:</p>
-        <div class="dl-service-list">
-            ${platform==='youtube'||platform==='link' ? '<div class="dl-service-item">🔴 YouTube: <a href="https://cobalt.tools/" target="_blank">cobalt.tools</a> &nbsp;or&nbsp; <a href="https://yt5s.io/" target="_blank">yt5s.io</a></div>' : ''}
-            ${platform==='tiktok' ? '<div class="dl-service-item">⚫ TikTok: <a href="https://snaptik.app/" target="_blank">snaptik.app</a></div>' : ''}
-            ${platform==='twitch' ? '<div class="dl-service-item">🟣 Twitch: <a href="https://twitch-dl.stevearc.com/" target="_blank">twitch-dl.stevearc.com</a></div>' : ''}
-            ${platform==='reddit' ? '<div class="dl-service-item">🟠 Reddit: <a href="https://redditsave.com/" target="_blank">redditsave.com</a></div>' : ''}
-        </div>
-    </div>`;
-
-    if (platform==='tiktok'||platform==='reddit') {
-        const label = platform==='tiktok' ? 'TIKTOK' : 'REDDIT';
-        const note = platform==='tiktok' ? 'TikTok blocks embeds in other websites.' : 'Reddit videos need to be opened directly.';
-        result.innerHTML = `
-            <div class="test-result-header">
-                <div class="test-result-title">${label} VIDEO</div>
-                <div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open ↗</button></div>
-            </div>
-            <div class="test-embed-wrap" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:2rem;">
-                <div style="font-size:2.5rem;">${platform==='tiktok'?'⚠️':'🟠'}</div>
-                <div style="color:var(--muted);text-align:center;">${note}</div>
-            </div>${dlBox}`;
-        return;
-    }
-
-    if (embedUrl) {
-        result.innerHTML = `
-            <div class="test-result-header">
-                <div class="test-result-title">${platform.toUpperCase()} VIDEO</div>
-                <div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open Original ↗</button></div>
-            </div>
-            <div class="test-embed-wrap">
-                <iframe src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-            </div>${dlBox}`;
-    } else {
-        result.innerHTML = `
-            <div class="test-result-header">
-                <div class="test-result-title">VIDEO LINK</div>
-                <div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open Link ↗</button></div>
-            </div>
-            <div class="test-embed-wrap" style="display:flex;align-items:center;justify-content:center;padding:2rem;">
-                <div style="color:var(--muted);text-align:center;">This link can't be embedded here.<br>Click "Open Link" to watch it.</div>
-            </div>${dlBox}`;
-    }
-}
-
-// ── KEYBOARD & MODAL CLOSE ──
-document.getElementById('clipUrlInput').addEventListener('keydown', e => { if(e.key==='Enter') addClip(); });
-document.getElementById('testUrlInput').addEventListener('keydown', e => { if(e.key==='Enter') loadTestVideo(); });
-document.getElementById('uploadZone').addEventListener('click', e => { if(e.target===document.getElementById('uploadZone')) closeUpload(); });
-document.getElementById('playerModal').addEventListener('click', e => { if(e.target===document.getElementById('playerModal')) closePlayer(); });
-
-// ── INIT ──
-renderVideos();
-renderClips();
+    // Init
+    openDB().then(renderVideos);
 </script>
 </body>
 </html>
