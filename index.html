@@ -18,209 +18,170 @@
             --text: #f0ede8;
             --muted: #7a7a8a;
             --green: #3ecf6e;
+            --red: #e06060;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow-x: hidden; }
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        header {
-            background: var(--surface);
-            border-bottom: 2px solid var(--accent);
-            padding: 0 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            gap: 1rem;
-        }
-
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 4px; color: var(--accent); flex-shrink: 0; }
+        /* ── HEADER ── */
+        header { background: var(--surface); border-bottom: 2px solid var(--accent); padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; gap: 1rem; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 4px; color: var(--accent); flex-shrink: 0; cursor: pointer; user-select: none; }
         .logo span { color: var(--accent2); }
-
-        nav { display: flex; gap: 0; height: 100%; align-items: flex-end; }
-
-        .nav-tab {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-            font-size: 1rem;
-            color: var(--muted);
-            padding: 0 1.2rem;
-            height: 42px;
-            line-height: 42px;
-            cursor: pointer;
-            border: none;
-            background: none;
-            border-bottom: 3px solid transparent;
-            transition: color 0.2s, border-color 0.2s;
-            white-space: nowrap;
-        }
+        nav { display: flex; gap: 0; height: 100%; align-items: flex-end; flex-wrap: nowrap; overflow-x: auto; }
+        .nav-tab { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1rem; color: var(--muted); padding: 0 1rem; height: 42px; line-height: 42px; cursor: pointer; border: none; background: none; border-bottom: 3px solid transparent; transition: color 0.2s, border-color 0.2s; white-space: nowrap; }
         .nav-tab:hover { color: var(--text); }
         .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-
-        .header-btn {
-            background: var(--accent);
-            color: #0d0d0f;
-            border: none;
-            padding: 0.5rem 1.2rem;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 600;
-            font-size: 0.85rem;
-            cursor: pointer;
-            letter-spacing: 1px;
-            transition: background 0.2s, transform 0.1s;
-            clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%);
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
+        .nav-tab.admin-tab { color: #555; font-size: 0.7rem; }
+        .nav-tab.admin-tab.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+        .header-btn { background: var(--accent); color: #0d0d0f; border: none; padding: 0.5rem 1.2rem; font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; letter-spacing: 1px; transition: background 0.2s, transform 0.1s; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); white-space: nowrap; flex-shrink: 0; }
         .header-btn:hover { background: #f7d165; transform: translateY(-1px); }
         .header-btn.hidden { display: none; }
 
+        /* ── PANELS ── */
         .tab-panel { display: none; }
         .tab-panel.active { display: block; }
-
         main { padding: 2rem; max-width: 1200px; margin: 0 auto; }
-
         .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 3px; color: var(--muted); margin-bottom: 1.5rem; }
-
         .empty-state { text-align: center; padding: 5rem 2rem; color: var(--muted); }
         .empty-state .icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.4; }
         .empty-state p { font-size: 1.1rem; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ── PIN LOCK ── */
+        .pin-lock { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 500; align-items: center; justify-content: center; flex-direction: column; gap: 1.5rem; }
+        .pin-lock.active { display: flex; }
+        .pin-lock h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 4px; color: var(--accent2); }
+        .pin-lock p { color: var(--muted); font-size: 0.9rem; }
+        .pin-dots { display: flex; gap: 1rem; margin: 0.5rem 0; }
+        .pin-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+        .pin-dot.filled { background: var(--accent2); }
+        .pin-grid { display: grid; grid-template-columns: repeat(3, 72px); gap: 0.7rem; }
+        .pin-btn { height: 72px; background: var(--card); border: 1px solid var(--border); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1.4rem; font-weight: 600; cursor: pointer; transition: background 0.15s, border-color 0.15s; border-radius: 4px; }
+        .pin-btn:hover { background: var(--border); border-color: var(--accent2); }
+        .pin-btn.del { font-size: 1rem; color: var(--muted); }
+        .pin-error { color: var(--red); font-size: 0.85rem; min-height: 1.2rem; }
+        .pin-cancel { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 1.2rem; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; transition: border-color 0.2s; }
+        .pin-cancel:hover { border-color: var(--text); color: var(--text); }
+
+        /* ── UPLOAD MODAL ── */
         .upload-zone { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; }
         .upload-zone.active { display: flex; }
-
         .upload-box { background: var(--card); border: 2px dashed var(--accent); width: min(520px, 92vw); padding: 3rem 2rem; text-align: center; position: relative; }
         .upload-box h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 0.5rem; }
         .upload-box p { color: var(--muted); margin-bottom: 1.5rem; font-size: 0.9rem; }
-
         .file-input-label { display: inline-block; background: var(--accent); color: #0d0d0f; padding: 0.7rem 2rem; font-weight: 600; cursor: pointer; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; }
         .file-input-label:hover { background: #f7d165; }
         #fileInput { display: none; }
-
         .close-btn { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--muted); font-size: 1.5rem; cursor: pointer; }
         .close-btn:hover { color: var(--text); }
-
         .progress-bar-wrap { width: 100%; height: 4px; background: var(--border); margin-top: 1.2rem; display: none; }
         .progress-bar-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s; }
         .upload-status { margin-top: 0.6rem; font-size: 0.85rem; color: var(--muted); }
 
+        /* ── VIDEO GRID ── */
         .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-
         .video-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s, transform 0.2s; animation: fadeIn 0.35s ease; }
         .video-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-
         .video-thumb { width: 100%; aspect-ratio: 16/9; background: #111; position: relative; overflow: hidden; cursor: pointer; }
         .video-thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
-
         .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); transition: background 0.2s; }
         .video-card:hover .play-overlay { background: rgba(0,0,0,0.2); }
-
         .play-icon { width: 52px; height: 52px; background: var(--accent); clip-path: polygon(0% 0%, 100% 50%, 0% 100%); margin-left: 6px; }
-
         .video-info { padding: 1rem; }
         .video-name { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 0.3rem; }
         .video-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.9rem; }
         .card-actions { display: flex; gap: 0.5rem; }
-
         .btn-watch, .btn-download, .btn-delete { flex: 1; padding: 0.45rem 0; border: none; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; letter-spacing: 0.5px; transition: opacity 0.2s; }
         .btn-watch { background: var(--accent); color: #0d0d0f; }
         .btn-download { background: var(--border); color: var(--text); }
         .btn-delete { background: #3a1818; color: #e06060; }
         .btn-watch:hover, .btn-download:hover, .btn-delete:hover { opacity: 0.8; }
 
+        /* ── PLAYER MODAL ── */
         .player-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 300; align-items: center; justify-content: center; flex-direction: column; }
         .player-modal.active { display: flex; }
-
         .player-header { display: flex; align-items: center; justify-content: space-between; width: min(900px, 96vw); padding: 0 0 0.75rem; }
         .player-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80%; }
         .player-close { background: none; border: 2px solid var(--border); color: var(--muted); width: 36px; height: 36px; cursor: pointer; font-size: 1.1rem; flex-shrink: 0; transition: border-color 0.2s, color 0.2s; }
         .player-close:hover { border-color: var(--accent2); color: var(--text); }
         .player-video { width: min(900px, 96vw); max-height: 70vh; background: #000; display: block; }
 
+        /* ── CLIPS ── */
         .clips-toolbar { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
         .clip-input-row { display: flex; gap: 0.7rem; flex: 1; min-width: 260px; }
-
         .clip-input { flex: 1; background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.6rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
         .clip-input:focus { border-color: var(--accent); }
         .clip-input::placeholder { color: var(--muted); }
-
         .btn-add-clip { background: var(--accent); color: #0d0d0f; border: none; padding: 0.6rem 1.4rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; letter-spacing: 1px; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; white-space: nowrap; }
         .btn-add-clip:hover { background: #f7d165; }
-
         .clips-feed { display: flex; flex-direction: column; gap: 1.2rem; max-width: 700px; }
-
         .clip-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s; animation: fadeIn 0.3s ease; }
         .clip-card:hover { border-color: var(--accent); }
-
         .clip-header { display: flex; align-items: center; padding: 0.75rem 1rem; gap: 0.7rem; border-bottom: 1px solid var(--border); }
-
         .clip-platform-badge { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; font-size: 0.75rem; padding: 0.2rem 0.6rem; border-radius: 2px; flex-shrink: 0; }
         .badge-yt { background: #ff0000; color: #fff; }
         .badge-tt { background: #010101; color: #fff; border: 1px solid #333; }
         .badge-reddit { background: #ff4500; color: #fff; }
         .badge-twitch { background: #9146ff; color: #fff; }
         .badge-link { background: var(--border); color: var(--text); }
-
         .clip-title { font-weight: 600; font-size: 0.9rem; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .clip-date { font-size: 0.75rem; color: var(--muted); flex-shrink: 0; }
         .clip-del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; flex-shrink: 0; padding: 0.2rem 0.4rem; transition: color 0.2s; }
         .clip-del-btn:hover { color: #e06060; }
-
         .clip-embed { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; }
         .clip-embed iframe { width: 100%; height: 100%; border: none; display: block; }
-
         .clip-url-display { padding: 0.6rem 1rem; font-size: 0.78rem; color: var(--muted); word-break: break-all; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; }
         .clip-open-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.75rem; padding: 0.2rem 0.5rem; cursor: pointer; white-space: nowrap; transition: border-color 0.2s, color 0.2s; }
         .clip-open-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-        .test-panel { max-width: 800px; }
+        /* ── TEST TAB ── */
+        .test-panel { max-width: 860px; }
+
+        /* Hamburger menu */
+        .test-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .hamburger-wrap { position: relative; }
+        .hamburger-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); width: 44px; height: 44px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; transition: border-color 0.2s; }
+        .hamburger-btn:hover { border-color: var(--accent); }
+        .hamburger-btn span { display: block; width: 20px; height: 2px; background: var(--text); transition: background 0.2s; }
+        .hamburger-menu { display: none; position: absolute; right: 0; top: 52px; background: var(--card); border: 1px solid var(--border); min-width: 220px; z-index: 50; }
+        .hamburger-menu.open { display: block; }
+        .hm-title { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 0.8rem; color: var(--muted); padding: 0.7rem 1rem 0.4rem; border-bottom: 1px solid var(--border); }
+        .hm-item { display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 1rem; cursor: pointer; transition: background 0.15s; font-size: 0.9rem; }
+        .hm-item:hover { background: var(--border); }
+        .hm-item.active-feature { color: var(--accent); }
+        .hm-badge { font-size: 0.65rem; background: var(--accent2); color: #fff; padding: 0.1rem 0.4rem; border-radius: 2px; margin-left: auto; }
+
+        /* Feature sections */
+        .test-feature { display: none; }
+        .test-feature.active { display: block; }
+
         .test-hero { background: var(--card); border: 1px solid var(--border); padding: 2rem; margin-bottom: 2rem; }
         .test-hero h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 0.4rem; }
         .test-hero p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
-
         .test-input-row { display: flex; gap: 0.7rem; }
-
         .test-url-input { flex: 1; background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
         .test-url-input:focus { border-color: var(--accent); }
         .test-url-input::placeholder { color: var(--muted); }
-
         .btn-test-load { background: var(--accent); color: #0d0d0f; border: none; padding: 0.75rem 1.6rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; white-space: nowrap; }
         .btn-test-load:hover { background: #f7d165; }
-
         .test-platform-pills { display: flex; gap: 0.5rem; margin-top: 0.9rem; flex-wrap: wrap; }
         .platform-pill { font-size: 0.75rem; padding: 0.25rem 0.7rem; border-radius: 20px; background: var(--border); color: var(--muted); }
         .pill-yt { background: rgba(255,0,0,0.15); color: #ff6060; }
         .pill-tt { background: rgba(0,0,0,0.5); color: #aaa; border: 1px solid #333; }
         .pill-twitch { background: rgba(145,70,255,0.15); color: #b07fff; }
         .pill-reddit { background: rgba(255,69,0,0.15); color: #ff8050; }
-
         .test-result { margin-top: 0; }
         .test-result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem; }
         .test-result-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 2px; color: var(--text); }
         .test-result-actions { display: flex; gap: 0.5rem; }
-
         .btn-result-action { border: none; padding: 0.45rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
         .btn-open-new { background: var(--border); color: var(--text); }
         .btn-result-action:hover { opacity: 0.8; }
-
         .test-embed-wrap { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border: 1px solid var(--border); }
         .test-embed-wrap iframe { width: 100%; height: 100%; border: none; display: block; }
-
         .test-empty { text-align: center; padding: 4rem 2rem; color: var(--muted); border: 1px dashed var(--border); }
         .test-empty .icon { font-size: 3rem; margin-bottom: 0.8rem; opacity: 0.35; }
-
         .test-info-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--green); padding: 1rem 1.2rem; margin-top: 1rem; font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
         .test-info-box a { color: var(--accent); text-decoration: none; }
         .test-info-box a:hover { text-decoration: underline; }
@@ -228,9 +189,93 @@
         .dl-service-list { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.5rem; }
         .dl-service-item a { color: var(--accent); font-weight: 600; }
 
+        /* ── VIDEO COMPRESSOR ── */
+        .compressor-box { background: var(--card); border: 1px solid var(--border); padding: 2rem; }
+        .compressor-box h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 0.4rem; }
+        .compressor-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .comp-drop { border: 2px dashed var(--border); padding: 2.5rem; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 1.5rem; }
+        .comp-drop:hover, .comp-drop.drag { border-color: var(--accent); }
+        .comp-drop .icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
+        .comp-drop p { color: var(--muted); font-size: 0.9rem; }
+        #compInput { display: none; }
+        .comp-settings { display: none; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+        .comp-settings.show { display: flex; }
+        .comp-row { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+        .comp-label { font-size: 0.85rem; color: var(--muted); min-width: 100px; }
+        .comp-select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem 0.8rem; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; outline: none; cursor: pointer; }
+        .comp-select:focus { border-color: var(--accent); }
+        .comp-info { background: var(--bg); border: 1px solid var(--border); padding: 0.8rem 1rem; font-size: 0.85rem; color: var(--muted); display: flex; gap: 2rem; flex-wrap: wrap; }
+        .comp-info span { color: var(--text); font-weight: 600; }
+        .btn-compress { background: var(--accent); color: #0d0d0f; border: none; padding: 0.75rem 2rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.95rem; cursor: pointer; clip-path: polygon(6px 0%, 100% 0%, calc(100% - 6px) 100%, 0% 100%); transition: background 0.2s; display: none; }
+        .btn-compress:hover { background: #f7d165; }
+        .btn-compress.show { display: inline-block; }
+        .comp-progress { display: none; margin-top: 1rem; }
+        .comp-progress.show { display: block; }
+        .comp-prog-bar { width: 100%; height: 6px; background: var(--border); margin-bottom: 0.5rem; }
+        .comp-prog-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.2s; }
+        .comp-prog-label { font-size: 0.85rem; color: var(--muted); }
+        .comp-result { display: none; background: var(--bg); border: 1px solid var(--green); padding: 1rem 1.2rem; margin-top: 1rem; }
+        .comp-result.show { display: block; }
+        .comp-result-title { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; color: var(--green); margin-bottom: 0.5rem; }
+        .comp-result-info { font-size: 0.85rem; color: var(--muted); margin-bottom: 0.8rem; }
+        .btn-dl-comp { background: var(--green); color: #0d0d0f; border: none; padding: 0.6rem 1.5rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.2s; }
+        .btn-dl-comp:hover { opacity: 0.85; }
+
+        /* ── LOCAL VIDEO PLAYER ── */
+        .local-box { background: var(--card); border: 1px solid var(--border); padding: 2rem; }
+        .local-box h2 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 3px; color: var(--accent); margin-bottom: 0.4rem; }
+        .local-box p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .local-drop { border: 2px dashed var(--border); padding: 2.5rem; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 1.5rem; }
+        .local-drop:hover, .local-drop.drag { border-color: var(--accent); }
+        .local-drop .icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.5; }
+        .local-drop p { color: var(--muted); font-size: 0.9rem; }
+        #localInput { display: none; }
+        .local-player-wrap { display: none; }
+        .local-player-wrap.show { display: block; }
+        .local-video { width: 100%; max-height: 60vh; background: #000; display: block; border: 1px solid var(--border); }
+        .local-file-info { display: flex; align-items: center; justify-content: space-between; padding: 0.7rem 0; font-size: 0.85rem; color: var(--muted); flex-wrap: wrap; gap: 0.5rem; }
+        .local-file-name { font-weight: 600; color: var(--text); }
+        .btn-local-clear { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.3rem 0.8rem; cursor: pointer; font-size: 0.8rem; transition: border-color 0.2s; }
+        .btn-local-clear:hover { border-color: var(--red); color: var(--red); }
+
+        /* ── ADMIN TAB ── */
+        .admin-locked { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 1.5rem; }
+        .admin-locked h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 4px; color: var(--accent2); }
+        .admin-locked p { color: var(--muted); }
+        .admin-content { display: none; }
+        .admin-content.unlocked { display: block; }
+        .admin-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+        .admin-badge { background: var(--accent2); color: #fff; font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; padding: 0.3rem 0.8rem; font-size: 0.85rem; }
+        .btn-admin-logout { background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.4rem 1rem; cursor: pointer; font-size: 0.85rem; transition: border-color 0.2s; }
+        .btn-admin-logout:hover { border-color: var(--red); color: var(--red); }
+
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .admin-stat { background: var(--card); border: 1px solid var(--border); padding: 1.5rem; }
+        .admin-stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
+        .admin-stat-value { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 2px; color: var(--accent); line-height: 1; }
+        .admin-stat-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.3rem; }
+
+        .admin-section { margin-bottom: 2rem; }
+        .admin-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 3px; color: var(--muted); margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+
+        .admin-video-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .admin-video-item { background: var(--card); border: 1px solid var(--border); padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+        .admin-video-name { font-size: 0.9rem; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .admin-video-meta { font-size: 0.75rem; color: var(--muted); flex-shrink: 0; }
+        .btn-admin-del { background: #3a1818; color: var(--red); border: none; padding: 0.3rem 0.8rem; font-size: 0.8rem; cursor: pointer; transition: opacity 0.2s; }
+        .btn-admin-del:hover { opacity: 0.8; }
+
+        .admin-pin-change { background: var(--card); border: 1px solid var(--border); padding: 1.5rem; }
+        .admin-pin-change h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.1rem; margin-bottom: 1rem; color: var(--text); }
+        .pin-change-row { display: flex; gap: 0.7rem; align-items: center; flex-wrap: wrap; }
+        .pin-input { background: var(--bg); border: 2px solid var(--border); color: var(--text); padding: 0.6rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 1.1rem; letter-spacing: 4px; width: 140px; outline: none; text-align: center; }
+        .pin-input:focus { border-color: var(--accent2); }
+        .btn-change-pin { background: var(--accent2); color: #fff; border: none; padding: 0.6rem 1.2rem; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: opacity 0.2s; }
+        .btn-change-pin:hover { opacity: 0.85; }
+
+        /* ── TOAST & SPINNER ── */
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--card); border: 1px solid var(--accent); color: var(--text); padding: 0.7rem 1.5rem; font-size: 0.9rem; font-weight: 600; z-index: 999; transition: transform 0.3s ease; pointer-events: none; }
         .toast.show { transform: translateX(-50%) translateY(0); }
-
         .spinner { text-align: center; padding: 3rem; color: var(--muted); font-size: 0.9rem; letter-spacing: 1px; }
         .spinner::before { content: ''; display: block; width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -239,14 +284,42 @@
 <body>
 
 <header>
-    <div class="logo">SC<span>OO</span>L</div>
+    <div class="logo" onclick="logoClick()">SC<span>OO</span>L</div>
     <nav>
-        <button class="nav-tab active" onclick="switchTab('videos', this)">📁 MY VIDEOS</button>
+        <button class="nav-tab active" onclick="switchTab('videos', this)">📁 VIDEOS</button>
         <button class="nav-tab" onclick="switchTab('clips', this)">🎞 CLIPS</button>
         <button class="nav-tab" onclick="switchTab('test', this)">🔗 TEST</button>
+        <button class="nav-tab admin-tab" id="adminNavBtn" onclick="switchTab('admin', this)" style="display:none;">⚙ ADMIN</button>
     </nav>
     <button class="header-btn" id="uploadHeaderBtn" onclick="openUpload()">+ UPLOAD</button>
 </header>
+
+<!-- PIN LOCK -->
+<div class="pin-lock" id="pinLock">
+    <h2>🔒 ADMIN ACCESS</h2>
+    <p>Enter your PIN to continue</p>
+    <div class="pin-dots" id="pinDots">
+        <div class="pin-dot" id="d0"></div>
+        <div class="pin-dot" id="d1"></div>
+        <div class="pin-dot" id="d2"></div>
+        <div class="pin-dot" id="d3"></div>
+    </div>
+    <div class="pin-grid">
+        <button class="pin-btn" onclick="pinPress('1')">1</button>
+        <button class="pin-btn" onclick="pinPress('2')">2</button>
+        <button class="pin-btn" onclick="pinPress('3')">3</button>
+        <button class="pin-btn" onclick="pinPress('4')">4</button>
+        <button class="pin-btn" onclick="pinPress('5')">5</button>
+        <button class="pin-btn" onclick="pinPress('6')">6</button>
+        <button class="pin-btn" onclick="pinPress('7')">7</button>
+        <button class="pin-btn" onclick="pinPress('8')">8</button>
+        <button class="pin-btn" onclick="pinPress('9')">9</button>
+        <button class="pin-btn" onclick="pinPress('0')" style="grid-column:2">0</button>
+        <button class="pin-btn del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="pin-error" id="pinError"></div>
+    <button class="pin-cancel" onclick="closePinLock()">Cancel</button>
+</div>
 
 <!-- UPLOAD MODAL -->
 <div class="upload-zone" id="uploadZone">
@@ -276,7 +349,7 @@
 
 <main>
 
-    <!-- TAB: VIDEOS -->
+    <!-- ── VIDEOS TAB ── -->
     <div class="tab-panel active" id="tab-videos">
         <div class="section-title">ALL VIDEOS</div>
         <div id="videosLoading" class="spinner">Loading videos…</div>
@@ -287,7 +360,7 @@
         <div class="video-grid" id="videoGrid"></div>
     </div>
 
-    <!-- TAB: CLIPS -->
+    <!-- ── CLIPS TAB ── -->
     <div class="tab-panel" id="tab-clips">
         <div class="section-title">CLIPS &amp; LINKS</div>
         <div class="clips-toolbar">
@@ -305,44 +378,190 @@
         <div class="clips-feed" id="clipsFeed"></div>
     </div>
 
-    <!-- TAB: TEST -->
+    <!-- ── TEST TAB ── -->
     <div class="tab-panel" id="tab-test">
         <div class="test-panel">
-            <div class="section-title">TEST PLAYER</div>
-            <div class="test-hero">
-                <h2>PASTE &amp; WATCH</h2>
-                <p>Paste a YouTube or TikTok link and watch it right here. Download info included.</p>
-                <div class="test-input-row">
-                    <input class="test-url-input" id="testUrlInput" type="text" placeholder="Paste YouTube or TikTok link here…" />
-                    <button class="btn-test-load" onclick="loadTestVideo()">▶ LOAD</button>
-                </div>
-                <div class="test-platform-pills">
-                    <span class="platform-pill pill-yt">YouTube</span>
-                    <span class="platform-pill pill-tt">TikTok</span>
-                    <span class="platform-pill pill-twitch">Twitch</span>
-                    <span class="platform-pill pill-reddit">Reddit</span>
-                    <span class="platform-pill">Other</span>
+            <div class="test-header-row">
+                <div class="section-title" style="margin-bottom:0;">TEST LAB</div>
+                <div class="hamburger-wrap">
+                    <button class="hamburger-btn" onclick="toggleHamburger()" title="Beta features">
+                        <span></span><span></span><span></span>
+                    </button>
+                    <div class="hamburger-menu" id="hamburgerMenu">
+                        <div class="hm-title">⚗ BETA FEATURES</div>
+                        <div class="hm-item" onclick="setTestFeature('player')">📺 Link Player <span class="hm-badge">DEFAULT</span></div>
+                        <div class="hm-item" onclick="setTestFeature('compressor')">🗜 Video Compressor <span class="hm-badge">BETA</span></div>
+                        <div class="hm-item" onclick="setTestFeature('local')">📂 Local Video Player <span class="hm-badge">BETA</span></div>
+                    </div>
                 </div>
             </div>
-            <div class="test-result" id="testResult">
-                <div class="test-empty">
-                    <div class="icon">📺</div>
-                    <p>Your video will appear here</p>
+
+            <!-- Feature: Link Player -->
+            <div class="test-feature active" id="feature-player">
+                <div class="test-hero">
+                    <h2>PASTE &amp; WATCH</h2>
+                    <p>Paste a YouTube or TikTok link and watch it right here.</p>
+                    <div class="test-input-row">
+                        <input class="test-url-input" id="testUrlInput" type="text" placeholder="Paste YouTube or TikTok link here…" />
+                        <button class="btn-test-load" onclick="loadTestVideo()">▶ LOAD</button>
+                    </div>
+                    <div class="test-platform-pills">
+                        <span class="platform-pill pill-yt">YouTube</span>
+                        <span class="platform-pill pill-tt">TikTok</span>
+                        <span class="platform-pill pill-twitch">Twitch</span>
+                        <span class="platform-pill pill-reddit">Reddit</span>
+                        <span class="platform-pill">Other</span>
+                    </div>
+                </div>
+                <div class="test-result" id="testResult">
+                    <div class="test-empty">
+                        <div class="icon">📺</div>
+                        <p>Your video will appear here</p>
+                    </div>
                 </div>
             </div>
+
+            <!-- Feature: Video Compressor -->
+            <div class="test-feature" id="feature-compressor">
+                <div class="compressor-box">
+                    <h2>VIDEO COMPRESSOR</h2>
+                    <p>Make your video file smaller without losing too much quality. Works 100% in your browser — nothing is uploaded.</p>
+                    <div class="comp-drop" id="compDrop" onclick="document.getElementById('compInput').click()">
+                        <div class="icon">🗜️</div>
+                        <p>Click or drag a video here to compress</p>
+                    </div>
+                    <input type="file" id="compInput" accept="video/*" onchange="loadCompVideo(this.files[0])">
+                    <div class="comp-info" id="compInfo" style="display:none;">
+                        Original: <span id="compOrigName">—</span> &nbsp;|&nbsp; Size: <span id="compOrigSize">—</span>
+                    </div>
+                    <div class="comp-settings" id="compSettings">
+                        <div class="comp-row">
+                            <div class="comp-label">Quality</div>
+                            <select class="comp-select" id="compQuality">
+                                <option value="high">High (smaller reduction)</option>
+                                <option value="medium" selected>Medium (balanced)</option>
+                                <option value="low">Low (smallest file)</option>
+                            </select>
+                        </div>
+                        <div class="comp-row">
+                            <div class="comp-label">Max width</div>
+                            <select class="comp-select" id="compWidth">
+                                <option value="1920">1920px (Full HD)</option>
+                                <option value="1280" selected>1280px (HD)</option>
+                                <option value="854">854px (480p)</option>
+                                <option value="640">640px (360p)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn-compress" id="btnCompress" onclick="startCompress()">🗜 COMPRESS VIDEO</button>
+                    <div class="comp-progress" id="compProgress">
+                        <div class="comp-prog-bar"><div class="comp-prog-fill" id="compProgFill"></div></div>
+                        <div class="comp-prog-label" id="compProgLabel">Processing…</div>
+                    </div>
+                    <div class="comp-result" id="compResult">
+                        <div class="comp-result-title">✓ COMPRESSION DONE!</div>
+                        <div class="comp-result-info" id="compResultInfo"></div>
+                        <button class="btn-dl-comp" id="btnDlComp">⬇ Download Compressed Video</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature: Local Video Player -->
+            <div class="test-feature" id="feature-local">
+                <div class="local-box">
+                    <h2>LOCAL VIDEO PLAYER</h2>
+                    <p>Play any video file from your computer right here — no upload needed.</p>
+                    <div class="local-drop" id="localDrop" onclick="document.getElementById('localInput').click()">
+                        <div class="icon">📂</div>
+                        <p>Click or drag a video file here to play it</p>
+                    </div>
+                    <input type="file" id="localInput" accept="video/*" onchange="loadLocalVideo(this.files[0])">
+                    <div class="local-player-wrap" id="localPlayerWrap">
+                        <video class="local-video" id="localVideo" controls></video>
+                        <div class="local-file-info">
+                            <span class="local-file-name" id="localFileName">—</span>
+                            <span id="localFileSize" style="color:var(--muted);">—</span>
+                            <button class="btn-local-clear" onclick="clearLocalVideo()">✕ Clear</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ── ADMIN TAB ── -->
+    <div class="tab-panel" id="tab-admin">
+        <div class="admin-locked" id="adminLocked">
+            <h2>🔒 ADMIN ONLY</h2>
+            <p>Click the logo 5 times to access admin</p>
+        </div>
+        <div class="admin-content" id="adminContent">
+            <div class="admin-header">
+                <div>
+                    <div class="section-title" style="margin-bottom:0.3rem;">ADMIN PANEL</div>
+                    <span class="admin-badge">ADMIN MODE</span>
+                </div>
+                <button class="btn-admin-logout" onclick="adminLogout()">🔒 Lock</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="admin-grid">
+                <div class="admin-stat">
+                    <div class="admin-stat-label">Total Videos</div>
+                    <div class="admin-stat-value" id="statVideos">—</div>
+                    <div class="admin-stat-sub">in Supabase storage</div>
+                </div>
+                <div class="admin-stat">
+                    <div class="admin-stat-label">Total Clips</div>
+                    <div class="admin-stat-value" id="statClips">—</div>
+                    <div class="admin-stat-sub">saved links</div>
+                </div>
+                <div class="admin-stat">
+                    <div class="admin-stat-label">Storage Used</div>
+                    <div class="admin-stat-value" id="statStorage">—</div>
+                    <div class="admin-stat-sub">of 1 GB free</div>
+                </div>
+            </div>
+
+            <!-- Manage Videos -->
+            <div class="admin-section">
+                <div class="admin-section-title">MANAGE VIDEOS</div>
+                <div class="admin-video-list" id="adminVideoList">
+                    <div class="spinner">Loading…</div>
+                </div>
+            </div>
+
+            <!-- Change PIN -->
+            <div class="admin-section">
+                <div class="admin-section-title">CHANGE ADMIN PIN</div>
+                <div class="admin-pin-change">
+                    <h3>Set New PIN</h3>
+                    <div class="pin-change-row">
+                        <input class="pin-input" id="newPinInput" type="password" maxlength="4" placeholder="••••" inputmode="numeric" />
+                        <button class="btn-change-pin" onclick="changePin()">SAVE PIN</button>
+                    </div>
+                    <div style="font-size:0.8rem;color:var(--muted);margin-top:0.6rem;">PIN is stored in your browser. Default is 1103.</div>
+                </div>
+            </div>
+
         </div>
     </div>
 
 </main>
 
 <script>
-// ── SUPABASE ──
+// ══════════════════════════════════════
+// SUPABASE
+// ══════════════════════════════════════
 const SUPABASE_URL = 'https://xptnaevvrwnsfklpqbhl.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const BUCKET = 'videos';
 
-// ── HELPERS ──
+// ══════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════
 function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
@@ -351,43 +570,139 @@ function showToast(msg) {
 }
 function formatSize(b) {
     if (!b) return '';
-    return b < 1048576 ? (b/1024).toFixed(1)+' KB' : (b/1048576).toFixed(1)+' MB';
+    if (b < 1048576) return (b/1024).toFixed(1)+' KB';
+    if (b < 1073741824) return (b/1048576).toFixed(1)+' MB';
+    return (b/1073741824).toFixed(2)+' GB';
 }
 function formatDate(ts) {
     return new Date(ts).toLocaleDateString(undefined, {year:'numeric',month:'short',day:'numeric'});
 }
+
+// ══════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════
 function switchTab(name, btn) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-'+name).classList.add('active');
     btn.classList.add('active');
     document.getElementById('uploadHeaderBtn').classList.toggle('hidden', name !== 'videos');
+    if (name === 'admin' && adminUnlocked) loadAdminData();
 }
 
-// ── VIDEOS TAB ──
+// ══════════════════════════════════════
+// LOGO CLICK → ADMIN UNLOCK
+// ══════════════════════════════════════
+let logoClicks = 0, logoTimer = null;
+function logoClick() {
+    logoClicks++;
+    clearTimeout(logoTimer);
+    logoTimer = setTimeout(() => { logoClicks = 0; }, 2000);
+    if (logoClicks >= 5) {
+        logoClicks = 0;
+        openPinLock();
+    }
+}
+
+// ══════════════════════════════════════
+// PIN LOCK
+// ══════════════════════════════════════
+let pinEntry = '';
+let adminUnlocked = false;
+function getAdminPin() { return localStorage.getItem('scool_pin') || '1103'; }
+
+function openPinLock() {
+    pinEntry = '';
+    updatePinDots();
+    document.getElementById('pinError').textContent = '';
+    document.getElementById('pinLock').classList.add('active');
+}
+function closePinLock() {
+    document.getElementById('pinLock').classList.remove('active');
+    pinEntry = '';
+    updatePinDots();
+}
+function pinPress(n) {
+    if (pinEntry.length >= 4) return;
+    pinEntry += n;
+    updatePinDots();
+    if (pinEntry.length === 4) setTimeout(checkPin, 150);
+}
+function pinDel() {
+    pinEntry = pinEntry.slice(0,-1);
+    updatePinDots();
+    document.getElementById('pinError').textContent = '';
+}
+function updatePinDots() {
+    for (let i=0;i<4;i++) {
+        document.getElementById('d'+i).classList.toggle('filled', i < pinEntry.length);
+    }
+}
+function checkPin() {
+    if (pinEntry === getAdminPin()) {
+        adminUnlocked = true;
+        closePinLock();
+        document.getElementById('adminNavBtn').style.display = '';
+        document.getElementById('adminContent').classList.add('unlocked');
+        document.getElementById('adminLocked').style.display = 'none';
+        // Switch to admin tab
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-admin').classList.add('active');
+        document.getElementById('adminNavBtn').classList.add('active');
+        document.getElementById('uploadHeaderBtn').classList.add('hidden');
+        loadAdminData();
+        showToast('Welcome back, Admin! 👑');
+    } else {
+        document.getElementById('pinError').textContent = 'Wrong PIN, try again';
+        pinEntry = '';
+        updatePinDots();
+        // Shake animation
+        const lock = document.getElementById('pinLock');
+        lock.style.animation = 'none';
+        setTimeout(() => { lock.style.animation = ''; }, 10);
+    }
+}
+function adminLogout() {
+    adminUnlocked = false;
+    document.getElementById('adminNavBtn').style.display = 'none';
+    document.getElementById('adminContent').classList.remove('unlocked');
+    document.getElementById('adminLocked').style.display = 'flex';
+    // Go back to videos tab
+    switchTab('videos', document.querySelector('.nav-tab'));
+    document.querySelector('.nav-tab').classList.add('active');
+    showToast('Locked 🔒');
+}
+function changePin() {
+    const np = document.getElementById('newPinInput').value.trim();
+    if (!/^\d{4}$/.test(np)) { showToast('PIN must be exactly 4 digits!'); return; }
+    localStorage.setItem('scool_pin', np);
+    document.getElementById('newPinInput').value = '';
+    showToast('PIN changed! ✓');
+}
+
+// ══════════════════════════════════════
+// VIDEOS TAB
+// ══════════════════════════════════════
 async function renderVideos() {
     document.getElementById('videosLoading').style.display = 'block';
     document.getElementById('emptyState').style.display = 'none';
     document.getElementById('videoGrid').innerHTML = '';
-
     const { data, error } = await sb.storage.from(BUCKET).list('', { sortBy: { column:'created_at', order:'desc' } });
     document.getElementById('videosLoading').style.display = 'none';
-
-    if (error) { showToast('Error: ' + error.message); return; }
-
+    if (error) { showToast('Error: '+error.message); return; }
     const files = (data||[]).filter(f => f.name && f.name !== '.emptyFolderPlaceholder');
     if (!files.length) { document.getElementById('emptyState').style.display = 'block'; return; }
-
     const grid = document.getElementById('videoGrid');
     files.forEach(file => {
-        const { data: urlData } = sb.storage.from(BUCKET).getPublicUrl(file.name);
-        const url = urlData.publicUrl;
-        const safeName = file.name.replace(/'/g,"\\'");
-        const safeUrl = url.replace(/'/g,"\\'");
+        const { data: u } = sb.storage.from(BUCKET).getPublicUrl(file.name);
+        const url = u.publicUrl;
+        const sn = file.name.replace(/'/g,"\\'");
+        const su = url.replace(/'/g,"\\'");
         const card = document.createElement('div');
         card.className = 'video-card';
         card.innerHTML = `
-            <div class="video-thumb" onclick="watchVideo('${safeUrl}','${safeName}')">
+            <div class="video-thumb" onclick="watchVideo('${su}','${sn}')">
                 <video src="${url}" muted preload="metadata"></video>
                 <div class="play-overlay"><div class="play-icon"></div></div>
             </div>
@@ -395,15 +710,14 @@ async function renderVideos() {
                 <div class="video-name" title="${file.name}">${file.name}</div>
                 <div class="video-meta">${formatSize(file.metadata?.size)} &nbsp;·&nbsp; ${formatDate(file.created_at)}</div>
                 <div class="card-actions">
-                    <button class="btn-watch" onclick="watchVideo('${safeUrl}','${safeName}')">▶ WATCH</button>
-                    <button class="btn-download" onclick="downloadVideo('${safeUrl}','${safeName}')">⬇ SAVE</button>
-                    <button class="btn-delete" onclick="deleteVideo('${safeName}',this)">✕ DEL</button>
+                    <button class="btn-watch" onclick="watchVideo('${su}','${sn}')">▶ WATCH</button>
+                    <button class="btn-download" onclick="downloadVideo('${su}','${sn}')">⬇ SAVE</button>
+                    <button class="btn-delete" onclick="deleteVideo('${sn}',this)">✕ DEL</button>
                 </div>
             </div>`;
         grid.appendChild(card);
     });
 }
-
 function watchVideo(url, name) {
     document.getElementById('playerTitle').textContent = name;
     const p = document.getElementById('playerVideo');
@@ -441,9 +755,9 @@ async function handleFile(file) {
     const fill = document.getElementById('progressFill');
     wrap.style.display = 'block'; fill.style.width = '5%';
     status.textContent = 'Uploading to cloud…';
-    const safeName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    const safeName = Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
     const { error } = await sb.storage.from(BUCKET).upload(safeName, file, { cacheControl:'3600', upsert:false, contentType:file.type });
-    if (error) { status.textContent = '❌ ' + error.message; fill.style.width='0%'; return; }
+    if (error) { status.textContent = '❌ '+error.message; fill.style.width='0%'; return; }
     fill.style.width = '100%';
     status.textContent = '✓ Done! Your friends can see it now 🎉';
     setTimeout(() => { closeUpload(); renderVideos(); }, 1200);
@@ -453,7 +767,9 @@ dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.style.
 dropArea.addEventListener('dragleave', () => { dropArea.style.borderColor='var(--accent)'; });
 dropArea.addEventListener('drop', e => { e.preventDefault(); dropArea.style.borderColor='var(--accent)'; handleFile(e.dataTransfer.files[0]); });
 
-// ── CLIPS TAB ──
+// ══════════════════════════════════════
+// CLIPS TAB
+// ══════════════════════════════════════
 function detectPlatform(url) {
     if (/youtube\.com|youtu\.be/.test(url)) return 'youtube';
     if (/tiktok\.com/.test(url)) return 'tiktok';
@@ -483,8 +799,8 @@ async function addClip() {
     let url = document.getElementById('clipUrlInput').value.trim();
     const title = document.getElementById('clipTitleInput').value.trim();
     if (!url) { showToast('Paste a link first!'); return; }
-    if (!/^https?:\/\//.test(url)) url = 'https://' + url;
-    const { error } = await sb.from('clips').insert([{ url, platform: detectPlatform(url), titel: title||url, date: new Date().toISOString() }]);
+    if (!/^https?:\/\//.test(url)) url = 'https://'+url;
+    const { error } = await sb.from('clips').insert([{ url, platform:detectPlatform(url), titel:title||url, date:new Date().toISOString() }]);
     if (error) { showToast('Error: '+error.message); return; }
     document.getElementById('clipUrlInput').value = '';
     document.getElementById('clipTitleInput').value = '';
@@ -532,70 +848,248 @@ async function deleteClip(id) {
     showToast('Clip removed!'); renderClips();
 }
 
-// ── TEST TAB ──
+// ══════════════════════════════════════
+// TEST TAB — HAMBURGER
+// ══════════════════════════════════════
+let currentFeature = 'player';
+function toggleHamburger() {
+    document.getElementById('hamburgerMenu').classList.toggle('open');
+}
+function setTestFeature(name) {
+    document.querySelectorAll('.test-feature').forEach(f => f.classList.remove('active'));
+    document.getElementById('feature-'+name).classList.add('active');
+    currentFeature = name;
+    document.getElementById('hamburgerMenu').classList.remove('open');
+}
+document.addEventListener('click', e => {
+    if (!e.target.closest('.hamburger-wrap')) {
+        document.getElementById('hamburgerMenu').classList.remove('open');
+    }
+});
+
+// ── Link Player ──
 function loadTestVideo() {
     let url = document.getElementById('testUrlInput').value.trim();
     if (!url) { showToast('Paste a link first!'); return; }
-    if (!/^https?:\/\//.test(url)) url = 'https://' + url;
+    if (!/^https?:\/\//.test(url)) url = 'https://'+url;
     const platform = detectPlatform(url);
     const embedUrl = buildEmbedUrl(url, platform);
     const result = document.getElementById('testResult');
     const safeUrl = url.replace(/'/g,"\\'");
-
     const dlBox = `<div class="test-info-box">
         <div class="test-info-title">⬇ How to download this video</div>
-        <p>Browsers can't directly download YouTube/TikTok. Use these free sites:</p>
+        <p>Use these free sites to download:</p>
         <div class="dl-service-list">
-            ${platform==='youtube'||platform==='link' ? '<div class="dl-service-item">🔴 YouTube: <a href="https://cobalt.tools/" target="_blank">cobalt.tools</a> &nbsp;or&nbsp; <a href="https://yt5s.io/" target="_blank">yt5s.io</a></div>' : ''}
+            ${platform==='youtube'||platform==='link' ? '<div class="dl-service-item">🔴 YouTube: <a href="https://cobalt.tools/" target="_blank">cobalt.tools</a> or <a href="https://yt5s.io/" target="_blank">yt5s.io</a></div>' : ''}
             ${platform==='tiktok' ? '<div class="dl-service-item">⚫ TikTok: <a href="https://snaptik.app/" target="_blank">snaptik.app</a></div>' : ''}
             ${platform==='twitch' ? '<div class="dl-service-item">🟣 Twitch: <a href="https://twitch-dl.stevearc.com/" target="_blank">twitch-dl.stevearc.com</a></div>' : ''}
             ${platform==='reddit' ? '<div class="dl-service-item">🟠 Reddit: <a href="https://redditsave.com/" target="_blank">redditsave.com</a></div>' : ''}
         </div>
     </div>`;
-
     if (platform==='tiktok'||platform==='reddit') {
-        const label = platform==='tiktok' ? 'TIKTOK' : 'REDDIT';
-        const note = platform==='tiktok' ? 'TikTok blocks embeds in other websites.' : 'Reddit videos need to be opened directly.';
-        result.innerHTML = `
-            <div class="test-result-header">
-                <div class="test-result-title">${label} VIDEO</div>
-                <div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open ↗</button></div>
-            </div>
-            <div class="test-embed-wrap" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:2rem;">
-                <div style="font-size:2.5rem;">${platform==='tiktok'?'⚠️':'🟠'}</div>
-                <div style="color:var(--muted);text-align:center;">${note}</div>
-            </div>${dlBox}`;
+        const lbl = platform==='tiktok'?'TIKTOK':'REDDIT';
+        const note = platform==='tiktok'?'TikTok blocks embeds in other websites.':'Reddit videos need to be opened directly.';
+        result.innerHTML = `<div class="test-result-header"><div class="test-result-title">${lbl} VIDEO</div><div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open ↗</button></div></div><div class="test-embed-wrap" style="display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1rem;padding:2rem;"><div style="font-size:2rem;">${platform==='tiktok'?'⚠️':'🟠'}</div><div style="color:var(--muted);text-align:center;">${note}</div></div>${dlBox}`;
         return;
     }
-
     if (embedUrl) {
-        result.innerHTML = `
-            <div class="test-result-header">
-                <div class="test-result-title">${platform.toUpperCase()} VIDEO</div>
-                <div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open Original ↗</button></div>
-            </div>
-            <div class="test-embed-wrap">
-                <iframe src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
-            </div>${dlBox}`;
+        result.innerHTML = `<div class="test-result-header"><div class="test-result-title">${platform.toUpperCase()} VIDEO</div><div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open Original ↗</button></div></div><div class="test-embed-wrap"><iframe src="${embedUrl}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe></div>${dlBox}`;
     } else {
-        result.innerHTML = `
-            <div class="test-result-header">
-                <div class="test-result-title">VIDEO LINK</div>
-                <div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open Link ↗</button></div>
-            </div>
-            <div class="test-embed-wrap" style="display:flex;align-items:center;justify-content:center;padding:2rem;">
-                <div style="color:var(--muted);text-align:center;">This link can't be embedded here.<br>Click "Open Link" to watch it.</div>
-            </div>${dlBox}`;
+        result.innerHTML = `<div class="test-result-header"><div class="test-result-title">VIDEO LINK</div><div class="test-result-actions"><button class="btn-result-action btn-open-new" onclick="window.open('${safeUrl}','_blank')">Open Link ↗</button></div></div><div class="test-embed-wrap" style="display:flex;align-items:center;justify-content:center;padding:2rem;"><div style="color:var(--muted);text-align:center;">Can't embed this link.<br>Click "Open Link" to watch it.</div></div>${dlBox}`;
     }
 }
 
-// ── KEYBOARD & MODAL CLOSE ──
+// ── Video Compressor ──
+let compFile = null, compBlob = null;
+function loadCompVideo(file) {
+    if (!file) return;
+    compFile = file;
+    compBlob = null;
+    document.getElementById('compInfo').style.display = 'flex';
+    document.getElementById('compOrigName').textContent = file.name;
+    document.getElementById('compOrigSize').textContent = formatSize(file.size);
+    document.getElementById('compSettings').classList.add('show');
+    document.getElementById('btnCompress').classList.add('show');
+    document.getElementById('compProgress').classList.remove('show');
+    document.getElementById('compResult').classList.remove('show');
+}
+const compDrop = document.getElementById('compDrop');
+compDrop.addEventListener('dragover', e => { e.preventDefault(); compDrop.classList.add('drag'); });
+compDrop.addEventListener('dragleave', () => compDrop.classList.remove('drag'));
+compDrop.addEventListener('drop', e => { e.preventDefault(); compDrop.classList.remove('drag'); loadCompVideo(e.dataTransfer.files[0]); });
+
+async function startCompress() {
+    if (!compFile) return;
+    const quality = document.getElementById('compQuality').value;
+    const maxW = parseInt(document.getElementById('compWidth').value);
+    const prog = document.getElementById('compProgress');
+    const fill = document.getElementById('compProgFill');
+    const label = document.getElementById('compProgLabel');
+    prog.classList.add('show');
+    document.getElementById('compResult').classList.remove('show');
+    fill.style.width = '10%';
+    label.textContent = 'Loading video…';
+
+    const bitsPerPixel = quality==='high' ? 0.12 : quality==='medium' ? 0.07 : 0.03;
+
+    try {
+        const url = URL.createObjectURL(compFile);
+        const video = document.createElement('video');
+        video.src = url;
+        await new Promise(r => { video.onloadedmetadata = r; });
+
+        let w = video.videoWidth, h = video.videoHeight;
+        if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext('2d');
+
+        const fps = 30;
+        const bitrate = Math.round(w * h * fps * bitsPerPixel);
+        let stream;
+        try {
+            stream = canvas.captureStream(fps);
+        } catch(e) {
+            label.textContent = '❌ Your browser does not support compression.';
+            return;
+        }
+
+        // Add audio
+        let audioCtx, dest;
+        try {
+            audioCtx = new AudioContext();
+            const src2 = audioCtx.createMediaElementSource(video);
+            dest = audioCtx.createMediaStreamDestination();
+            src2.connect(dest);
+            src2.connect(audioCtx.destination);
+            dest.stream.getAudioTracks().forEach(t => stream.addTrack(t));
+        } catch(e) { /* no audio */ }
+
+        const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
+        const rec = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: bitrate });
+        const chunks = [];
+        rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+        fill.style.width = '20%';
+        label.textContent = 'Compressing… (this may take a while)';
+
+        rec.start(100);
+        video.currentTime = 0;
+        await video.play();
+
+        const duration = video.duration;
+        let lastT = 0;
+        video.ontimeupdate = () => {
+            const pct = Math.min(95, 20 + (video.currentTime / duration) * 75);
+            fill.style.width = pct+'%';
+            label.textContent = `Compressing… ${Math.round(video.currentTime)}s / ${Math.round(duration)}s`;
+        };
+
+        await new Promise(r => { video.onended = r; });
+        rec.stop();
+        await new Promise(r => { rec.onstop = r; });
+
+        fill.style.width = '100%';
+        label.textContent = 'Done!';
+
+        compBlob = new Blob(chunks, { type: mimeType });
+        const origMB = (compFile.size/1048576).toFixed(2);
+        const newMB = (compBlob.size/1048576).toFixed(2);
+        const savings = Math.round((1 - compBlob.size/compFile.size)*100);
+
+        document.getElementById('compResultInfo').textContent = `Original: ${origMB} MB → Compressed: ${newMB} MB (${savings}% smaller)`;
+        document.getElementById('compResult').classList.add('show');
+
+        const dlBtn = document.getElementById('btnDlComp');
+        dlBtn.onclick = () => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(compBlob);
+            a.download = 'compressed_' + compFile.name.replace(/\.[^.]+$/, '') + '.webm';
+            a.click();
+        };
+
+        URL.revokeObjectURL(url);
+        if (audioCtx) audioCtx.close();
+    } catch(err) {
+        label.textContent = '❌ Error: '+err.message;
+        console.error(err);
+    }
+}
+
+// ── Local Video Player ──
+function loadLocalVideo(file) {
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const vid = document.getElementById('localVideo');
+    vid.src = url;
+    document.getElementById('localFileName').textContent = file.name;
+    document.getElementById('localFileSize').textContent = formatSize(file.size);
+    document.getElementById('localPlayerWrap').classList.add('show');
+    document.getElementById('localDrop').style.display = 'none';
+    vid.play();
+}
+function clearLocalVideo() {
+    const vid = document.getElementById('localVideo');
+    vid.pause(); vid.src = '';
+    document.getElementById('localPlayerWrap').classList.remove('show');
+    document.getElementById('localDrop').style.display = '';
+    document.getElementById('localInput').value = '';
+}
+const localDrop = document.getElementById('localDrop');
+localDrop.addEventListener('dragover', e => { e.preventDefault(); localDrop.classList.add('drag'); });
+localDrop.addEventListener('dragleave', () => localDrop.classList.remove('drag'));
+localDrop.addEventListener('drop', e => { e.preventDefault(); localDrop.classList.remove('drag'); loadLocalVideo(e.dataTransfer.files[0]); });
+
+// ══════════════════════════════════════
+// ADMIN TAB
+// ══════════════════════════════════════
+async function loadAdminData() {
+    const { data: vids } = await sb.storage.from(BUCKET).list('', { sortBy: { column:'created_at', order:'desc' } });
+    const { data: clips } = await sb.from('clips').select('id');
+
+    const files = (vids||[]).filter(f => f.name && f.name !== '.emptyFolderPlaceholder');
+    const totalSize = files.reduce((s,f) => s + (f.metadata?.size||0), 0);
+
+    document.getElementById('statVideos').textContent = files.length;
+    document.getElementById('statClips').textContent = (clips||[]).length;
+    document.getElementById('statStorage').textContent = formatSize(totalSize);
+
+    const list = document.getElementById('adminVideoList');
+    if (!files.length) { list.innerHTML = '<div style="color:var(--muted);font-size:0.9rem;padding:1rem;">No videos uploaded yet.</div>'; return; }
+    list.innerHTML = '';
+    files.forEach(f => {
+        const item = document.createElement('div');
+        item.className = 'admin-video-item';
+        const sn = f.name.replace(/'/g,"\\'");
+        item.innerHTML = `
+            <div class="admin-video-name" title="${f.name}">${f.name}</div>
+            <div class="admin-video-meta">${formatSize(f.metadata?.size)} · ${formatDate(f.created_at)}</div>
+            <button class="btn-admin-del" onclick="adminDeleteVideo('${sn}',this)">✕ DELETE</button>`;
+        list.appendChild(item);
+    });
+}
+async function adminDeleteVideo(name, btn) {
+    if (!confirm('Delete "'+name+'"?')) return;
+    btn.textContent = '...';
+    const { error } = await sb.storage.from(BUCKET).remove([name]);
+    if (error) { showToast('Error: '+error.message); btn.textContent='✕ DELETE'; return; }
+    showToast('Deleted!');
+    loadAdminData();
+    renderVideos();
+}
+
+// ══════════════════════════════════════
+// KEYBOARD & MODAL CLOSE
+// ══════════════════════════════════════
 document.getElementById('clipUrlInput').addEventListener('keydown', e => { if(e.key==='Enter') addClip(); });
 document.getElementById('testUrlInput').addEventListener('keydown', e => { if(e.key==='Enter') loadTestVideo(); });
 document.getElementById('uploadZone').addEventListener('click', e => { if(e.target===document.getElementById('uploadZone')) closeUpload(); });
 document.getElementById('playerModal').addEventListener('click', e => { if(e.target===document.getElementById('playerModal')) closePlayer(); });
 
-// ── INIT ──
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
 renderVideos();
 renderClips();
 </script>
