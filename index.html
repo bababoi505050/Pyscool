@@ -795,7 +795,7 @@ async function addClip(){
     const title=document.getElementById('clipTitleInput').value.trim();
     if(!url){showToast('Paste a link first!');return;}
     if(!/^https?:\/\//.test(url))url='https://'+url;
-    const{error}=await sb.from('clips').insert([{url,platform:detectPlatform(url),titel:title||url,date:new Date().toISOString()}]);
+    const{error}=await sb.from('Clips').insert([{url,platform:detectPlatform(url),titel:title||url,date:new Date().toISOString()}]);
     if(error){showToast('Error: '+error.message);return;}
     document.getElementById('clipUrlInput').value='';document.getElementById('clipTitleInput').value='';
     showToast('Clip saved! 🎉');renderClips();
@@ -804,7 +804,7 @@ async function renderClips(){
     document.getElementById('clipsLoading').style.display='block';
     document.getElementById('clipsEmpty').style.display='none';
     document.getElementById('clipsFeed').innerHTML='';
-    const{data,error}=await sb.from('clips').select('*').order('date',{ascending:false});
+    const{data,error}=await sb.from('Clips').select('*').order('date',{ascending:false});
     document.getElementById('clipsLoading').style.display='none';
     if(error){showToast('Error: '+error.message);return;}
     if(!data||!data.length){document.getElementById('clipsEmpty').style.display='block';return;}
@@ -831,7 +831,7 @@ async function renderClips(){
 }
 async function deleteClip(id){
     if(!confirm('Remove this clip?'))return;
-    const{error}=await sb.from('clips').delete().eq('id',id);
+    const{error}=await sb.from('Clips').delete().eq('id',id);
     if(error){showToast('Error: '+error.message);return;}
     showToast('Clip removed!');renderClips();
 }
@@ -991,7 +991,7 @@ async function delVault(id,btn){
 // ══ ADMIN TAB ══
 async function loadAdminData(){
     const{data:vids}=await sb.storage.from(BUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
-    const{data:clips}=await sb.from('clips').select('id');
+    const{data:clips}=await sb.from('Clips').select('id');
     const vaultVids=await dbGetAll('vault');
     const files=(vids||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
     const totalSize=files.reduce((s,f)=>s+(f.metadata?.size||0),0);
