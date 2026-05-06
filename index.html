@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scool</title>
+    <title>school</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -696,7 +696,7 @@
     <div class="upload-box" id="dropArea">
         <button class="close-btn" onclick="closeUpload()">✕</button>
         <h2>Upload Video</h2>
-        <p>Drop a video here or click to browse.<br><small>Everyone on Scool can see it! 🌍</small></p>
+        <p>Drop a video here or click to browse.<br><small>Everyone on school can see it! 🌍</small></p>
         <label class="file-input-label" for="fileInput">Choose File</label>
         <input type="file" id="fileInput" accept="video/*" onchange="handleFile(this.files[0])">
         <div class="progress-bar-wrap" id="progressWrap"><div class="progress-bar-fill" id="progressFill"></div></div>
@@ -806,7 +806,7 @@ function checkAccPin(){
     if(!pendingLoginUser)return;
     if(accPinEntry===pendingLoginUser.pin){
         currentUser=pendingLoginUser;
-        sessionStorage.setItem('scool_session',JSON.stringify(currentUser));
+        sessionStorage.setItem('school_session',JSON.stringify(currentUser));
         document.getElementById('pinScreen').classList.remove('active');
         initSite();
     } else {
@@ -817,7 +817,7 @@ function checkAccPin(){
 
 function doLogout(){
     currentUser=null;pendingLoginUser=null;adminUnlocked=false;
-    sessionStorage.removeItem('scool_session');
+    sessionStorage.removeItem('school_session');
     document.getElementById('siteContainer').style.display='none';
     document.getElementById('authScreen').style.display='flex';
     document.getElementById('adminNavBtn').style.display='none';
@@ -858,7 +858,7 @@ function logoClick(){
 }
 
 // ══ ADMIN PIN ══
-function getAdminPin(){return localStorage.getItem('scool_admin_pin')||'1103';}
+function getAdminPin(){return localStorage.getItem('school_admin_pin')||'1103';}
 function openAdminPin(){adminPinEntry='';updateAdminPinDots();document.getElementById('adminPinError').textContent='';document.getElementById('adminPinLock').classList.add('active');}
 function closeAdminPin(){document.getElementById('adminPinLock').classList.remove('active');adminPinEntry='';updateAdminPinDots();}
 function adminPinPress(n){if(adminPinEntry.length>=4)return;adminPinEntry+=n;updateAdminPinDots();if(adminPinEntry.length===4)setTimeout(checkAdminPin,150);}
@@ -893,7 +893,7 @@ function adminLogout(){
 function changeAdminPin(){
     const np=document.getElementById('newPinInput').value.trim();
     if(!/^\d{4}$/.test(np)){showToast('PIN must be 4 digits!');return;}
-    localStorage.setItem('scool_admin_pin',np);document.getElementById('newPinInput').value='';showToast('Admin PIN changed! ✓');
+    localStorage.setItem('school_admin_pin',np);document.getElementById('newPinInput').value='';showToast('Admin PIN changed! ✓');
 }
 function openAdminFromMenu(){
     document.getElementById('hamburgerMenu').classList.remove('open');
@@ -1080,7 +1080,7 @@ function copyShareCode(){
 }
 
 // ══ INDEXEDDB ══
-const DB_NAME='scoolOffline';let offlineDB;
+const DB_NAME='schoolOffline';let offlineDB;
 function openOfflineDB(){
     return new Promise((res,rej)=>{
         const req=indexedDB.open(DB_NAME,2);
@@ -1411,7 +1411,7 @@ document.getElementById('loginUsername').addEventListener('keydown',e=>{if(e.key
 document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 // ══ INIT ══
-const saved=sessionStorage.getItem('scool_session');
+const saved=sessionStorage.getItem('school_session');
 if(saved){currentUser=JSON.parse(saved);initSite();}
 </script>
 </body>
