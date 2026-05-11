@@ -293,6 +293,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .hb-beta{background:var(--accent2);color:#fff;}
 .hb-priv{background:#1a2535;color:var(--blue);}
 .hb-admin{background:#2a1010;color:var(--accent2);}
+.hb-ai{background:linear-gradient(90deg,#7c3aed,#4a9eff);color:#fff;}
 .test-feature{display:none;}
 .test-feature.active{display:block;}
 .test-hero{background:var(--card);border:1px solid var(--border);padding:1.8rem;margin-bottom:1.5rem;}
@@ -363,6 +364,13 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .vault-prog-wrap{width:100%;height:4px;background:var(--border);margin-bottom:.4rem;display:none;}
 .vault-prog-fill{height:100%;background:var(--blue);width:0%;transition:width .2s;}
 .vault-status{font-size:.82rem;color:var(--muted);margin-bottom:.8rem;}
+/* Vault claim row */
+.vault-claim-row{display:flex;gap:.6rem;margin-bottom:1rem;align-items:center;}
+.vault-claim-input{flex:1;background:var(--bg);border:2px solid #2a3a50;color:var(--text);padding:.55rem .9rem;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:4px;outline:none;text-transform:uppercase;transition:border-color .2s;}
+.vault-claim-input:focus{border-color:var(--blue);}
+.vault-claim-input::placeholder{font-family:'DM Sans',sans-serif;font-size:.82rem;letter-spacing:1px;color:var(--muted);}
+.btn-vault-claim{background:var(--blue);color:#fff;border:none;padding:.55rem 1rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;white-space:nowrap;transition:opacity .2s;}
+.btn-vault-claim:hover{opacity:.85;}
 .vault-sec-title{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:.95rem;color:var(--muted);margin:1rem 0 .7rem;padding-bottom:.35rem;border-bottom:1px solid var(--border);}
 .vault-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.9rem;}
 .vault-card{background:var(--bg);border:1px solid #2a3a50;overflow:hidden;animation:fadeIn .3s ease;transition:border-color .2s;}
@@ -378,6 +386,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .btn-vv{flex:1;padding:.38rem 0;border:none;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;transition:opacity .2s;}
 .btn-vv:hover{opacity:.8;}
 .bvv-watch{background:var(--blue);color:#fff;}
+.bvv-share{background:#1a2a3a;color:var(--accent);border:1px solid #2a3a50;}
 .bvv-del{background:#3a1818;color:#e06060;}
 .sc-card{background:var(--bg);border:1px solid #2a3a50;padding:.7rem .9rem;display:flex;align-items:center;gap:.7rem;margin-bottom:.4rem;}
 .sc-title{flex:1;font-size:.85rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -386,19 +395,46 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .btn-sc:hover{border-color:var(--accent);color:var(--accent);}
 .btn-sc-del:hover{border-color:var(--red)!important;color:var(--red)!important;}
 
+/* ── CODE HELPER (new AI feature) ── */
+.ch-box{background:var(--card);border:1px solid var(--border);border-image:linear-gradient(135deg,#7c3aed,#4a9eff) 1;padding:1.8rem;}
+.ch-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:.3rem;background:linear-gradient(90deg,#b07fff,#4a9eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.ch-box p{color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;}
+.ch-textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Mono',monospace,'DM Sans',sans-serif;font-size:.82rem;outline:none;resize:vertical;min-height:120px;transition:border-color .2s;margin-bottom:.8rem;line-height:1.6;}
+.ch-textarea:focus{border-color:#7c3aed;}
+.ch-textarea::placeholder{color:var(--muted);}
+.ch-controls{display:flex;gap:.6rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap;}
+.ch-mode{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.45rem .7rem;font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;cursor:pointer;}
+.btn-ch-ask{background:linear-gradient(135deg,#7c3aed,#4a9eff);color:#fff;border:none;padding:.6rem 1.4rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);transition:opacity .2s;}
+.btn-ch-ask:hover{opacity:.85;}
+.btn-ch-ask:disabled{opacity:.5;cursor:not-allowed;}
+.ch-result{background:var(--bg);border:1px solid #3a2a5a;padding:1.2rem;font-size:.88rem;line-height:1.75;color:var(--text);min-height:60px;white-space:pre-wrap;display:none;}
+.ch-result.show{display:block;}
+.ch-result-label{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:.8rem;color:#b07fff;margin-bottom:.6rem;}
+.ch-thinking{color:var(--muted);font-style:italic;font-size:.83rem;}
+.ch-copy-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:.3rem .7rem;font-size:.75rem;cursor:pointer;margin-top:.8rem;transition:border-color .2s,color .2s;}
+.ch-copy-btn:hover{border-color:var(--accent);color:var(--accent);}
+.ch-examples{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;}
+.ch-pill{background:var(--border);color:var(--muted);font-size:.72rem;padding:.25rem .65rem;cursor:pointer;border-radius:20px;transition:background .2s,color .2s;border:none;}
+.ch-pill:hover{background:#3a2a5a;color:#b07fff;}
+
 /* FEEDBACK BUTTON */
 .feedback-fab{position:fixed;bottom:2rem;right:2rem;z-index:150;background:var(--card);border:1px solid var(--border);color:var(--text);width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:border-color .2s,transform .2s;box-shadow:0 4px 16px rgba(0,0,0,.4);}
 .feedback-fab:hover{border-color:var(--accent);transform:scale(1.1);}
 .feedback-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:400;align-items:center;justify-content:center;}
 .feedback-modal.active{display:flex;}
-.feedback-box{background:var(--card);border:1px solid var(--border);width:min(440px,92vw);padding:2rem;position:relative;}
+.feedback-box{background:var(--card);border:1px solid var(--border);width:min(460px,92vw);padding:2rem;position:relative;}
 .feedback-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;color:var(--accent);margin-bottom:.3rem;}
 .feedback-box p{color:var(--muted);font-size:.85rem;margin-bottom:1rem;}
 .feedback-textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:vertical;min-height:100px;transition:border-color .2s;margin-bottom:.8rem;}
 .feedback-textarea:focus{border-color:var(--accent);}
 .feedback-textarea::placeholder{color:var(--muted);}
-.btn-feedback-send{background:var(--accent);color:#0d0d0f;border:none;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;width:100%;transition:background .2s;}
+/* NEW: two-button row in feedback */
+.feedback-btn-row{display:flex;gap:.6rem;margin-bottom:.6rem;}
+.btn-feedback-send{background:var(--accent);color:#0d0d0f;border:none;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;flex:1;transition:background .2s;}
 .btn-feedback-send:hover{background:#f7d165;}
+.btn-feedback-ai{background:var(--card);color:var(--text);border:1px solid var(--border);padding:.7rem 1.1rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;white-space:nowrap;transition:border-color .2s,color .2s;}
+.btn-feedback-ai:hover{border-color:#b07fff;color:#b07fff;}
+.feedback-ai-note{font-size:.75rem;color:var(--muted);text-align:center;margin-top:.3rem;}
 
 /* ADMIN TAB */
 .admin-locked{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:1.5rem;}
@@ -532,18 +568,18 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <button class="apl-cancel" onclick="closeApl()">Cancel</button>
 </div>
 
-<!-- SHARE MODAL -->
+<!-- SHARE MODAL (clips + vault) -->
 <div class="share-modal" id="shareModal">
     <div class="share-box">
         <h3>🔗 SHARE CODE</h3>
-        <p>Send this code to your friend — they enter it in their Vault to claim the clip!</p>
+        <p id="shareModalDesc">Send this code to your friend — they enter it in their Vault to claim it!</p>
         <div class="share-code" id="shareCodeDisplay">------</div>
         <button class="btn-copy" onclick="copyCode()">📋 COPY CODE</button>
         <button class="btn-share-close" onclick="shareModal.classList.remove('active')">Close</button>
     </div>
 </div>
 
-<!-- CLAIM MODAL -->
+<!-- CLAIM MODAL (clips) -->
 <div class="claim-modal" id="claimModal">
     <div class="claim-box">
         <h3>🔗 CLAIM CLIP</h3>
@@ -554,14 +590,18 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     </div>
 </div>
 
-<!-- FEEDBACK MODAL -->
+<!-- FEEDBACK MODAL — now with AI prompt button -->
 <div class="feedback-modal" id="feedbackModal">
     <div class="feedback-box">
         <button class="modal-close" onclick="feedbackModal.classList.remove('active')">✕</button>
         <h2>💬 FEEDBACK</h2>
-        <p>Got a suggestion or bug to report? Let us know!</p>
-        <textarea class="feedback-textarea" id="feedbackText" placeholder="Type your feedback here…"></textarea>
-        <button class="btn-feedback-send" onclick="sendFeedback()">SEND FEEDBACK</button>
+        <p>Got a suggestion or bug to report? Send it to the admin, or copy it as an AI prompt to get it fixed yourself!</p>
+        <textarea class="feedback-textarea" id="feedbackText" placeholder="Type your feedback or bug description here…"></textarea>
+        <div class="feedback-btn-row">
+            <button class="btn-feedback-send" onclick="sendFeedback()">SEND TO ADMIN</button>
+            <button class="btn-feedback-ai" onclick="generateAIPrompt()" title="Format as a prompt you can paste into Claude or ChatGPT">🤖 Copy AI Prompt</button>
+        </div>
+        <div class="feedback-ai-note">AI Prompt = formats your feedback into a ready-to-paste message for Claude / ChatGPT</div>
     </div>
 </div>
 
@@ -623,7 +663,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="clips-feed" id="clipsFeed"></div>
 </div>
 
-<!-- SHORTS TAB - special full height -->
+<!-- SHORTS TAB -->
 <div class="tab-panel" id="tab-shorts" style="padding:0;">
     <div class="shorts-header">
         <div class="shorts-header-title">📱 SHORTS</div>
@@ -662,6 +702,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
                 <div class="hm-item" onclick="setFeature('player')">📺 Link Player <span class="hm-badge hb-def">DEFAULT</span></div>
                 <div class="hm-item" onclick="setFeature('compressor')">🗜 Compressor <span class="hm-badge hb-beta">BETA</span></div>
                 <div class="hm-item" onclick="setFeature('vault')">🔒 Private Vault <span class="hm-badge hb-priv">PRIVATE</span></div>
+                <div class="hm-item" onclick="setFeature('codehelper')">🎓 Code Helper <span class="hm-badge hb-ai">AI</span></div>
                 <div class="hm-title" style="margin-top:.3rem;">⚙ SYSTEM</div>
                 <div class="hm-item" onclick="openAdminFromMenu()" style="color:var(--accent2);">👑 Admin Mode <span class="hm-badge hb-admin">PIN</span></div>
             </div>
@@ -709,7 +750,12 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="test-feature" id="feature-vault">
         <div class="vault-box">
             <h2>🔒 PRIVATE VAULT</h2>
-            <p>Upload private big videos or claim shared clips. Only stored in your browser.</p>
+            <p>Upload private videos or claim shared ones. Stored in your browser only.</p>
+            <!-- Vault file claim row (NEW) -->
+            <div class="vault-claim-row">
+                <input class="vault-claim-input" id="vaultClaimInput" maxlength="6" placeholder="Enter 6-letter code to claim a shared file…" oninput="this.value=this.value.toUpperCase()"/>
+                <button class="btn-vault-claim" onclick="claimVaultFile()">🔗 CLAIM FILE</button>
+            </div>
             <div class="vault-drop" id="vaultDrop" onclick="document.getElementById('vaultInput').click()">
                 <div class="dicon">🔒</div><p>Click or drag any video — no size limit</p>
             </div>
@@ -724,6 +770,38 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
             <div id="sharedClipsList"></div>
         </div>
     </div>
+
+    <!-- ══ CODE HELPER (NEW AI feature) ══ -->
+    <div class="test-feature" id="feature-codehelper">
+        <div class="ch-box">
+            <h2>🎓 CODE HELPER</h2>
+            <p>Paste any snippet from the Scool source code and get a plain-English explanation — or ask a question about how it works. Powered by AI.</p>
+            <!-- Quick example pills -->
+            <div class="ch-examples">
+                <button class="ch-pill" onclick="chExample('auth')">🔐 How does login work?</button>
+                <button class="ch-pill" onclick="chExample('vault')">🔒 What is the Vault?</button>
+                <button class="ch-pill" onclick="chExample('clips')">🎞 How are clips stored?</button>
+                <button class="ch-pill" onclick="chExample('offline')">📴 How does offline work?</button>
+                <button class="ch-pill" onclick="chExample('supabase')">☁️ What is Supabase?</button>
+            </div>
+            <textarea class="ch-textarea" id="chInput" placeholder="Paste a code snippet here, or type a question like 'What does renderVideos() do?'…" rows="6"></textarea>
+            <div class="ch-controls">
+                <select class="ch-mode" id="chMode">
+                    <option value="explain">Explain this code</option>
+                    <option value="question">Answer my question</option>
+                    <option value="debug">Help me debug this</option>
+                    <option value="improve">Suggest improvements</option>
+                </select>
+                <button class="btn-ch-ask" id="chAskBtn" onclick="askCodeHelper()">🎓 ASK AI</button>
+            </div>
+            <div class="ch-result" id="chResult">
+                <div class="ch-result-label">AI EXPLANATION</div>
+                <div id="chResultText"></div>
+                <button class="ch-copy-btn" onclick="copyChResult()">📋 Copy answer</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 </div>
 
@@ -797,11 +875,14 @@ const SUPABASE_URL='https://xptnaevvrwnsfklpqbhl.supabase.co';
 const SUPABASE_KEY='sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const BUCKET='videos', SBUCKET='shorts';
+// Vault file sharing uses the same BUCKET but with a prefix
+const VAULT_SHARE_PREFIX='vault_share_';
 
 // ══ STATE ══
 let currentUser=null, pendingUser=null, adminUnlocked=false;
 let accPinStr='', aplPinStr='';
-let renameTarget=null; // {filename}
+let renameTarget=null;
+let shareModalMode='clip'; // 'clip' or 'vault'
 
 // ══ HELPERS ══
 function showToast(msg,dur=2800){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
@@ -904,7 +985,6 @@ function switchTab(name,btn){
     btn.classList.add('active');
     const showUp=name==='videos';
     document.getElementById('uploadHeaderBtn').classList.toggle('hidden',!showUp);
-    // Special layout for shorts
     document.getElementById('mainContent').style.padding=name==='shorts'?'0':'2rem';
     if(name==='admin'&&adminUnlocked)loadAdminData();
     if(name==='offline')renderOffline();
@@ -978,7 +1058,8 @@ async function renderVideos(){
     const{data:files}=await sb.storage.from(BUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
     const{data:posts}=await sb.from('video_posts').select('*');
     document.getElementById('videosLoading').style.display='none';
-    const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
+    // Filter out vault share files from the public grid
+    const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder'&&!f.name.startsWith(VAULT_SHARE_PREFIX));
     if(!vids.length){document.getElementById('emptyVideos').style.display='block';return;}
     const pm={};(posts||[]).forEach(p=>pm[p.filename]=p);
     const grid=document.getElementById('videoGrid');
@@ -1022,8 +1103,7 @@ async function delVideo(name,btn){
     await sb.from('video_posts').delete().eq('filename',name);
     showToast('Deleted!');renderVideos();
 }
-// Rename
-function openRename(filename, currentName){
+function openRename(filename,currentName){
     renameTarget=filename;
     document.getElementById('renameInput').value=currentName;
     document.getElementById('renameModal').classList.add('active');
@@ -1031,12 +1111,11 @@ function openRename(filename, currentName){
 async function confirmRename(){
     const newName=document.getElementById('renameInput').value.trim();
     if(!newName){showToast('Enter a name!');return;}
-    if(!renameTarget){return;}
+    if(!renameTarget)return;
     await sb.from('video_posts').upsert([{filename:renameTarget,display_name:newName,username:currentUser.username,rank:currentUser.rank}],{onConflict:'filename'});
     document.getElementById('renameModal').classList.remove('active');
     showToast('Renamed! ✓');renderVideos();renameTarget=null;
 }
-
 function toggleTheater(){
     const m=document.getElementById('playerModal');const b=document.getElementById('theaterBtn');
     m.classList.toggle('theater');b.classList.toggle('on');
@@ -1085,14 +1164,12 @@ async function uploadShort(file){
     document.getElementById('shortInput').value='';
     renderShorts();
 }
-
 let shortsMuted=true;
 async function renderShorts(){
     const{data:files}=await sb.storage.from(SBUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
     const{data:posts}=await sb.from('shorts_posts').select('*');
     const feed=document.getElementById('shortsFeed');
     const empty=document.getElementById('shortsEmpty');
-    // Clear existing slides but keep empty state
     feed.querySelectorAll('.short-slide').forEach(s=>s.remove());
     const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
     if(!vids.length){empty.style.display='flex';return;}
@@ -1120,7 +1197,6 @@ async function renderShorts(){
                 <button class="short-side-btn" onclick="saveOffline('${url.replace(/'/g,"\\'")}','${file.name.replace(/'/g,"\\'")}')">📴</button>
             </div>`;
         feed.appendChild(slide);
-        // Intersection observer for auto play
         const video=slide.querySelector('video');
         const prog=slide.querySelector('.short-progress-fill');
         video.addEventListener('timeupdate',()=>{if(video.duration)prog.style.width=(video.currentTime/video.duration*100)+'%';});
@@ -1205,10 +1281,13 @@ async function delClip(id){
     await sb.from('Clips').delete().eq('id',id);
     showToast('Removed!');renderClips();
 }
+// Share a clip (link/URL) — stores in shared_clips table
 async function shareClip(id,url,title,platform){
     const code=Math.random().toString(36).slice(2,8).toUpperCase();
     const{error}=await sb.from('shared_clips').insert([{share_code:code,url,titel:title,platform,from_user:currentUser.username}]);
     if(error){showToast('Error: '+error.message);return;}
+    shareModalMode='clip';
+    document.getElementById('shareModalDesc').textContent="Send this code to your friend — they enter it in their Vault to claim the clip!";
     document.getElementById('shareCodeDisplay').textContent=code;
     document.getElementById('shareModal').classList.add('active');
 }
@@ -1216,6 +1295,7 @@ function copyCode(){
     const code=document.getElementById('shareCodeDisplay').textContent;
     navigator.clipboard.writeText(code).then(()=>showToast('Code copied! 📋')).catch(()=>showToast('Code: '+code));
 }
+// Claim a shared clip (URL/link)
 async function claimClip(){
     const code=document.getElementById('claimCodeInput').value.trim().toUpperCase();
     if(!code||code.length!==6){showToast('Enter a valid 6-letter code!');return;}
@@ -1231,11 +1311,40 @@ async function claimClip(){
     document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
     document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
     document.getElementById('tab-test').classList.add('active');
-    document.querySelectorAll('.nav-tab')[3].classList.add('active');
+    document.querySelectorAll('.nav-tab')[4].classList.add('active');
     renderVault();
 }
 
-// ══ FEEDBACK ══
+// ══ NEW: FEEDBACK AI PROMPT ══
+// Generates a structured prompt ready to paste into Claude or ChatGPT
+// so the user can ask the AI to help fix the issue themselves.
+function generateAIPrompt(){
+    const text=document.getElementById('feedbackText').value.trim();
+    if(!text){showToast('Write your feedback or bug first!');return;}
+    const prompt=`I'm working on a private web app called "Scool" — a video sharing platform for a friend group.
+
+Tech stack:
+- Frontend: Vanilla HTML, CSS, JavaScript (single HTML file)
+- Backend: Supabase (PostgreSQL database + Storage buckets)
+- Auth: custom username/password stored in a "users" table, with a 4-digit PIN on login
+- Features: Videos tab (upload/watch from Supabase storage), Clips tab (YouTube/TikTok/Twitch links), Shorts tab (vertical video feed), Offline tab (IndexedDB), Test Lab (link player, video compressor, private Vault)
+- The Vault stores videos as ArrayBuffers in IndexedDB (local browser only) and can share files via Supabase using vault_shares table + a 6-letter code system
+
+Here is my feedback / bug report:
+"${text}"
+
+Please help me understand or fix this. If code changes are needed, show the exact lines to change and what to change them to.`;
+    navigator.clipboard.writeText(prompt)
+        .then(()=>showToast('AI prompt copied to clipboard! 📋 Paste it into Claude or ChatGPT.'))
+        .catch(()=>{
+            // Fallback: show in a temporary textarea
+            const ta=document.createElement('textarea');ta.value=prompt;ta.style.cssText='position:fixed;left:-9999px;top:0;';
+            document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+            showToast('AI prompt copied! 📋');
+        });
+}
+
+// ══ FEEDBACK (send to admin) ══
 async function sendFeedback(){
     const msg=document.getElementById('feedbackText').value.trim();
     if(!msg){showToast('Write something first!');return;}
@@ -1343,7 +1452,7 @@ function loadTest(){
     else{result.innerHTML=`<div class="test-result-header"><div class="test-result-title">VIDEO LINK</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open ↗</button></div></div><div class="test-embed" style="display:flex;align-items:center;justify-content:center;"><div style="color:var(--muted);">Can't embed. Click Open to watch.</div></div>${dlBox}`;}
 }
 
-// Compressor
+// ── Compressor ──
 let compFile=null;
 function loadComp(file){
     if(!file)return;compFile=file;
@@ -1392,7 +1501,7 @@ async function startCompress(){
     }catch(err){label.textContent='❌ '+err.message;}
 }
 
-// Vault
+// ── Vault ──
 async function saveVault(file){
     if(!file)return;
     const wrap=document.getElementById('vaultProgWrap');const fill=document.getElementById('vaultProgFill');const status=document.getElementById('vaultStatus');
@@ -1408,6 +1517,71 @@ const vaultDrop=document.getElementById('vaultDrop');
 vaultDrop.addEventListener('dragover',e=>{e.preventDefault();vaultDrop.classList.add('drag');});
 vaultDrop.addEventListener('dragleave',()=>vaultDrop.classList.remove('drag'));
 vaultDrop.addEventListener('drop',e=>{e.preventDefault();vaultDrop.classList.remove('drag');saveVault(e.dataTransfer.files[0]);});
+
+// ══ NEW: VAULT FILE SHARING ══
+// Uploads the actual video file to Supabase temporarily, generates a 6-letter code.
+// The recipient enters the code, downloads the file into their own vault, then the file is deleted from Supabase.
+async function shareVaultVideo(vaultId){
+    const vids=await dbGetAll('vault');
+    const vid=vids.find(v=>v.id===vaultId);
+    if(!vid){showToast('File not found!');return;}
+    showToast('Uploading to share… this may take a moment ⏳');
+    try{
+        // Generate unique share code and filename
+        const code=Math.random().toString(36).slice(2,8).toUpperCase();
+        const filename=VAULT_SHARE_PREFIX+code+'_'+vid.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+        // Upload the video blob to Supabase storage
+        const blob=new Blob([vid.data],{type:vid.type});
+        const{error:uploadErr}=await sb.storage.from(BUCKET).upload(filename,blob,{cacheControl:'86400',upsert:false,contentType:vid.type});
+        if(uploadErr){showToast('Upload error: '+uploadErr.message);return;}
+        // Store the share record in Supabase DB (vault_shares table)
+        const{error:dbErr}=await sb.from('vault_shares').insert([{
+            share_code:code,filename,from_user:currentUser.username,title:vid.name,file_size:vid.size
+        }]);
+        if(dbErr){
+            // If vault_shares table doesn't exist yet, show a helpful message
+            showToast('Note: Create a "vault_shares" table in Supabase first! (share_code, filename, from_user, title, file_size)');
+            // Clean up the uploaded file
+            await sb.storage.from(BUCKET).remove([filename]);
+            return;
+        }
+        // Show the share modal with the code
+        shareModalMode='vault';
+        document.getElementById('shareModalDesc').textContent='Send this code to your friend — they paste it into the Vault claim box to download this file!';
+        document.getElementById('shareCodeDisplay').textContent=code;
+        document.getElementById('shareModal').classList.add('active');
+        showToast('File ready to share! 🔒');
+    }catch(e){showToast('Error: '+e.message);}
+}
+
+// Claim a shared vault file — downloads from Supabase into local vault
+async function claimVaultFile(){
+    const code=document.getElementById('vaultClaimInput').value.trim().toUpperCase();
+    if(!code||code.length!==6){showToast('Enter a valid 6-letter code!');return;}
+    showToast('Looking up code…');
+    const{data,error}=await sb.from('vault_shares').select('*').eq('share_code',code);
+    if(error){showToast('Error: '+error.message);return;}
+    if(!data||!data.length){showToast('Invalid or expired code!');return;}
+    const share=data[0];
+    showToast('Downloading file… please wait ⏳');
+    try{
+        // Get the public URL and fetch the file
+        const{data:urlData}=sb.storage.from(BUCKET).getPublicUrl(share.filename);
+        const resp=await fetch(urlData.publicUrl);
+        if(!resp.ok)throw new Error('Download failed ('+resp.status+')');
+        const blob=await resp.blob();
+        const arr=await blob.arrayBuffer();
+        // Save to local vault
+        await dbPut('vault',{id:'v_'+Date.now(),name:share.title,type:blob.type,size:blob.size,date:Date.now(),data:arr});
+        // Delete the share record and file from Supabase (one-time use)
+        await sb.from('vault_shares').delete().eq('share_code',code);
+        await sb.storage.from(BUCKET).remove([share.filename]);
+        document.getElementById('vaultClaimInput').value='';
+        showToast('✓ File saved to your Vault! 🔒');
+        renderVault();
+    }catch(e){showToast('Error: '+e.message);}
+}
+
 async function renderVault(){
     const vids=await dbGetAll('vault');const shared=await dbGetAll('sharedClips');
     const grid=document.getElementById('vaultGrid');const empty=document.getElementById('vaultEmpty');
@@ -1429,6 +1603,7 @@ async function renderVault(){
                     <div class="vault-meta">${fmtSize(v.size)} · ${fmtDate(v.date)}</div>
                     <div class="vault-actions">
                         <button class="btn-vv bvv-watch" onclick="watchVideo('${su}','${sn}')">▶ WATCH</button>
+                        <button class="btn-vv bvv-share" onclick="shareVaultVideo('${sid}')" title="Share this file with a friend via code">🔗 SHARE</button>
                         <button class="btn-vv bvv-del" onclick="delVault('${sid}')">✕ DEL</button>
                     </div>
                 </div>`;
@@ -1456,6 +1631,84 @@ async function renderVault(){
 async function delVault(id){if(!confirm('Delete?'))return;await dbDel('vault',id);showToast('Deleted!');renderVault();}
 async function delShared(id){await dbDel('sharedClips',id);showToast('Removed!');renderVault();}
 
+// ══ NEW: CODE HELPER (AI-powered) ══
+// Lets users ask questions about the Scool codebase and get plain-English explanations.
+// Uses the Anthropic API so it actually understands the code in context.
+
+// Quick example snippets / questions
+const CH_EXAMPLES={
+    auth:`How does login work in Scool? What happens step by step when I click LOGIN?`,
+    vault:`What is the Private Vault? How does it store videos, and what's the difference between saving to vault vs saving for offline?`,
+    clips:`How are clips stored? What tables does Supabase use and what data is saved?`,
+    offline:`How does the Offline tab work? What is IndexedDB and why can't I see the videos on another device?`,
+    supabase:`What is Supabase and how is it used in Scool? What is stored in the database vs in storage buckets?`
+};
+function chExample(key){
+    document.getElementById('chInput').value=CH_EXAMPLES[key];
+    document.getElementById('chMode').value='question';
+}
+
+// System prompt that describes Scool so the AI has full context
+const CH_SYSTEM=`You are a helpful coding assistant explaining the "Scool" web app to its developer. Scool is a private video-sharing platform for a friend group.
+
+Tech overview:
+- Single HTML file (vanilla JS, no framework)
+- Supabase backend: PostgreSQL database + Storage buckets
+- Database tables: users (id, username, password, pin, rank, verified), video_posts (filename, display_name, username, rank), Clips (id, url, platform, titel, date, username, rank), shorts_posts (filename, display_name, username, rank), shared_clips (share_code, url, titel, platform, from_user), vault_shares (share_code, filename, from_user, title, file_size), feedback (id, username, rank, message, read)
+- Storage buckets: "videos" (public videos + temporary vault share files prefixed vault_share_), "shorts" (vertical short videos)
+- Auth: custom username/password in users table, 4-digit PIN stored per user, verified boolean for admin approval
+- Offline/Vault: uses IndexedDB (browser-local) — stores entire video as ArrayBuffer, never leaves the device
+- Vault sharing: sender uploads file to Supabase (prefixed vault_share_), stores a 6-letter code in vault_shares table. Receiver enters code → file downloads to their IndexedDB vault → file deleted from Supabase (one-time use)
+- Admin access: PIN-locked (default 1103), 5-tap on logo shortcut, unlocks an admin panel to approve users, set ranks, manage videos, read feedback
+- Ranks: Member, Regular, VIP, Admin, Owner (stored per user, shown as colored badges)
+
+When explaining code: be clear, friendly, and concrete. Use simple language. The developer is learning, so explain WHY things work the way they do, not just what they do.`;
+
+async function askCodeHelper(){
+    const input=document.getElementById('chInput').value.trim();
+    const mode=document.getElementById('chMode').value;
+    if(!input){showToast('Type a question or paste some code first!');return;}
+    const btn=document.getElementById('chAskBtn');
+    const result=document.getElementById('chResult');
+    const resultText=document.getElementById('chResultText');
+    btn.disabled=true;btn.textContent='Thinking…';
+    result.classList.add('show');
+    resultText.innerHTML='<span class="ch-thinking">🤔 Reading the code…</span>';
+    const modeInstructions={
+        explain:'Explain what this code does in plain English. Break it down step by step.',
+        question:'Answer this question clearly and concisely, with examples if helpful.',
+        debug:'Help debug this issue. Identify what might be wrong and suggest fixes.',
+        improve:'Suggest improvements to this code. Focus on clarity, reliability, and user experience.'
+    };
+    const userMessage=`${modeInstructions[mode]}\n\n${input}`;
+    try{
+        const resp=await fetch('https://api.anthropic.com/v1/messages',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({
+                model:'claude-sonnet-4-20250514',
+                max_tokens:1000,
+                system:CH_SYSTEM,
+                messages:[{role:'user',content:userMessage}]
+            })
+        });
+        const data=await resp.json();
+        if(data.error){resultText.textContent='Error: '+data.error.message;return;}
+        const answer=data.content.map(b=>b.text||'').join('');
+        // Render with basic markdown: bold, code, line breaks
+        resultText.innerHTML=answer
+            .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+            .replace(/`([^`]+)`/g,'<code style="background:#0d0d0f;padding:.1em .3em;border-radius:3px;font-family:monospace;font-size:.85em;color:#f0c040;">$1</code>')
+            .replace(/\n/g,'<br>');
+    }catch(e){resultText.textContent='Error: '+e.message;}
+    finally{btn.disabled=false;btn.textContent='🎓 ASK AI';}
+}
+function copyChResult(){
+    const text=document.getElementById('chResultText').innerText;
+    navigator.clipboard.writeText(text).then(()=>showToast('Answer copied! 📋')).catch(()=>showToast('Select and copy manually'));
+}
+
 // ══ ADMIN TAB ══
 async function loadAdminData(){
     const{data:vids}=await sb.storage.from(BUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
@@ -1463,9 +1716,8 @@ async function loadAdminData(){
     const{data:clips}=await sb.from('Clips').select('id');
     const{data:users}=await sb.from('users').select('*');
     const{data:feedbacks}=await sb.from('feedback').select('*').order('id',{ascending:false});
-    const files=(vids||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
+    const files=(vids||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder'&&!f.name.startsWith(VAULT_SHARE_PREFIX));
     const shortFiles=(shorts||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
-    // FIX: explicitly filter pending vs approved
     const pending=(users||[]).filter(u=>u.verified!==true);
     const approved=(users||[]).filter(u=>u.verified===true);
     const unreadFb=(feedbacks||[]).filter(f=>!f.read);
@@ -1492,7 +1744,7 @@ async function loadAdminData(){
             pl.appendChild(item);
         });
     }
-    // All approved users
+    // Approved users
     const al=document.getElementById('allUsersList');
     if(!approved.length){al.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No approved users yet.</div>';}
     else{
@@ -1554,13 +1806,15 @@ document.getElementById('claimModal').addEventListener('click',e=>{if(e.target==
 document.getElementById('feedbackModal').addEventListener('click',e=>{if(e.target===document.getElementById('feedbackModal'))document.getElementById('feedbackModal').classList.remove('active');});
 document.getElementById('renameModal').addEventListener('click',e=>{if(e.target===document.getElementById('renameModal'))document.getElementById('renameModal').classList.remove('active');});
 
-// Keyboard
+// Keyboard shortcuts
 document.getElementById('clipUrlInput').addEventListener('keydown',e=>{if(e.key==='Enter')addClip();});
 document.getElementById('testUrlInput').addEventListener('keydown',e=>{if(e.key==='Enter')loadTest();});
 document.getElementById('claimCodeInput').addEventListener('keydown',e=>{if(e.key==='Enter')claimClip();});
 document.getElementById('loginUsername').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 document.getElementById('renameInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();});
+document.getElementById('vaultClaimInput').addEventListener('keydown',e=>{if(e.key==='Enter')claimVaultFile();});
+document.getElementById('chInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))askCodeHelper();});
 
 // ══ INIT ══
 const saved=sessionStorage.getItem('scool_session');
