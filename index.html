@@ -364,7 +364,6 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .vault-prog-wrap{width:100%;height:4px;background:var(--border);margin-bottom:.4rem;display:none;}
 .vault-prog-fill{height:100%;background:var(--blue);width:0%;transition:width .2s;}
 .vault-status{font-size:.82rem;color:var(--muted);margin-bottom:.8rem;}
-/* Vault claim row */
 .vault-claim-row{display:flex;gap:.6rem;margin-bottom:1rem;align-items:center;}
 .vault-claim-input{flex:1;background:var(--bg);border:2px solid #2a3a50;color:var(--text);padding:.55rem .9rem;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:4px;outline:none;text-transform:uppercase;transition:border-color .2s;}
 .vault-claim-input:focus{border-color:var(--blue);}
@@ -395,7 +394,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .btn-sc:hover{border-color:var(--accent);color:var(--accent);}
 .btn-sc-del:hover{border-color:var(--red)!important;color:var(--red)!important;}
 
-/* ── CODE HELPER (new AI feature) ── */
+/* CODE HELPER */
 .ch-box{background:var(--card);border:1px solid var(--border);border-image:linear-gradient(135deg,#7c3aed,#4a9eff) 1;padding:1.8rem;}
 .ch-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:.3rem;background:linear-gradient(90deg,#b07fff,#4a9eff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 .ch-box p{color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;}
@@ -417,6 +416,27 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .ch-pill{background:var(--border);color:var(--muted);font-size:.72rem;padding:.25rem .65rem;cursor:pointer;border-radius:20px;transition:background .2s,color .2s;border:none;}
 .ch-pill:hover{background:#3a2a5a;color:#b07fff;}
 
+/* ══ VIDEOS EXTENDED ══ */
+.vext-box{background:var(--card);border:1px solid #5b21b6;padding:1.8rem;}
+.vext-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:.3rem;color:#c084fc;}
+.vext-box > p{color:var(--muted);font-size:.88rem;margin-bottom:1rem;}
+.vext-setup-note{background:#0d0919;border:1px solid #5b21b6;border-left:3px solid #c084fc;padding:.8rem 1rem;font-size:.78rem;color:var(--muted);line-height:1.7;margin-bottom:1.2rem;}
+.vext-setup-note code{color:#c084fc;background:#1e1033;padding:.1em .3em;font-family:monospace;font-size:.9em;}
+.vext-drop{border:2px dashed #5b21b6;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .25s,background .25s;margin-bottom:1rem;}
+.vext-drop:hover,.vext-drop.drag{border-color:#c084fc;background:#0d0919;}
+.vext-drop-icon{font-size:2.5rem;margin-bottom:.5rem;opacity:.7;}
+.vext-drop-title{font-family:'Bebas Neue',sans-serif;letter-spacing:3px;font-size:1.1rem;color:#c084fc;margin-bottom:.3rem;}
+.vext-drop-sub{font-size:.78rem;color:var(--muted);}
+.vext-prog-wrap{margin-bottom:1rem;display:none;}
+.vext-prog-track{width:100%;height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:.45rem;}
+.vext-prog-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#c084fc);width:0%;transition:width .25s ease;border-radius:3px;}
+.vext-prog-info{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);}
+#vextProgPct{color:#c084fc;font-weight:700;}
+.vext-grid-header{display:flex;align-items:center;justify-content:space-between;margin:1.2rem 0 .9rem;}
+.vext-refresh-btn{background:none;border:1px solid #5b21b6;color:#c084fc;padding:.3rem .8rem;font-size:.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:border-color .2s,background .2s;}
+.vext-refresh-btn:hover{border-color:#c084fc;background:#0d0919;}
+.vext-card-badge{display:inline-block;background:#1e1033;color:#c084fc;font-size:.62rem;padding:.1rem .4rem;border-radius:2px;font-weight:700;letter-spacing:.5px;margin-left:.3rem;}
+
 /* FEEDBACK BUTTON */
 .feedback-fab{position:fixed;bottom:2rem;right:2rem;z-index:150;background:var(--card);border:1px solid var(--border);color:var(--text);width:48px;height:48px;border-radius:50%;cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:border-color .2s,transform .2s;box-shadow:0 4px 16px rgba(0,0,0,.4);}
 .feedback-fab:hover{border-color:var(--accent);transform:scale(1.1);}
@@ -428,7 +448,6 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .feedback-textarea{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;resize:vertical;min-height:100px;transition:border-color .2s;margin-bottom:.8rem;}
 .feedback-textarea:focus{border-color:var(--accent);}
 .feedback-textarea::placeholder{color:var(--muted);}
-/* NEW: two-button row in feedback */
 .feedback-btn-row{display:flex;gap:.6rem;margin-bottom:.6rem;}
 .btn-feedback-send{background:var(--accent);color:#0d0d0f;border:none;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;flex:1;transition:background .2s;}
 .btn-feedback-send:hover{background:#f7d165;}
@@ -568,11 +587,11 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <button class="apl-cancel" onclick="closeApl()">Cancel</button>
 </div>
 
-<!-- SHARE MODAL (clips + vault) -->
+<!-- SHARE MODAL -->
 <div class="share-modal" id="shareModal">
     <div class="share-box">
         <h3>🔗 SHARE CODE</h3>
-        <p id="shareModalDesc">Send this code to your friend — they enter it in their Vault to claim it!</p>
+        <p id="shareModalDesc">Send this code to your friend!</p>
         <div class="share-code" id="shareCodeDisplay">------</div>
         <button class="btn-copy" onclick="copyCode()">📋 COPY CODE</button>
         <button class="btn-share-close" onclick="shareModal.classList.remove('active')">Close</button>
@@ -590,7 +609,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     </div>
 </div>
 
-<!-- FEEDBACK MODAL — now with AI prompt button -->
+<!-- FEEDBACK MODAL -->
 <div class="feedback-modal" id="feedbackModal">
     <div class="feedback-box">
         <button class="modal-close" onclick="feedbackModal.classList.remove('active')">✕</button>
@@ -599,7 +618,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <textarea class="feedback-textarea" id="feedbackText" placeholder="Type your feedback or bug description here…"></textarea>
         <div class="feedback-btn-row">
             <button class="btn-feedback-send" onclick="sendFeedback()">SEND TO ADMIN</button>
-            <button class="btn-feedback-ai" onclick="generateAIPrompt()" title="Format as a prompt you can paste into Claude or ChatGPT">🤖 Copy AI Prompt</button>
+            <button class="btn-feedback-ai" onclick="generateAIPrompt()" title="Format as a prompt for Claude / ChatGPT">🤖 Copy AI Prompt</button>
         </div>
         <div class="feedback-ai-note">AI Prompt = formats your feedback into a ready-to-paste message for Claude / ChatGPT</div>
     </div>
@@ -703,6 +722,8 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
                 <div class="hm-item" onclick="setFeature('compressor')">🗜 Compressor <span class="hm-badge hb-beta">BETA</span></div>
                 <div class="hm-item" onclick="setFeature('vault')">🔒 Private Vault <span class="hm-badge hb-priv">PRIVATE</span></div>
                 <div class="hm-item" onclick="setFeature('codehelper')">🎓 Code Helper <span class="hm-badge hb-ai">AI</span></div>
+                <!-- ══ NEW: Videos Extended ══ -->
+                <div class="hm-item" onclick="setFeature('videosext')">📹 Videos Extended <span class="hm-badge" style="background:#1e1033;color:#c084fc;border:1px solid #5b21b6;">95 MB</span></div>
                 <div class="hm-title" style="margin-top:.3rem;">⚙ SYSTEM</div>
                 <div class="hm-item" onclick="openAdminFromMenu()" style="color:var(--accent2);">👑 Admin Mode <span class="hm-badge hb-admin">PIN</span></div>
             </div>
@@ -751,7 +772,6 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <div class="vault-box">
             <h2>🔒 PRIVATE VAULT</h2>
             <p>Upload private videos or claim shared ones. Stored in your browser only.</p>
-            <!-- Vault file claim row (NEW) -->
             <div class="vault-claim-row">
                 <input class="vault-claim-input" id="vaultClaimInput" maxlength="6" placeholder="Enter 6-letter code to claim a shared file…" oninput="this.value=this.value.toUpperCase()"/>
                 <button class="btn-vault-claim" onclick="claimVaultFile()">🔗 CLAIM FILE</button>
@@ -766,17 +786,16 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
             <div id="vaultEmpty" class="empty-state" style="display:none;padding:1rem;"><div class="icon" style="font-size:2rem;">🔒</div><p>No private videos</p></div>
             <div class="vault-grid" id="vaultGrid"></div>
             <div class="vault-sec-title">🎞 SHARED CLIPS</div>
-            <div id="sharedClipsEmpty" style="color:var(--muted);font-size:.83rem;padding:.4rem 0;display:none;">No shared clips yet. Use "Claim Code" in the Clips tab!</div>
+            <div id="sharedClipsEmpty" style="color:var(--muted);font-size:.83rem;padding:.4rem 0;display:none;">No shared clips yet.</div>
             <div id="sharedClipsList"></div>
         </div>
     </div>
 
-    <!-- ══ CODE HELPER (NEW AI feature) ══ -->
+    <!-- Code Helper -->
     <div class="test-feature" id="feature-codehelper">
         <div class="ch-box">
             <h2>🎓 CODE HELPER</h2>
             <p>Paste any snippet from the Scool source code and get a plain-English explanation — or ask a question about how it works. Powered by AI.</p>
-            <!-- Quick example pills -->
             <div class="ch-examples">
                 <button class="ch-pill" onclick="chExample('auth')">🔐 How does login work?</button>
                 <button class="ch-pill" onclick="chExample('vault')">🔒 What is the Vault?</button>
@@ -799,6 +818,39 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
                 <div id="chResultText"></div>
                 <button class="ch-copy-btn" onclick="copyChResult()">📋 Copy answer</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ══ NEW: Videos Extended ══ -->
+    <div class="test-feature" id="feature-videosext">
+        <div class="vext-box">
+            <h2>📹 VIDEOS EXTENDED</h2>
+            <p>Upload heavier videos up to <strong style="color:#c084fc;">95 MB</strong>. Stored in a dedicated bucket — the whole crew can watch, download, and save offline.</p>
+            <div class="vext-setup-note">
+                ⚠️ <strong style="color:#c084fc;">One-time Supabase setup needed:</strong><br>
+                1. Go to <strong>Storage</strong> → New bucket → Name: <code>big-videos</code> → Enable "Public bucket" → Set file size limit: <code>100 MB</code> → Create<br>
+                2. Go to <strong>Table Editor</strong> → New table → Name: <code>big_video_posts</code> → Add columns: <code>filename</code> (text), <code>display_name</code> (text), <code>username</code> (text), <code>rank</code> (text) — then this works!
+            </div>
+            <div class="vext-drop" id="vextDrop" onclick="document.getElementById('vextFileInput').click()">
+                <div class="vext-drop-icon">📹</div>
+                <div class="vext-drop-title">DRAG & DROP OR CLICK TO CHOOSE</div>
+                <div class="vext-drop-sub">MP4 · MOV · WebM · max 95 MB</div>
+            </div>
+            <input type="file" id="vextFileInput" accept="video/*" style="display:none" onchange="uploadBigVideo(this.files[0])">
+            <div class="vext-prog-wrap" id="vextProgWrap">
+                <div class="vext-prog-track"><div class="vext-prog-fill" id="vextProgFill"></div></div>
+                <div class="vext-prog-info">
+                    <span id="vextProgLabel">Preparing…</span>
+                    <span id="vextProgPct">0%</span>
+                </div>
+            </div>
+            <div class="vext-grid-header">
+                <div class="section-title" style="margin:0;font-size:1.1rem;">ALL BIG VIDEOS</div>
+                <button class="vext-refresh-btn" onclick="renderBigVideos()">↻ Refresh</button>
+            </div>
+            <div id="vextLoading" class="spinner" style="padding:1.5rem;">Loading…</div>
+            <div id="vextEmpty" class="empty-state" style="display:none;padding:2rem;"><div class="icon" style="font-size:3rem;opacity:.35;">📹</div><p>No big videos yet — upload one above!</p></div>
+            <div class="video-grid" id="vextGrid"></div>
         </div>
     </div>
 
@@ -839,7 +891,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 </div>
 
 </main>
-</div><!-- end siteContainer -->
+</div>
 
 <!-- UPLOAD MODAL -->
 <div class="upload-zone" id="uploadZone">
@@ -874,15 +926,14 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 const SUPABASE_URL='https://xptnaevvrwnsfklpqbhl.supabase.co';
 const SUPABASE_KEY='sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-const BUCKET='videos', SBUCKET='shorts';
-// Vault file sharing uses the same BUCKET but with a prefix
+const BUCKET='videos', SBUCKET='shorts', BIGBUCKET='big-videos';
 const VAULT_SHARE_PREFIX='vault_share_';
 
 // ══ STATE ══
 let currentUser=null, pendingUser=null, adminUnlocked=false;
 let accPinStr='', aplPinStr='';
 let renameTarget=null;
-let shareModalMode='clip'; // 'clip' or 'vault'
+let shareModalMode='clip';
 
 // ══ HELPERS ══
 function showToast(msg,dur=2800){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
@@ -989,6 +1040,7 @@ function switchTab(name,btn){
     if(name==='admin'&&adminUnlocked)loadAdminData();
     if(name==='offline')renderOffline();
     if(name==='test'&&curFeature==='vault')renderVault();
+    if(name==='test'&&curFeature==='videosext')renderBigVideos();
     if(name==='shorts')renderShorts();
 }
 
@@ -1058,7 +1110,6 @@ async function renderVideos(){
     const{data:files}=await sb.storage.from(BUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
     const{data:posts}=await sb.from('video_posts').select('*');
     document.getElementById('videosLoading').style.display='none';
-    // Filter out vault share files from the public grid
     const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder'&&!f.name.startsWith(VAULT_SHARE_PREFIX));
     if(!vids.length){document.getElementById('emptyVideos').style.display='block';return;}
     const pm={};(posts||[]).forEach(p=>pm[p.filename]=p);
@@ -1281,7 +1332,6 @@ async function delClip(id){
     await sb.from('Clips').delete().eq('id',id);
     showToast('Removed!');renderClips();
 }
-// Share a clip (link/URL) — stores in shared_clips table
 async function shareClip(id,url,title,platform){
     const code=Math.random().toString(36).slice(2,8).toUpperCase();
     const{error}=await sb.from('shared_clips').insert([{share_code:code,url,titel:title,platform,from_user:currentUser.username}]);
@@ -1295,7 +1345,6 @@ function copyCode(){
     const code=document.getElementById('shareCodeDisplay').textContent;
     navigator.clipboard.writeText(code).then(()=>showToast('Code copied! 📋')).catch(()=>showToast('Code: '+code));
 }
-// Claim a shared clip (URL/link)
 async function claimClip(){
     const code=document.getElementById('claimCodeInput').value.trim().toUpperCase();
     if(!code||code.length!==6){showToast('Enter a valid 6-letter code!');return;}
@@ -1315,36 +1364,17 @@ async function claimClip(){
     renderVault();
 }
 
-// ══ NEW: FEEDBACK AI PROMPT ══
-// Generates a structured prompt ready to paste into Claude or ChatGPT
-// so the user can ask the AI to help fix the issue themselves.
+// ══ FEEDBACK AI PROMPT ══
 function generateAIPrompt(){
     const text=document.getElementById('feedbackText').value.trim();
     if(!text){showToast('Write your feedback or bug first!');return;}
-    const prompt=`I'm working on a private web app called "Scool" — a video sharing platform for a friend group.
-
-Tech stack:
-- Frontend: Vanilla HTML, CSS, JavaScript (single HTML file)
-- Backend: Supabase (PostgreSQL database + Storage buckets)
-- Auth: custom username/password stored in a "users" table, with a 4-digit PIN on login
-- Features: Videos tab (upload/watch from Supabase storage), Clips tab (YouTube/TikTok/Twitch links), Shorts tab (vertical video feed), Offline tab (IndexedDB), Test Lab (link player, video compressor, private Vault)
-- The Vault stores videos as ArrayBuffers in IndexedDB (local browser only) and can share files via Supabase using vault_shares table + a 6-letter code system
-
-Here is my feedback / bug report:
-"${text}"
-
-Please help me understand or fix this. If code changes are needed, show the exact lines to change and what to change them to.`;
+    const prompt=`I'm working on a private web app called "Scool" — a video sharing platform for a friend group.\n\nTech stack:\n- Frontend: Vanilla HTML, CSS, JavaScript (single HTML file)\n- Backend: Supabase (PostgreSQL database + Storage buckets)\n- Auth: custom username/password stored in a "users" table, with a 4-digit PIN on login\n- Features: Videos tab (upload/watch from Supabase storage), Clips tab (YouTube/TikTok/Twitch links), Shorts tab (vertical video feed), Offline tab (IndexedDB), Test Lab (link player, video compressor, private Vault, Videos Extended up to 95MB)\n\nHere is my feedback / bug report:\n"${text}"\n\nPlease help me understand or fix this. If code changes are needed, show the exact lines to change and what to change them to.`;
     navigator.clipboard.writeText(prompt)
-        .then(()=>showToast('AI prompt copied to clipboard! 📋 Paste it into Claude or ChatGPT.'))
-        .catch(()=>{
-            // Fallback: show in a temporary textarea
-            const ta=document.createElement('textarea');ta.value=prompt;ta.style.cssText='position:fixed;left:-9999px;top:0;';
-            document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-            showToast('AI prompt copied! 📋');
-        });
+        .then(()=>showToast('AI prompt copied to clipboard! 📋'))
+        .catch(()=>{const ta=document.createElement('textarea');ta.value=prompt;ta.style.cssText='position:fixed;left:-9999px;top:0;';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('AI prompt copied! 📋');});
 }
 
-// ══ FEEDBACK (send to admin) ══
+// ══ FEEDBACK ══
 async function sendFeedback(){
     const msg=document.getElementById('feedbackText').value.trim();
     if(!msg){showToast('Write something first!');return;}
@@ -1430,6 +1460,7 @@ function setFeature(name){
     document.getElementById('feature-'+name).classList.add('active');
     curFeature=name;document.getElementById('hm').classList.remove('open');
     if(name==='vault')renderVault();
+    if(name==='videosext')renderBigVideos();
 }
 document.addEventListener('click',e=>{if(!e.target.closest('.hamburger-wrap'))document.getElementById('hm').classList.remove('open');});
 
@@ -1518,34 +1549,19 @@ vaultDrop.addEventListener('dragover',e=>{e.preventDefault();vaultDrop.classList
 vaultDrop.addEventListener('dragleave',()=>vaultDrop.classList.remove('drag'));
 vaultDrop.addEventListener('drop',e=>{e.preventDefault();vaultDrop.classList.remove('drag');saveVault(e.dataTransfer.files[0]);});
 
-// ══ NEW: VAULT FILE SHARING ══
-// Uploads the actual video file to Supabase temporarily, generates a 6-letter code.
-// The recipient enters the code, downloads the file into their own vault, then the file is deleted from Supabase.
 async function shareVaultVideo(vaultId){
     const vids=await dbGetAll('vault');
     const vid=vids.find(v=>v.id===vaultId);
     if(!vid){showToast('File not found!');return;}
     showToast('Uploading to share… this may take a moment ⏳');
     try{
-        // Generate unique share code and filename
         const code=Math.random().toString(36).slice(2,8).toUpperCase();
         const filename=VAULT_SHARE_PREFIX+code+'_'+vid.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-        // Upload the video blob to Supabase storage
         const blob=new Blob([vid.data],{type:vid.type});
         const{error:uploadErr}=await sb.storage.from(BUCKET).upload(filename,blob,{cacheControl:'86400',upsert:false,contentType:vid.type});
         if(uploadErr){showToast('Upload error: '+uploadErr.message);return;}
-        // Store the share record in Supabase DB (vault_shares table)
-        const{error:dbErr}=await sb.from('vault_shares').insert([{
-            share_code:code,filename,from_user:currentUser.username,title:vid.name,file_size:vid.size
-        }]);
-        if(dbErr){
-            // If vault_shares table doesn't exist yet, show a helpful message
-            showToast('Note: Create a "vault_shares" table in Supabase first! (share_code, filename, from_user, title, file_size)');
-            // Clean up the uploaded file
-            await sb.storage.from(BUCKET).remove([filename]);
-            return;
-        }
-        // Show the share modal with the code
+        const{error:dbErr}=await sb.from('vault_shares').insert([{share_code:code,filename,from_user:currentUser.username,title:vid.name,file_size:vid.size}]);
+        if(dbErr){showToast('Note: Create a "vault_shares" table in Supabase first!');await sb.storage.from(BUCKET).remove([filename]);return;}
         shareModalMode='vault';
         document.getElementById('shareModalDesc').textContent='Send this code to your friend — they paste it into the Vault claim box to download this file!';
         document.getElementById('shareCodeDisplay').textContent=code;
@@ -1553,8 +1569,6 @@ async function shareVaultVideo(vaultId){
         showToast('File ready to share! 🔒');
     }catch(e){showToast('Error: '+e.message);}
 }
-
-// Claim a shared vault file — downloads from Supabase into local vault
 async function claimVaultFile(){
     const code=document.getElementById('vaultClaimInput').value.trim().toUpperCase();
     if(!code||code.length!==6){showToast('Enter a valid 6-letter code!');return;}
@@ -1565,15 +1579,11 @@ async function claimVaultFile(){
     const share=data[0];
     showToast('Downloading file… please wait ⏳');
     try{
-        // Get the public URL and fetch the file
         const{data:urlData}=sb.storage.from(BUCKET).getPublicUrl(share.filename);
         const resp=await fetch(urlData.publicUrl);
         if(!resp.ok)throw new Error('Download failed ('+resp.status+')');
-        const blob=await resp.blob();
-        const arr=await blob.arrayBuffer();
-        // Save to local vault
+        const blob=await resp.blob();const arr=await blob.arrayBuffer();
         await dbPut('vault',{id:'v_'+Date.now(),name:share.title,type:blob.type,size:blob.size,date:Date.now(),data:arr});
-        // Delete the share record and file from Supabase (one-time use)
         await sb.from('vault_shares').delete().eq('share_code',code);
         await sb.storage.from(BUCKET).remove([share.filename]);
         document.getElementById('vaultClaimInput').value='';
@@ -1581,7 +1591,6 @@ async function claimVaultFile(){
         renderVault();
     }catch(e){showToast('Error: '+e.message);}
 }
-
 async function renderVault(){
     const vids=await dbGetAll('vault');const shared=await dbGetAll('sharedClips');
     const grid=document.getElementById('vaultGrid');const empty=document.getElementById('vaultEmpty');
@@ -1603,7 +1612,7 @@ async function renderVault(){
                     <div class="vault-meta">${fmtSize(v.size)} · ${fmtDate(v.date)}</div>
                     <div class="vault-actions">
                         <button class="btn-vv bvv-watch" onclick="watchVideo('${su}','${sn}')">▶ WATCH</button>
-                        <button class="btn-vv bvv-share" onclick="shareVaultVideo('${sid}')" title="Share this file with a friend via code">🔗 SHARE</button>
+                        <button class="btn-vv bvv-share" onclick="shareVaultVideo('${sid}')">🔗 SHARE</button>
                         <button class="btn-vv bvv-del" onclick="delVault('${sid}')">✕ DEL</button>
                     </div>
                 </div>`;
@@ -1631,11 +1640,7 @@ async function renderVault(){
 async function delVault(id){if(!confirm('Delete?'))return;await dbDel('vault',id);showToast('Deleted!');renderVault();}
 async function delShared(id){await dbDel('sharedClips',id);showToast('Removed!');renderVault();}
 
-// ══ NEW: CODE HELPER (AI-powered) ══
-// Lets users ask questions about the Scool codebase and get plain-English explanations.
-// Uses the Anthropic API so it actually understands the code in context.
-
-// Quick example snippets / questions
+// ══ CODE HELPER ══
 const CH_EXAMPLES={
     auth:`How does login work in Scool? What happens step by step when I click LOGIN?`,
     vault:`What is the Private Vault? How does it store videos, and what's the difference between saving to vault vs saving for offline?`,
@@ -1643,27 +1648,8 @@ const CH_EXAMPLES={
     offline:`How does the Offline tab work? What is IndexedDB and why can't I see the videos on another device?`,
     supabase:`What is Supabase and how is it used in Scool? What is stored in the database vs in storage buckets?`
 };
-function chExample(key){
-    document.getElementById('chInput').value=CH_EXAMPLES[key];
-    document.getElementById('chMode').value='question';
-}
-
-// System prompt that describes Scool so the AI has full context
-const CH_SYSTEM=`You are a helpful coding assistant explaining the "Scool" web app to its developer. Scool is a private video-sharing platform for a friend group.
-
-Tech overview:
-- Single HTML file (vanilla JS, no framework)
-- Supabase backend: PostgreSQL database + Storage buckets
-- Database tables: users (id, username, password, pin, rank, verified), video_posts (filename, display_name, username, rank), Clips (id, url, platform, titel, date, username, rank), shorts_posts (filename, display_name, username, rank), shared_clips (share_code, url, titel, platform, from_user), vault_shares (share_code, filename, from_user, title, file_size), feedback (id, username, rank, message, read)
-- Storage buckets: "videos" (public videos + temporary vault share files prefixed vault_share_), "shorts" (vertical short videos)
-- Auth: custom username/password in users table, 4-digit PIN stored per user, verified boolean for admin approval
-- Offline/Vault: uses IndexedDB (browser-local) — stores entire video as ArrayBuffer, never leaves the device
-- Vault sharing: sender uploads file to Supabase (prefixed vault_share_), stores a 6-letter code in vault_shares table. Receiver enters code → file downloads to their IndexedDB vault → file deleted from Supabase (one-time use)
-- Admin access: PIN-locked (default 1103), 5-tap on logo shortcut, unlocks an admin panel to approve users, set ranks, manage videos, read feedback
-- Ranks: Member, Regular, VIP, Admin, Owner (stored per user, shown as colored badges)
-
-When explaining code: be clear, friendly, and concrete. Use simple language. The developer is learning, so explain WHY things work the way they do, not just what they do.`;
-
+function chExample(key){document.getElementById('chInput').value=CH_EXAMPLES[key];document.getElementById('chMode').value='question';}
+const CH_SYSTEM=`You are a helpful coding assistant explaining the "Scool" web app to its developer. Scool is a private video-sharing platform for a friend group.\n\nTech overview:\n- Single HTML file (vanilla JS, no framework)\n- Supabase backend: PostgreSQL database + Storage buckets\n- Database tables: users, video_posts, Clips, shorts_posts, shared_clips, vault_shares, feedback, big_video_posts\n- Storage buckets: "videos" (public), "shorts" (vertical videos), "big-videos" (up to 95MB per file)\n- Auth: custom username/password in users table, 4-digit PIN, verified boolean for admin approval\n- Offline/Vault: uses IndexedDB (browser-local only)\n- Ranks: Member, Regular, VIP, Admin, Owner\n\nBe clear, friendly, and concrete. Explain WHY things work the way they do.`;
 async function askCodeHelper(){
     const input=document.getElementById('chInput').value.trim();
     const mode=document.getElementById('chMode').value;
@@ -1674,28 +1660,13 @@ async function askCodeHelper(){
     btn.disabled=true;btn.textContent='Thinking…';
     result.classList.add('show');
     resultText.innerHTML='<span class="ch-thinking">🤔 Reading the code…</span>';
-    const modeInstructions={
-        explain:'Explain what this code does in plain English. Break it down step by step.',
-        question:'Answer this question clearly and concisely, with examples if helpful.',
-        debug:'Help debug this issue. Identify what might be wrong and suggest fixes.',
-        improve:'Suggest improvements to this code. Focus on clarity, reliability, and user experience.'
-    };
+    const modeInstructions={explain:'Explain what this code does in plain English. Break it down step by step.',question:'Answer this question clearly and concisely, with examples if helpful.',debug:'Help debug this issue. Identify what might be wrong and suggest fixes.',improve:'Suggest improvements to this code. Focus on clarity, reliability, and user experience.'};
     const userMessage=`${modeInstructions[mode]}\n\n${input}`;
     try{
-        const resp=await fetch('https://api.anthropic.com/v1/messages',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({
-                model:'claude-sonnet-4-20250514',
-                max_tokens:1000,
-                system:CH_SYSTEM,
-                messages:[{role:'user',content:userMessage}]
-            })
-        });
+        const resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:CH_SYSTEM,messages:[{role:'user',content:userMessage}]})});
         const data=await resp.json();
         if(data.error){resultText.textContent='Error: '+data.error.message;return;}
         const answer=data.content.map(b=>b.text||'').join('');
-        // Render with basic markdown: bold, code, line breaks
         resultText.innerHTML=answer
             .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
             .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
@@ -1708,6 +1679,119 @@ function copyChResult(){
     const text=document.getElementById('chResultText').innerText;
     navigator.clipboard.writeText(text).then(()=>showToast('Answer copied! 📋')).catch(()=>showToast('Select and copy manually'));
 }
+
+// ══ VIDEOS EXTENDED ══
+async function renderBigVideos(){
+    const loading=document.getElementById('vextLoading');
+    const empty=document.getElementById('vextEmpty');
+    const grid=document.getElementById('vextGrid');
+    loading.style.display='block';empty.style.display='none';grid.innerHTML='';
+    const{data:files,error:ferr}=await sb.storage.from(BIGBUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
+    const{data:posts}=await sb.from('big_video_posts').select('*');
+    loading.style.display='none';
+    if(ferr){
+        grid.innerHTML=`<div style="color:var(--red);font-size:.85rem;padding:.5rem;background:var(--bg);border:1px solid var(--red);border-left:3px solid var(--red);padding:1rem;line-height:1.7;">❌ <strong>Bucket not found.</strong><br><span style="color:var(--muted);">Create the <code style="color:#c084fc;">big-videos</code> bucket in Supabase Storage first (see the setup note above).</span></div>`;
+        return;
+    }
+    const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
+    if(!vids.length){empty.style.display='block';return;}
+    const pm={};(posts||[]).forEach(p=>pm[p.filename]=p);
+    vids.forEach(file=>{
+        const{data:u}=sb.storage.from(BIGBUCKET).getPublicUrl(file.name);
+        const url=u.publicUrl;
+        const sn=file.name.replace(/'/g,"\\'");const su=url.replace(/'/g,"\\'");
+        const post=pm[file.name];
+        const poster=post?`<div class="video-poster">${rankBadge(post.rank)}<span class="video-poster-name">${post.username}</span></div>`:'';
+        const dname=post?post.display_name:file.name;
+        const dn=dname.replace(/'/g,"\\'");
+        const card=document.createElement('div');card.className='video-card';
+        card.style.borderColor='#3b1f6e';
+        card.innerHTML=`
+            <div class="video-thumb" onclick="watchVideo('${su}','${dn}')">
+                <video src="${url}" muted preload="metadata"></video>
+                <div class="play-overlay"><div class="play-icon" style="background:#c084fc;"></div></div>
+            </div>
+            <div class="video-info">
+                ${poster}
+                <div class="video-name" title="${dname}">${dname} <span class="vext-card-badge">BIG</span></div>
+                <div class="video-meta">${fmtSize(file.metadata?.size)} · ${fmtDate(file.created_at)}</div>
+                <div class="card-actions">
+                    <button class="btn-v" style="background:#5b21b6;color:#fff;" onclick="watchVideo('${su}','${dn}')">▶ WATCH</button>
+                    <button class="btn-v bv-dl" onclick="dlVideo('${su}','${sn}')">⬇ SAVE</button>
+                    <button class="btn-v bv-off" onclick="saveOffline('${su}','${sn}')">📴 OFFLINE</button>
+                    <button class="btn-v bv-del" onclick="delBigVideo('${sn}',this)">✕ DEL</button>
+                </div>
+            </div>`;
+        grid.appendChild(card);
+    });
+}
+
+async function uploadBigVideo(file){
+    if(!file||!file.type.startsWith('video/')){showToast('Select a video file!');return;}
+    const MAX=95*1024*1024;
+    if(file.size>MAX){showToast('Too big! Max 95 MB (yours is '+fmtSize(file.size)+')');return;}
+    const wrap=document.getElementById('vextProgWrap');
+    const fill=document.getElementById('vextProgFill');
+    const label=document.getElementById('vextProgLabel');
+    const pct=document.getElementById('vextProgPct');
+    wrap.style.display='block';
+    fill.style.width='2%';fill.style.background='linear-gradient(90deg,#7c3aed,#c084fc)';
+    label.textContent='Preparing upload…';pct.textContent='0%';
+    const safeName=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    try{
+        await new Promise((resolve,reject)=>{
+            const xhr=new XMLHttpRequest();
+            xhr.open('POST',`${SUPABASE_URL}/storage/v1/object/${BIGBUCKET}/${encodeURIComponent(safeName)}`);
+            xhr.setRequestHeader('Authorization',`Bearer ${SUPABASE_KEY}`);
+            xhr.setRequestHeader('Content-Type',file.type);
+            xhr.setRequestHeader('x-upsert','false');
+            xhr.upload.onprogress=e=>{
+                if(e.lengthComputable){
+                    const p=Math.round(e.loaded/e.total*92);
+                    fill.style.width=p+'%';
+                    label.textContent='Uploading… '+fmtSize(e.loaded)+' of '+fmtSize(e.total);
+                    pct.textContent=p+'%';
+                }
+            };
+            xhr.onload=()=>{
+                if(xhr.status>=200&&xhr.status<300){resolve();}
+                else{
+                    let msg=xhr.responseText;
+                    try{msg=JSON.parse(xhr.responseText).message||msg;}catch(ex){}
+                    reject(new Error(msg));
+                }
+            };
+            xhr.onerror=()=>reject(new Error('Network error — check your connection'));
+            xhr.send(file);
+        });
+        fill.style.width='96%';label.textContent='Saving info…';pct.textContent='96%';
+        await sb.from('big_video_posts').insert([{filename:safeName,display_name:file.name,username:currentUser.username,rank:currentUser.rank}]);
+        fill.style.width='100%';label.textContent='✓ Upload complete!';pct.textContent='100%';
+        document.getElementById('vextFileInput').value='';
+        showToast('Big video uploaded! 🎉');
+        setTimeout(()=>{wrap.style.display='none';fill.style.width='0%';label.textContent='';pct.textContent='';},1800);
+        renderBigVideos();
+    }catch(err){
+        label.textContent='❌ '+err.message;pct.textContent='';
+        fill.style.background='var(--red)';
+        setTimeout(()=>{fill.style.background='linear-gradient(90deg,#7c3aed,#c084fc)';},2500);
+        showToast('Upload failed: '+err.message);
+    }
+}
+
+async function delBigVideo(name,btn){
+    if(!confirm('Delete "'+name+'"?'))return;
+    btn.textContent='…';btn.disabled=true;
+    await sb.storage.from(BIGBUCKET).remove([name]);
+    await sb.from('big_video_posts').delete().eq('filename',name);
+    showToast('Deleted!');renderBigVideos();
+}
+
+// Drag & drop for Videos Extended
+const vextDropEl=document.getElementById('vextDrop');
+vextDropEl.addEventListener('dragover',e=>{e.preventDefault();vextDropEl.classList.add('drag');});
+vextDropEl.addEventListener('dragleave',()=>vextDropEl.classList.remove('drag'));
+vextDropEl.addEventListener('drop',e=>{e.preventDefault();vextDropEl.classList.remove('drag');uploadBigVideo(e.dataTransfer.files[0]);});
 
 // ══ ADMIN TAB ══
 async function loadAdminData(){
@@ -1727,60 +1811,36 @@ async function loadAdminData(){
     document.getElementById('statU').textContent=(users||[]).length;
     document.getElementById('statP').textContent=pending.length;
     document.getElementById('statF').textContent=unreadFb.length+' new';
-
-    // Pending
     const pl=document.getElementById('pendingList');
     if(!pending.length){pl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No pending users ✓</div>';}
     else{
         pl.innerHTML='';
         pending.forEach(u=>{
             const item=document.createElement('div');item.className='admin-user-item';
-            item.innerHTML=`
-                <div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div>
-                <div class="admin-user-actions">
-                    <button class="btn-approve" onclick="approveUser(${u.id},this)">✓ APPROVE</button>
-                    <button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REJECT</button>
-                </div>`;
+            item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div><div class="admin-user-actions"><button class="btn-approve" onclick="approveUser(${u.id},this)">✓ APPROVE</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REJECT</button></div>`;
             pl.appendChild(item);
         });
     }
-    // Approved users
     const al=document.getElementById('allUsersList');
     if(!approved.length){al.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No approved users yet.</div>';}
     else{
         al.innerHTML='';
         approved.forEach(u=>{
             const item=document.createElement('div');item.className='admin-user-item';
-            item.innerHTML=`
-                <div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div>
-                <div class="admin-user-actions">
-                    <select class="rank-select" id="rk_${u.id}">
-                        <option ${u.rank==='Member'?'selected':''}>Member</option>
-                        <option ${u.rank==='Regular'?'selected':''}>Regular</option>
-                        <option ${u.rank==='VIP'?'selected':''}>VIP</option>
-                        <option ${u.rank==='Admin'?'selected':''}>Admin</option>
-                        <option ${u.rank==='Owner'?'selected':''}>Owner</option>
-                    </select>
-                    <button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button>
-                    <button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button>
-                </div>`;
+            item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
             al.appendChild(item);
         });
     }
-    // Feedback
     const fl=document.getElementById('feedbackList');
     if(!feedbacks||!feedbacks.length){fl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No feedback yet.</div>';}
     else{
         fl.innerHTML='';
         feedbacks.forEach(f=>{
             const item=document.createElement('div');item.className='feedback-item'+(f.read?'':' unread');
-            item.innerHTML=`
-                <div class="fb-header">${rankBadge(f.rank)}<strong>${f.username}</strong><span class="fb-date">${fmtDate(f.created_at||Date.now())}</span>${!f.read?`<button class="btn-fb-read" onclick="markFbRead(${f.id},this)">✓ Mark read</button>`:''}<button class="btn-fb-del" onclick="delFb(${f.id},this)">✕</button></div>
-                <div class="fb-msg">${f.message}</div>`;
+            item.innerHTML=`<div class="fb-header">${rankBadge(f.rank)}<strong>${f.username}</strong><span class="fb-date">${fmtDate(f.created_at||Date.now())}</span>${!f.read?`<button class="btn-fb-read" onclick="markFbRead(${f.id},this)">✓ Mark read</button>`:''}<button class="btn-fb-del" onclick="delFb(${f.id},this)">✕</button></div><div class="fb-msg">${f.message}</div>`;
             fl.appendChild(item);
         });
     }
-    // Videos
     const vl=document.getElementById('adminVidList');
     if(!files.length){vl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No videos.</div>';return;}
     vl.innerHTML='';
