@@ -661,6 +661,15 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 <!-- VIDEOS TAB -->
 <div class="tab-panel active" id="tab-videos">
     <div class="section-title">ALL VIDEOS</div>
+    <div class="update-log">
+        <div class="update-log-title">Update Log</div>
+        <ul class="update-log-list">
+            <li>Added a temporary watch mode for large videos. It downloads a temp copy that is deleted after closing the player.</li>
+            <li>Added an adjustable per-user 5 GB big-video quota with admin control.</li>
+            <li>Added a browser offline save workflow for loaded videos.</li>
+            <li>Added an admin button to copy all feedback into a ready-to-paste prompt.</li>
+        </ul>
+    </div>
     <div id="videosLoading" class="spinner">Loading videos…</div>
     <div id="emptyVideos" class="empty-state" style="display:none;"><div class="icon">🎬</div><p>No videos yet — upload one!</p></div>
     <div class="video-grid" id="videoGrid"></div>
@@ -831,6 +840,8 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
                 1. Go to <strong>Storage</strong> → New bucket → Name: <code>big-videos</code> → Enable "Public bucket" → Set file size limit: <code>100 MB</code> → Create<br>
                 2. Go to <strong>Table Editor</strong> → New table → Name: <code>big_video_posts</code> → Add columns: <code>filename</code> (text), <code>display_name</code> (text), <code>username</code> (text), <code>rank</code> (text) — then this works!
             </div>
+            <div class="vext-quota-note" id="vextQuotaNote">Loading storage quota info…</div>
+            <div class="vext-onedrive-note">OneDrive sync is not available in this browser-only version. Use the TEMP button to watch a copy, or save offline to keep it in your browser.</div>
             <div class="vext-drop" id="vextDrop" onclick="document.getElementById('vextFileInput').click()">
                 <div class="vext-drop-icon">📹</div>
                 <div class="vext-drop-title">DRAG & DROP OR CLICK TO CHOOSE</div>
@@ -875,7 +886,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         </div>
         <div class="admin-sec"><div class="admin-sec-title">⏳ PENDING USERS</div><div id="pendingList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec"><div class="admin-sec-title">👥 ALL USERS</div><div id="allUsersList"><div class="spinner">Loading…</div></div></div>
-        <div class="admin-sec"><div class="admin-sec-title">💬 FEEDBACK</div><div id="feedbackList"><div class="spinner">Loading…</div></div></div>
+        <div class="admin-sec"><div class="admin-feedback-header"><div class="admin-sec-title">💬 FEEDBACK</div><button class="btn-quota" onclick="copyAllFeedback()">📋 COPY ALL FEEDBACK</button></div><div id="feedbackList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec"><div class="admin-sec-title">🎬 MANAGE VIDEOS</div><div id="adminVidList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec">
             <div class="admin-sec-title">🔑 CHANGE ADMIN PIN</div>
@@ -928,6 +939,36 @@ const SUPABASE_KEY='sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const BUCKET='videos', SBUCKET='shorts', BIGBUCKET='big-videos';
 const VAULT_SHARE_PREFIX='vault_share_';
+const DEFAULT_STORAGE_QUOTA=5*1024*1024*1024;
+let tempPlayerUrl=null;
+
+async function getUserStorageQuota(username){
+    const stored=localStorage.getItem(`scool_storage_quota_${username}`);
+    return stored?parseInt(stored,10):DEFAULT_STORAGE_QUOTA;
+}
+function setUserStorageQuota(username,bytes){
+    localStorage.setItem(`scool_storage_quota_${username}`,String(bytes));
+}
+async function getUserBigVideoUsage(username){
+    const {data:posts}=await sb.from('big_video_posts').select('filename,username');
+    const {data:files}=await sb.storage.from(BIGBUCKET).list('');
+    const map={};
+    (posts||[]).forEach(p=>{if(p.filename&&p.username)map[p.filename]=p.username;});
+    let total=0;
+    (files||[]).forEach(file=>{if(map[file.name]===username)total+=(file.metadata?.size||0);});
+    return total;
+}
+async function updateStorageQuotaNotice(){
+    const el=document.getElementById('vextQuotaNote');
+    const username=currentUser?.username;
+    const quota=await getUserStorageQuota(username||'');
+    const usage= username ? await getUserBigVideoUsage(username) : 0;
+    if(el){
+        const status=usage>=quota ? `<strong style="color:#f39c12;">Limit reached.</strong> Ask admin to increase your storage.` : `${fmtSize(Math.max(quota-usage,0))} left before your ${fmtSize(quota)} quota.`;
+        el.innerHTML=`<strong>Storage limit:</strong> ${fmtSize(usage)} / ${fmtSize(quota)}. ${status}`;
+    }
+    return {usage,quota};
+}
 
 // ══ STATE ══
 let currentUser=null, pendingUser=null, adminUnlocked=false;
@@ -1147,6 +1188,22 @@ function watchVideo(url,name){
     const p=document.getElementById('playerVideo');p.src=url;p.play();
     document.getElementById('playerModal').classList.add('active');
 }
+async function watchTempVideo(url,name){
+    showToast('Downloading a temporary copy…');
+    try{
+        const resp=await fetch(url);
+        if(!resp.ok)throw new Error('Download failed');
+        const blob=await resp.blob();
+        const objectUrl=URL.createObjectURL(blob);
+        tempPlayerUrl=objectUrl;
+        const p=document.getElementById('playerVideo');
+        p.src=objectUrl; p.load();
+        document.getElementById('playerTitle').textContent=name+' (temp)';
+        document.getElementById('playerModal').dataset.temp='true';
+        document.getElementById('playerModal').classList.add('active');
+        await p.play().catch(()=>{});
+    }catch(err){showToast('Temp watch failed: '+err.message);}
+}
 function dlVideo(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.target='_blank';a.click();}
 async function delVideo(name,btn){
     if(!confirm('Delete "'+name+'"?'))return;btn.textContent='…';
@@ -1173,7 +1230,13 @@ function toggleTheater(){
 }
 function closePlayer(){
     const p=document.getElementById('playerVideo');p.pause();p.src='';
-    document.getElementById('playerModal').classList.remove('active','theater');
+    const modal=document.getElementById('playerModal');
+    if(modal.dataset.temp==='true'){
+        if(tempPlayerUrl){URL.revokeObjectURL(tempPlayerUrl);tempPlayerUrl=null;}
+        modal.dataset.temp='';
+        showToast('Temporary copy deleted.');
+    }
+    modal.classList.remove('active','theater');
     document.getElementById('theaterBtn').classList.remove('on');
 }
 function openUpload(){document.getElementById('uploadZone').classList.add('active');}
@@ -1383,6 +1446,14 @@ async function sendFeedback(){
     document.getElementById('feedbackText').value='';
     document.getElementById('feedbackModal').classList.remove('active');
     showToast('Feedback sent! Thanks 💬');
+}
+async function copyAllFeedback(){
+    const {data,error}=await sb.from('feedback').select('*').order('created_at',{ascending:true});
+    if(error){showToast('Error: '+error.message);return;}
+    if(!data||!data.length){showToast('No feedback to copy');return;}
+    const text=data.map(f=>`${fmtDate(f.created_at||Date.now())} — ${f.username||'Unknown'} (${f.rank||'Member'}): ${f.message}`).join('\n');
+    const prompt=`SCool admin feedback summary:\n\n${text}\n\nUse this for an AI analysis prompt.`;
+    navigator.clipboard.writeText(prompt).then(()=>showToast('Copied feedback summary to clipboard! 📋')).catch(()=>showToast('Could not copy to clipboard'));
 }
 
 // ══ INDEXEDDB ══
@@ -1717,6 +1788,7 @@ async function renderBigVideos(){
                 <div class="video-meta">${fmtSize(file.metadata?.size)} · ${fmtDate(file.created_at)}</div>
                 <div class="card-actions">
                     <button class="btn-v" style="background:#5b21b6;color:#fff;" onclick="watchVideo('${su}','${dn}')">▶ WATCH</button>
+                    <button class="btn-v" style="background:#3b1f6e;color:#fff;" onclick="watchTempVideo('${su}','${dn}')">⌛ TEMP</button>
                     <button class="btn-v bv-dl" onclick="dlVideo('${su}','${sn}')">⬇ SAVE</button>
                     <button class="btn-v bv-off" onclick="saveOffline('${su}','${sn}')">📴 OFFLINE</button>
                     <button class="btn-v bv-del" onclick="delBigVideo('${sn}',this)">✕ DEL</button>
@@ -1724,12 +1796,16 @@ async function renderBigVideos(){
             </div>`;
         grid.appendChild(card);
     });
+    await updateStorageQuotaNotice();
 }
 
 async function uploadBigVideo(file){
     if(!file||!file.type.startsWith('video/')){showToast('Select a video file!');return;}
     const MAX=95*1024*1024;
     if(file.size>MAX){showToast('Too big! Max 95 MB (yours is '+fmtSize(file.size)+')');return;}
+    const {usage,quota}=await updateStorageQuotaNotice();
+    if(usage>=quota){showToast('You have reached your big-video quota. Ask admin to increase your storage.');return;}
+    if(file.size + usage > quota){showToast('This upload would exceed your '+fmtSize(quota)+' quota. Ask admin to increase your storage or remove older files.');return;}
     const wrap=document.getElementById('vextProgWrap');
     const fill=document.getElementById('vextProgFill');
     const label=document.getElementById('vextProgLabel');
@@ -1827,7 +1903,10 @@ async function loadAdminData(){
         al.innerHTML='';
         approved.forEach(u=>{
             const item=document.createElement('div');item.className='admin-user-item';
-            item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
+            const safeName=(u.username||'').replace(/'/g,"\\'");
+            const storedQuota=localStorage.getItem(`scool_storage_quota_${u.username}`);
+            const quotaLabel=fmtSize(storedQuota?parseInt(storedQuota,10):DEFAULT_STORAGE_QUOTA);
+            item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}<span style="margin-left:.6rem;font-size:.72rem;color:var(--muted);">Quota: ${quotaLabel}</span></div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-quota" onclick="setQuota(${u.id},'${safeName}')">Set Quota</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
             al.appendChild(item);
         });
     }
@@ -1854,6 +1933,16 @@ async function loadAdminData(){
 async function approveUser(id,btn){btn.textContent='…';await sb.from('users').update({verified:true}).eq('id',id);showToast('User approved! ✓');loadAdminData();}
 async function rejectUser(id,btn){if(!confirm('Remove this user?'))return;btn.textContent='…';await sb.from('users').delete().eq('id',id);showToast('Removed!');loadAdminData();}
 async function setRank(id){const rank=document.getElementById('rk_'+id).value;await sb.from('users').update({rank}).eq('id',id);showToast('Rank set to '+rank+'!');loadAdminData();}
+async function setQuota(id,username){
+    const answer=prompt('Enter storage quota for '+username+' in GB (example: 5):');
+    if(!answer)return;
+    const gb=parseFloat(answer);
+    if(Number.isNaN(gb)||gb<=0){showToast('Enter a valid number.');return;}
+    const bytes=Math.round(gb*1024*1024*1024);
+    setUserStorageQuota(username,bytes);
+    showToast('Quota set to '+gb+' GB for '+username+'!');
+    loadAdminData();
+}
 async function adminDelVid(name,btn){if(!confirm('Delete?'))return;btn.textContent='…';await sb.storage.from(BUCKET).remove([name]);await sb.from('video_posts').delete().eq('filename',name);showToast('Deleted!');loadAdminData();renderVideos();}
 async function markFbRead(id,btn){await sb.from('feedback').update({read:true}).eq('id',id);showToast('Marked as read');loadAdminData();}
 async function delFb(id,btn){await sb.from('feedback').delete().eq('id',id);showToast('Deleted!');loadAdminData();}
