@@ -90,6 +90,7 @@ nav::-webkit-scrollbar{display:none;}
 .rank-Member{background:#2a2a35;color:var(--muted);}
 .rank-Regular{background:#1a2e1a;color:var(--green);}
 .rank-VIP{background:#2a2010;color:var(--accent);}
+.rank-Moderator{background:#1a2a3a;color:#4a9eff;}
 .rank-Admin{background:#2a1010;color:var(--accent2);}
 .rank-Owner{background:linear-gradient(90deg,#f0c040,#e05a2b);color:#000;}
 .header-username{font-weight:600;font-size:.82rem;}
@@ -457,10 +458,53 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 
 /* ADMIN TAB */
 .admin-locked{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:1.5rem;}
-.admin-locked h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;color:var(--accent2);}
-.admin-locked p{color:var(--muted);}
-.admin-content{display:none;}
-.admin-content.unlocked{display:block;}
+
+/* MODERATOR TAB */
+.mod-locked{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:1.5rem;}
+.mod-locked h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;color:var(--accent);}
+.mod-locked p{color:var(--muted);}
+.mod-content{display:none;}
+.mod-content.unlocked{display:block;}
+.mod-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.mod-tab{padding:.6rem 1.2rem;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;transition:border-color .2s,color .2s;}
+.mod-tab.active{border-color:var(--accent);color:var(--accent);}
+.mod-subtab{display:none;}
+.mod-subtab.active{display:block;}
+.mod-toolbar{display:flex;gap:.8rem;margin-bottom:1.5rem;align-items:center;flex-wrap:wrap;}
+.mod-search{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:.6rem .9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;}
+.mod-search:focus{border-color:var(--accent);}
+.btn-mod-add{background:var(--accent);color:#0d0d0f;border:none;padding:.6rem 1.2rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);transition:background .2s;}
+.btn-mod-add:hover{background:#f7d165;}
+.mod-list{display:flex;flex-direction:column;gap:.8rem;}
+.mod-item{background:var(--card);border:1px solid var(--border);padding:.9rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;}
+.mod-item-info{flex:1;min-width:0;}
+.mod-item-name{font-weight:600;font-size:.88rem;margin-bottom:.25rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mod-item-detail{font-size:.78rem;color:var(--muted);}
+.mod-item-actions{display:flex;gap:.4rem;flex-shrink:0;}
+.btn-mod-action{background:none;border:1px solid var(--border);color:var(--muted);padding:.35rem .7rem;font-size:.75rem;cursor:pointer;transition:border-color .2s,color .2s;}
+.btn-mod-action:hover{border-color:var(--text);color:var(--text);}
+.btn-mod-del:hover{border-color:var(--red);color:var(--red);}
+.btn-mod-copy:hover{border-color:var(--accent);color:var(--accent);}
+.mod-empty{color:var(--muted);padding:1.5rem;text-align:center;font-size:.88rem;}
+.mod-input-row{display:flex;gap:.6rem;flex-wrap:wrap;}
+.mod-input{flex:1;min-width:180px;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.6rem .9rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;}
+.mod-input:focus{border-color:var(--accent);}
+.mod-input::placeholder{color:var(--muted);}
+
+/* MODERATOR PASSWORD MODAL */
+.mod-pass-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;}
+.mod-pass-modal.active{display:flex;}
+.mod-pass-box{background:var(--card);border:1px solid var(--accent);width:min(380px,92vw);padding:2rem;text-align:center;}
+.mod-pass-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;color:var(--accent);margin-bottom:.5rem;}
+.mod-pass-box p{color:var(--muted);font-size:.88rem;margin-bottom:1.2rem;}
+.mod-pass-input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.7rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;margin-bottom:.8rem;}
+.mod-pass-input:focus{border-color:var(--accent);}
+.mod-pass-error{color:var(--red);font-size:.82rem;min-height:1.2rem;margin-bottom:.8rem;}
+.btn-mod-pass{background:var(--accent);color:#0d0d0f;border:none;padding:.7rem 1.5rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;width:100%;transition:background .2s;margin-bottom:.5rem;}
+.btn-mod-pass:hover{background:#f7d165;}
+.btn-mod-pass-close{background:none;border:1px solid var(--border);color:var(--muted);padding:.5rem 1rem;cursor:pointer;font-size:.85rem;font-family:'DM Sans',sans-serif;width:100%;transition:border-color .2s;}
+.btn-mod-pass-close:hover{border-color:var(--text);color:var(--text);}
+
 .admin-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
 .admin-badge{background:var(--accent2);color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;padding:.28rem .7rem;font-size:.82rem;}
 .btn-admin-lock{background:none;border:1px solid var(--border);color:var(--muted);padding:.38rem .9rem;cursor:pointer;font-size:.82rem;}
@@ -624,6 +668,18 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     </div>
 </div>
 
+<!-- MODERATOR PASSWORD MODAL -->
+<div class="mod-pass-modal" id="modPassModal">
+    <div class="mod-pass-box">
+        <h2>👮 MODERATOR ACCESS</h2>
+        <p>Enter the moderator password to continue</p>
+        <input type="password" class="mod-pass-input" id="modPassInput" placeholder="Password" />
+        <div class="mod-pass-error" id="modPassError"></div>
+        <button class="btn-mod-pass" onclick="checkModPassword()">UNLOCK →</button>
+        <button class="btn-mod-pass-close" onclick="closeModPass()">Cancel</button>
+    </div>
+</div>
+
 <!-- RENAME MODAL -->
 <div class="modal-backdrop" id="renameModal">
     <div class="modal-box">
@@ -647,6 +703,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <button class="nav-tab" onclick="switchTab('shorts',this)">📱 SHORTS</button>
         <button class="nav-tab" onclick="switchTab('offline',this)">📴 OFFLINE</button>
         <button class="nav-tab" onclick="switchTab('test',this)">🔗 TEST</button>
+        <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">👮 MODERATOR</button>
         <button class="nav-tab admin-tab" id="adminNavBtn" onclick="switchTab('admin',this)" style="display:none;">⚙ ADMIN</button>
     </nav>
     <div class="header-right">
@@ -868,6 +925,60 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 </div>
 </div>
 
+<!-- MODERATOR TAB -->
+<div class="tab-panel" id="tab-moderator">
+    <div class="mod-locked" id="modLocked">
+        <h2>👮 MODERATOR ONLY</h2>
+        <p>This section requires moderator role and password verification.</p>
+    </div>
+    <div class="mod-content" id="modContent">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
+            <div class="section-title" style="margin-bottom:0;">MODERATOR PANEL</div>
+            <button class="btn-logout" onclick="closeModeratorAccess()">🔒 Lock</button>
+        </div>
+        
+        <!-- Moderator Tabs -->
+        <div class="mod-tabs">
+            <button class="mod-tab active" onclick="switchModTab('websites',this)">🌐 WEBSITES</button>
+            <button class="mod-tab" onclick="switchModTab('proxy',this)">🌍 PROXY SERVERS</button>
+            <button class="mod-tab" onclick="switchModTab('vpn',this)">🔐 VPN SERVERS</button>
+        </div>
+
+        <!-- Websites Subtab -->
+        <div class="mod-subtab active" id="mod-websites">
+            <div class="mod-toolbar">
+                <input type="text" class="mod-search" id="modWebSearch" placeholder="Search websites…" onkeyup="filterModList('websites')" />
+                <button class="btn-mod-add" onclick="openModAddModal('websites')">+ ADD</button>
+            </div>
+            <div class="mod-list" id="modWebList">
+                <div class="mod-empty">Loading websites…</div>
+            </div>
+        </div>
+
+        <!-- Proxy Servers Subtab -->
+        <div class="mod-subtab" id="mod-proxy">
+            <div class="mod-toolbar">
+                <input type="text" class="mod-search" id="modProxySearch" placeholder="Search proxies…" onkeyup="filterModList('proxy')" />
+                <button class="btn-mod-add" onclick="openModAddModal('proxy')">+ ADD</button>
+            </div>
+            <div class="mod-list" id="modProxyList">
+                <div class="mod-empty">Loading proxies…</div>
+            </div>
+        </div>
+
+        <!-- VPN Servers Subtab -->
+        <div class="mod-subtab" id="mod-vpn">
+            <div class="mod-toolbar">
+                <input type="text" class="mod-search" id="modVpnSearch" placeholder="Search VPNs…" onkeyup="filterModList('vpn')" />
+                <button class="btn-mod-add" onclick="openModAddModal('vpn')">+ ADD</button>
+            </div>
+            <div class="mod-list" id="modVpnList">
+                <div class="mod-empty">Loading VPNs…</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- ADMIN TAB -->
 <div class="tab-panel" id="tab-admin">
     <div class="admin-locked" id="adminLocked"><h2>🔒 ADMIN ONLY</h2><p>Use hamburger menu in TEST → Admin Mode</p></div>
@@ -1051,14 +1162,17 @@ function checkAccPin(){
     }
 }
 function doLogout(){
-    currentUser=null;pendingUser=null;adminUnlocked=false;
+    currentUser=null;pendingUser=null;adminUnlocked=false;modUnlocked=false;
     sessionStorage.removeItem('scool_session');
     document.getElementById('siteContainer').style.display='none';
     document.getElementById('feedbackFab').style.display='none';
     document.getElementById('authScreen').style.display='flex';
     document.getElementById('adminNavBtn').style.display='none';
+    document.getElementById('modNavBtn').style.display='none';
     document.getElementById('adminContent').classList.remove('unlocked');
     document.getElementById('adminLocked').style.display='flex';
+    document.getElementById('modContent').classList.remove('unlocked');
+    document.getElementById('modLocked').style.display='flex';
 }
 
 // ══ SITE INIT ══
@@ -1066,6 +1180,7 @@ function initSite(){
     document.getElementById('siteContainer').style.display='block';
     document.getElementById('feedbackFab').style.display='flex';
     document.getElementById('headerUser').innerHTML=`${rankBadge(currentUser.rank)}<span class="header-username">${currentUser.username}</span>`;
+    checkModeratorButtonVisibility();
     openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();});
 }
 
@@ -1079,6 +1194,7 @@ function switchTab(name,btn){
     document.getElementById('uploadHeaderBtn').classList.toggle('hidden',!showUp);
     document.getElementById('mainContent').style.padding=name==='shorts'?'0':'2rem';
     if(name==='admin'&&adminUnlocked)loadAdminData();
+    if(name==='moderator'&&modUnlocked)loadModeratorData();
     if(name==='offline')renderOffline();
     if(name==='test'&&curFeature==='vault')renderVault();
     if(name==='test'&&curFeature==='videosext')renderBigVideos();
@@ -1964,6 +2080,262 @@ document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key
 document.getElementById('renameInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();});
 document.getElementById('vaultClaimInput').addEventListener('keydown',e=>{if(e.key==='Enter')claimVaultFile();});
 document.getElementById('chInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))askCodeHelper();});
+
+// ══ MODERATOR ══
+let modUnlocked=false;
+let modCurrentTab='websites';
+let modData={websites:[],proxy:[],vpn:[]};
+const MOD_PASSWORD='Digre pyscool';
+
+function isModerator(){
+    if(!currentUser)return false;
+    const ranks=['Moderator','Admin','Owner'];
+    return ranks.includes(currentUser.rank);
+}
+
+function openModeratorCheck(){
+    if(!isModerator()){
+        showToast('You need to be a Moderator to access this!');
+        switchTab('videos',document.querySelectorAll('.nav-tab')[0]);
+        return;
+    }
+    if(!modUnlocked){
+        document.getElementById('modPassModal').classList.add('active');
+        document.getElementById('modPassInput').value='';
+        document.getElementById('modPassError').textContent='';
+    }
+}
+
+function closeModPass(){
+    document.getElementById('modPassModal').classList.remove('active');
+    document.getElementById('modPassInput').value='';
+    document.getElementById('modPassError').textContent='';
+    switchTab('videos',document.querySelectorAll('.nav-tab')[0]);
+}
+
+function checkModPassword(){
+    const pass=document.getElementById('modPassInput').value;
+    const err=document.getElementById('modPassError');
+    if(pass===MOD_PASSWORD){
+        modUnlocked=true;
+        document.getElementById('modPassModal').classList.remove('active');
+        document.getElementById('modLocked').style.display='none';
+        document.getElementById('modContent').classList.add('unlocked');
+        loadModeratorData();
+        showToast('Moderator access granted! 👮');
+    } else {
+        err.textContent='Incorrect password. Try again.';
+        document.getElementById('modPassInput').value='';
+    }
+}
+
+function closeModeratorAccess(){
+    modUnlocked=false;
+    document.getElementById('modContent').classList.remove('unlocked');
+    document.getElementById('modLocked').style.display='flex';
+    switchTab('videos',document.querySelectorAll('.nav-tab')[0]);
+    showToast('Moderator locked 🔒');
+}
+
+async function loadModeratorData(){
+    try{
+        const {data:websites,error:e1}=await sb.from('moderator_websites').select('*');
+        const {data:proxies,error:e2}=await sb.from('moderator_proxies').select('*');
+        const {data:vpns,error:e3}=await sb.from('moderator_vpns').select('*');
+        
+        modData.websites=(websites||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+        modData.proxy=(proxies||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+        modData.vpn=(vpns||[]).sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+        
+        renderModList('websites');
+        renderModList('proxy');
+        renderModList('vpn');
+    }catch(e){
+        showToast('Error loading moderator data');
+    }
+}
+
+function switchModTab(tabName,btn){
+    document.querySelectorAll('.mod-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.mod-subtab').forEach(t=>t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('mod-'+tabName).classList.add('active');
+    modCurrentTab=tabName;
+}
+
+function renderModList(type){
+    const items=modData[type]||[];
+    const container=document.getElementById('mod-'+type+'List');
+    
+    if(!items.length){
+        container.innerHTML='<div class="mod-empty">No items yet. Click "+ ADD" to create one.</div>';
+        return;
+    }
+    
+    container.innerHTML='';
+    items.forEach(item=>{
+        const div=document.createElement('div');
+        div.className='mod-item';
+        
+        let detailHTML='';
+        if(type==='websites'){
+            detailHTML=`<div class="mod-item-detail">${item.url}</div>`;
+        } else if(type==='proxy'||type==='vpn'){
+            detailHTML=`<div class="mod-item-detail">User: ${item.username} | Port: ${item.port}</div>`;
+        }
+        
+        div.innerHTML=`
+            <div class="mod-item-info">
+                <div class="mod-item-name">${item.name}</div>
+                ${detailHTML}
+            </div>
+            <div class="mod-item-actions">
+                <button class="btn-mod-action btn-mod-copy" onclick="copyModItem('${item.id}','${type}')" title="Copy">📋</button>
+                <button class="btn-mod-action btn-mod-del" onclick="delModItem('${item.id}','${type}')">✕</button>
+            </div>`;
+        container.appendChild(div);
+    });
+}
+
+function filterModList(type){
+    const searchId='mod'+type.charAt(0).toUpperCase()+type.slice(1)+'Search';
+    const searchValue=document.getElementById(searchId)?.value.toLowerCase()||'';
+    const items=modData[type]||[];
+    const container=document.getElementById('mod-'+type+'List');
+    
+    const filtered=items.filter(item=>{
+        const name=item.name.toLowerCase();
+        const url=item.url?.toLowerCase()||'';
+        const user=item.username?.toLowerCase()||'';
+        return name.includes(searchValue)||url.includes(searchValue)||user.includes(searchValue);
+    });
+    
+    if(!filtered.length){
+        container.innerHTML='<div class="mod-empty">No matches found.</div>';
+        return;
+    }
+    
+    container.innerHTML='';
+    filtered.forEach(item=>{
+        const div=document.createElement('div');
+        div.className='mod-item';
+        
+        let detailHTML='';
+        if(type==='websites'){
+            detailHTML=`<div class="mod-item-detail">${item.url}</div>`;
+        } else if(type==='proxy'||type==='vpn'){
+            detailHTML=`<div class="mod-item-detail">User: ${item.username} | Port: ${item.port}</div>`;
+        }
+        
+        div.innerHTML=`
+            <div class="mod-item-info">
+                <div class="mod-item-name">${item.name}</div>
+                ${detailHTML}
+            </div>
+            <div class="mod-item-actions">
+                <button class="btn-mod-action btn-mod-copy" onclick="copyModItem('${item.id}','${type}')" title="Copy">📋</button>
+                <button class="btn-mod-action btn-mod-del" onclick="delModItem('${item.id}','${type}')">✕</button>
+            </div>`;
+        container.appendChild(div);
+    });
+}
+
+function openModAddModal(type){
+    let html='';
+    const typeLabel={websites:'Website',proxy:'Proxy Server',vpn:'VPN Server'};
+    
+    if(type==='websites'){
+        html=`
+            <div class="mod-input-row">
+                <input class="mod-input" id="modAddName" placeholder="Website name (e.g., YouTube)" />
+                <input class="mod-input" id="modAddUrl" placeholder="URL (e.g., https://youtube.com)" />
+            </div>
+            <button class="btn-mod-add" onclick="saveModItem('${type}')">✓ ADD WEBSITE</button>`;
+    } else {
+        html=`
+            <div class="mod-input-row">
+                <input class="mod-input" id="modAddName" placeholder="Server name" />
+                <input class="mod-input" id="modAddUser" placeholder="Username" />
+                <input class="mod-input" id="modAddPass" placeholder="Password" />
+                <input class="mod-input" id="modAddPort" placeholder="Port (e.g., 8080)" />
+            </div>
+            <button class="btn-mod-add" onclick="saveModItem('${type}')">✓ ADD ${typeLabel[type].toUpperCase()}</button>`;
+    }
+    
+    const modal=document.createElement('div');
+    modal.className='modal-backdrop active';
+    modal.id='modAddModal';
+    modal.innerHTML=`
+        <div class="modal-box">
+            <button class="modal-close" onclick="document.getElementById('modAddModal').remove()">✕</button>
+            <h2>+ ADD ${typeLabel[type].toUpperCase()}</h2>
+            ${html}
+        </div>`;
+    modal.addEventListener('click',e=>{if(e.target===modal)modal.remove();});
+    document.body.appendChild(modal);
+}
+
+async function saveModItem(type){
+    let name,url,username,password,port;
+    
+    if(type==='websites'){
+        name=document.getElementById('modAddName')?.value.trim();
+        url=document.getElementById('modAddUrl')?.value.trim();
+        if(!name||!url){showToast('Please fill in all fields');return;}
+        if(!url.startsWith('http'))url='https://'+url;
+        
+        const{error}=await sb.from('moderator_websites').insert([{name,url,username:currentUser.username}]);
+        if(error){showToast('Error: '+error.message);return;}
+    } else {
+        name=document.getElementById('modAddName')?.value.trim();
+        username=document.getElementById('modAddUser')?.value.trim();
+        password=document.getElementById('modAddPass')?.value.trim();
+        port=document.getElementById('modAddPort')?.value.trim();
+        if(!name||!username||!password||!port){showToast('Please fill in all fields');return;}
+        
+        const table=type==='proxy'?'moderator_proxies':'moderator_vpns';
+        const{error}=await sb.from(table).insert([{name,username,password,port,added_by:currentUser.username}]);
+        if(error){showToast('Error: '+error.message);return;}
+    }
+    
+    document.getElementById('modAddModal').remove();
+    showToast('✓ Added!');
+    loadModeratorData();
+}
+
+async function delModItem(id,type){
+    if(!confirm('Delete this item?'))return;
+    const table=type==='websites'?'moderator_websites':type==='proxy'?'moderator_proxies':'moderator_vpns';
+    await sb.from(table).delete().eq('id',id);
+    showToast('Deleted!');
+    loadModeratorData();
+}
+
+function copyModItem(id,type){
+    const item=modData[type]?.find(i=>i.id===id);
+    if(!item){showToast('Item not found');return;}
+    
+    let text='';
+    if(type==='websites'){
+        text=`${item.name}: ${item.url}`;
+    } else {
+        text=`${item.name}\nUsername: ${item.username}\nPassword: ${item.password}\nPort: ${item.port}`;
+    }
+    
+    navigator.clipboard.writeText(text)
+        .then(()=>showToast('Copied to clipboard! 📋'))
+        .catch(()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied! 📋');});
+}
+
+// Add moderator button visibility on init
+function checkModeratorButtonVisibility(){
+    const modBtn=document.getElementById('modNavBtn');
+    if(isModerator()){
+        modBtn.style.display='';
+    } else {
+        modBtn.style.display='none';
+    }
+}
 
 // ══ INIT ══
 const saved=sessionStorage.getItem('scool_session');
