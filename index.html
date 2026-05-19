@@ -2139,19 +2139,35 @@ function closeModeratorAccess(){
 
 async function loadModeratorData(){
     try{
-        const {data:websites,error:e1}=await sb.from('moderator_websites').select('*');
-        const {data:proxies,error:e2}=await sb.from('moderator_proxies').select('*');
-        const {data:vpns,error:e3}=await sb.from('moderator_vpns').select('*');
-        
-        modData.websites=(websites||[]).sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
-        modData.proxy=(proxies||[]).sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
-        modData.vpn=(vpns||[]).sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
-        
+        const resWeb = await sb.from('moderator_websites').select('*');
+        const resPro = await sb.from('moderator_proxies').select('*');
+        const resVpn = await sb.from('moderator_vpns').select('*');
+
+        // Check for Supabase errors and report them clearly
+        if(resWeb.error || resPro.error || resVpn.error){
+            console.error('Moderator load errors', {web:resWeb.error,pro:resPro.error,vpn:resVpn.error});
+            const msgs = [];
+            if(resWeb.error) msgs.push('moderator_websites: '+(resWeb.error.message||resWeb.error));
+            if(resPro.error) msgs.push('moderator_proxies: '+(resPro.error.message||resPro.error));
+            if(resVpn.error) msgs.push('moderator_vpns: '+(resVpn.error.message||resVpn.error));
+            showToast('Error loading moderator data: '+msgs.join(' | '));
+            return;
+        }
+
+        const websites = resWeb.data || [];
+        const proxies = resPro.data || [];
+        const vpns = resVpn.data || [];
+
+        modData.websites = websites.sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
+        modData.proxy = proxies.sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
+        modData.vpn = vpns.sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
+
         renderModList('websites');
         renderModList('proxy');
         renderModList('vpn');
     }catch(e){
-        showToast('Error loading moderator data');
+        console.error('Unexpected error loading moderator data', e);
+        showToast('Unexpected error loading moderator data: '+(e.message||e));
     }
 }
 
