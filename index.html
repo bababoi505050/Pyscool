@@ -55,18 +55,18 @@
     .pending-title{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;color:var(--accent2);}
     .pending-text{color:var(--muted);font-size:.95rem;max-width:360px;line-height:1.7;}
 
-    /* ADMIN PIN LOCK */
+    /* ADMIN ACCESS LOCK */
     .apl{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;}
     .apl.active{display:flex;}
-    .apl h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;color:var(--accent2);}
-    .apl p{color:var(--muted);font-size:.9rem;}
-    .apl-dots{display:flex;gap:1rem;}
-    .apl-dot{width:16px;height:16px;border-radius:50%;background:var(--border);transition:background .2s;}
-    .apl-dot.filled{background:var(--accent2);}
-    .apl-grid{display:grid;grid-template-columns:repeat(3,72px);gap:.7rem;}
-    .apl-btn{height:72px;background:var(--card);border:1px solid var(--border);color:var(--text);font-family:'DM Sans',sans-serif;font-size:1.4rem;font-weight:600;cursor:pointer;transition:background .15s;border-radius:4px;}
-    .apl-btn:hover{background:var(--border);border-color:var(--accent2);}
-    .apl-btn.del{font-size:1rem;color:var(--muted);}
+    .apl-box{background:var(--card);border:1px solid var(--accent2);width:min(420px,92vw);padding:2rem;text-align:center;}
+    .apl h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;color:var(--accent2);margin-bottom:.35rem;}
+    .apl p{display:none;}
+    .apl-help{display:block!important;color:var(--muted);font-size:.9rem;line-height:1.7;margin-bottom:1rem;}
+    .apl-dots,.apl-grid{display:none;}
+    .apl-input{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.8rem 1rem;font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;transition:border-color .2s;margin-bottom:.85rem;}
+    .apl-input:focus{border-color:var(--accent2);}
+    .btn-apl{background:var(--accent2);color:#fff;border:none;padding:.72rem 1.2rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.88rem;cursor:pointer;width:100%;transition:opacity .2s;margin-bottom:.6rem;}
+    .btn-apl:hover{opacity:.88;}
     .apl-error{color:var(--red);font-size:.85rem;min-height:1.2rem;}
     .apl-cancel{background:none;border:1px solid var(--border);color:var(--muted);padding:.4rem 1.2rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.85rem;}
     .apl-cancel:hover{border-color:var(--text);color:var(--text);}
@@ -83,7 +83,7 @@
     .nav-tab{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:.9rem;color:var(--muted);padding:0 .8rem;height:42px;line-height:42px;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
     .nav-tab:hover{color:var(--text);}
     .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-    .nav-tab.admin-tab{color:#444;font-size:.7rem;}
+    .nav-tab.admin-tab{color:#d6805e;font-size:.9rem;}
     .nav-tab.admin-tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
     .header-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0;}
     .rank-badge{font-size:.68rem;padding:.15rem .45rem;border-radius:2px;font-weight:700;letter-spacing:.5px;white-space:nowrap;}
@@ -201,6 +201,37 @@
     .clip-footer{padding:.55rem .9rem;font-size:.75rem;color:var(--muted);border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:.5rem;}
     .btn-open{background:none;border:1px solid var(--border);color:var(--muted);font-size:.72rem;padding:.2rem .5rem;cursor:pointer;white-space:nowrap;transition:border-color .2s,color .2s;}
     .btn-open:hover{border-color:var(--accent);color:var(--accent);}
+
+    /* MOVIES */
+    .movie-toolbar{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap;}
+    .movie-form{display:flex;gap:.65rem;flex:1;min-width:280px;flex-wrap:wrap;}
+    .movie-input{flex:1;min-width:180px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:.7rem .95rem;font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;}
+    .movie-input:focus{border-color:var(--accent);}
+    .movie-note{background:#12151d;border:1px solid #23304a;border-left:3px solid var(--blue);padding:.85rem 1rem;font-size:.8rem;color:var(--muted);margin-bottom:1rem;line-height:1.7;}
+    .movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;}
+    .movie-card{background:var(--card);border:1px solid var(--border);padding:1rem;display:flex;flex-direction:column;gap:.85rem;animation:fadeIn .3s ease;}
+    .movie-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.8rem;}
+    .movie-title-wrap{min-width:0;flex:1;}
+    .movie-title{font-weight:700;font-size:1rem;line-height:1.3;}
+    .movie-meta{font-size:.76rem;color:var(--muted);margin-top:.25rem;}
+    .movie-score{background:#211608;color:#f3d274;border:1px solid #5d4320;min-width:56px;text-align:center;padding:.4rem .55rem;border-radius:8px;}
+    .movie-score strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:1px;}
+    .movie-desc{font-size:.84rem;color:var(--text);line-height:1.6;}
+    .movie-stats{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .movie-pill{background:var(--bg);border:1px solid var(--border);padding:.22rem .55rem;font-size:.72rem;color:var(--muted);border-radius:999px;}
+    .movie-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+    .btn-movie{border:none;padding:.52rem .85rem;font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;transition:opacity .2s;}
+    .btn-movie:hover{opacity:.86;}
+    .btn-movie-watch{background:#1c3720;color:#7ae08f;}
+    .btn-movie-anon{background:#1b2740;color:#8ec5ff;}
+    .btn-movie-skip{background:#3a1818;color:#ff9494;}
+    .btn-movie-pick{background:linear-gradient(135deg,#f0c040,#e05a2b);color:#0d0d0f;border:none;padding:.65rem 1rem;font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);}
+    .movie-votes{display:flex;flex-wrap:wrap;gap:.4rem;}
+    .movie-vote-chip{background:var(--bg);border:1px solid var(--border);font-size:.72rem;color:var(--text);padding:.22rem .5rem;border-radius:999px;}
+    .movie-vote-chip.anon{border-color:#2b4570;color:#8ec5ff;}
+    .movie-vote-chip.skip{border-color:#5c2d2d;color:#ff9494;}
+    .movie-footer{display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;}
+    .movie-my-vote{font-size:.74rem;color:var(--muted);}
 
     /* SHARE MODAL */
     .share-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:400;align-items:center;justify-content:center;}
@@ -417,7 +448,7 @@
     .ch-pill{background:var(--border);color:var(--muted);font-size:.72rem;padding:.25rem .65rem;cursor:pointer;border-radius:20px;transition:background .2s,color .2s;border:none;}
     .ch-pill:hover{background:#3a2a5a;color:#b07fff;}
 
-    /* ══ VIDEOS EXTENDED ══ */
+    /* â•â• VIDEOS EXTENDED â•â• */
     .vext-box{background:var(--card);border:1px solid #5b21b6;padding:1.8rem;}
     .vext-box h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;margin-bottom:.3rem;color:#c084fc;}
     .vext-box > p{color:var(--muted);font-size:.88rem;margin-bottom:1rem;}
@@ -505,6 +536,8 @@
     .btn-mod-pass-close{background:none;border:1px solid var(--border);color:var(--muted);padding:.5rem 1rem;cursor:pointer;font-size:.85rem;font-family:'DM Sans',sans-serif;width:100%;transition:border-color .2s;}
     .btn-mod-pass-close:hover{border-color:var(--text);color:var(--text);}
 
+    .admin-content{display:none;}
+    .admin-content.unlocked{display:block;}
     .admin-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
     .admin-badge{background:var(--accent2);color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:2px;padding:.28rem .7rem;font-size:.82rem;}
     .btn-admin-lock{background:none;border:1px solid var(--border);color:var(--muted);padding:.38rem .9rem;cursor:pointer;font-size:.82rem;}
@@ -515,6 +548,7 @@
     .astat-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;color:var(--accent);line-height:1;}
     .admin-sec{margin-bottom:1.8rem;}
     .admin-sec-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:3px;color:var(--muted);margin-bottom:.9rem;border-bottom:1px solid var(--border);padding-bottom:.4rem;}
+    .admin-feedback-header{display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;}
     .admin-user-item{background:var(--card);border:1px solid var(--border);padding:.65rem .9rem;display:flex;align-items:center;justify-content:space-between;gap:.7rem;flex-wrap:wrap;margin-bottom:.4rem;}
     .admin-user-info{display:flex;align-items:center;gap:.6rem;flex:1;min-width:0;}
     .admin-user-name{font-size:.88rem;font-weight:600;}
@@ -524,8 +558,10 @@
     .btn-reject{background:#3a1818;color:var(--red);border:none;padding:.28rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer;transition:opacity .2s;}
     .btn-reject:hover{opacity:.8;}
     .rank-select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.28rem .45rem;font-family:'DM Sans',sans-serif;font-size:.75rem;outline:none;cursor:pointer;}
-    .btn-set-rank{background:var(--border);color:var(--text);border:none;padding:.28rem .6rem;font-size:.75rem;font-weight:600;cursor:pointer;}
+    .btn-set-rank{background:#2d2243;color:#d7b9ff;border:none;padding:.28rem .6rem;font-size:.75rem;font-weight:600;cursor:pointer;}
     .btn-set-rank:hover{opacity:.8;}
+    .btn-quota{background:#182339;color:#8ec5ff;border:none;padding:.28rem .7rem;font-size:.75rem;font-weight:700;cursor:pointer;}
+    .btn-quota:hover{opacity:.85;}
     .admin-vid-item{background:var(--card);border:1px solid var(--border);padding:.65rem .9rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem;}
     .admin-vid-name{font-size:.88rem;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .admin-vid-meta{font-size:.72rem;color:var(--muted);flex-shrink:0;}
@@ -536,6 +572,7 @@
     .fb-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.4rem;}
     .fb-msg{font-size:.88rem;color:var(--text);line-height:1.6;}
     .fb-date{font-size:.7rem;color:var(--muted);margin-left:auto;}
+    .fb-points{background:#2b1d0a;color:#f3d274;border:1px solid #5e4620;font-size:.67rem;font-weight:700;padding:.16rem .45rem;border-radius:999px;}
     .btn-fb-read{background:none;border:1px solid var(--border);color:var(--muted);font-size:.72rem;padding:.18rem .5rem;cursor:pointer;}
     .btn-fb-read:hover{border-color:var(--green);color:var(--green);}
     .btn-fb-del{background:none;border:1px solid var(--border);color:var(--muted);font-size:.72rem;padding:.18rem .5rem;cursor:pointer;}
@@ -543,9 +580,15 @@
     .admin-pin-sec{background:var(--card);border:1px solid var(--border);padding:1.3rem;}
     .admin-pin-sec h3{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:1rem;margin-bottom:.9rem;}
     .pin-change-row{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;}
-    .pin-input{background:var(--bg);border:2px solid var(--border);color:var(--text);padding:.55rem .9rem;font-family:'DM Sans',sans-serif;font-size:1.1rem;letter-spacing:4px;width:130px;outline:none;text-align:center;}
+    .pin-input{background:var(--bg);border:2px solid var(--border);color:var(--text);padding:.55rem .9rem;font-family:'DM Sans',sans-serif;font-size:1rem;width:240px;outline:none;}
     .pin-input:focus{border-color:var(--accent2);}
     .btn-change-pin{background:var(--accent2);color:#fff;border:none;padding:.55rem 1.1rem;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.82rem;cursor:pointer;}
+    .admin-note{font-size:.78rem;color:var(--muted);margin-top:.55rem;line-height:1.7;}
+
+    .mod-item-secret{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-top:.35rem;font-size:.76rem;color:var(--muted);}
+    .mod-code{background:#11131a;border:1px solid var(--border);padding:.12rem .38rem;color:var(--text);font-family:monospace;border-radius:4px;}
+    .btn-mod-mini{background:#182339;border:1px solid #2b4570;color:#8ec5ff;padding:.18rem .48rem;font-size:.68rem;font-weight:700;cursor:pointer;border-radius:999px;transition:opacity .2s;}
+    .btn-mod-mini:hover{opacity:.85;}
 
     /* TOAST & SPINNER */
     .toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--accent);color:var(--text);padding:.65rem 1.4rem;font-size:.88rem;font-weight:600;z-index:999;transition:transform .3s ease;pointer-events:none;}
@@ -561,7 +604,7 @@
     <div id="authScreen">
     <div class="auth-wrap">
         <div class="auth-logo">SC<span>OO</span>L</div>
-        <div class="auth-sub">ONLY FOR THE CREW 🔒</div>
+        <div class="auth-sub">ONLY FOR THE CREW ðŸ”’</div>
         <div class="auth-tabs">
             <button class="auth-tab active" onclick="switchAuthTab('login',this)">LOGIN</button>
             <button class="auth-tab" onclick="switchAuthTab('signup',this)">SIGN UP</button>
@@ -572,7 +615,7 @@
             <div class="auth-label">PASSWORD</div>
             <input class="auth-input" id="loginPassword" type="password" placeholder="Your password"/>
             <div class="auth-error" id="loginError"></div>
-            <button class="btn-auth" onclick="doLogin()">LOGIN →</button>
+            <button class="btn-auth" onclick="doLogin()">LOGIN â†’</button>
         </div>
         <div class="auth-form" id="signupForm">
             <div class="auth-label">USERNAME</div>
@@ -582,7 +625,7 @@
             <div class="auth-label">4-DIGIT PIN (to access the site)</div>
             <input class="auth-input" id="signupPin" type="password" maxlength="4" inputmode="numeric" placeholder="e.g. 4829"/>
             <div class="auth-error" id="signupError"></div>
-            <button class="btn-auth" onclick="doSignup()">CREATE ACCOUNT →</button>
+            <button class="btn-auth" onclick="doSignup()">CREATE ACCOUNT â†’</button>
             <div class="auth-info">An admin must approve your account before you can log in.</div>
         </div>
     </div>
@@ -602,42 +645,45 @@
             <button class="pin-btn" onclick="accPin('4')">4</button><button class="pin-btn" onclick="accPin('5')">5</button><button class="pin-btn" onclick="accPin('6')">6</button>
             <button class="pin-btn" onclick="accPin('7')">7</button><button class="pin-btn" onclick="accPin('8')">8</button><button class="pin-btn" onclick="accPin('9')">9</button>
             <button class="pin-btn" onclick="accPin('0')" style="grid-column:2">0</button>
-            <button class="pin-btn del" onclick="accPinDel()">⌫</button>
+            <button class="pin-btn del" onclick="accPinDel()">âŒ«</button>
         </div>
         <div class="pin-error" id="psError"></div>
-        <button class="btn-back" onclick="backToLogin()">← Back</button>
+        <button class="btn-back" onclick="backToLogin()">â† Back</button>
     </div>
 
     <!-- PENDING -->
     <div id="pendingScreen">
-        <div class="pending-icon">⏳</div>
+        <div class="pending-icon">â³</div>
         <div class="pending-title">AWAITING APPROVAL</div>
         <div class="pending-text">Your account is waiting for admin approval.<br>Try logging in again later!</div>
-        <button class="btn-back" onclick="backToLogin()">← Back to Login</button>
+        <button class="btn-back" onclick="backToLogin()">â† Back to Login</button>
     </div>
 
-    <!-- ADMIN PIN LOCK -->
+    <!-- ADMIN ACCESS LOCK -->
     <div class="apl" id="aplModal">
-        <h2>🔒 ADMIN ACCESS</h2><p>Enter the admin PIN</p>
+        <h2>ðŸ”’ ADMIN ACCESS</h2><p>Enter the admin PIN</p>
         <div class="apl-dots"><div class="apl-dot" id="ad0"></div><div class="apl-dot" id="ad1"></div><div class="apl-dot" id="ad2"></div><div class="apl-dot" id="ad3"></div></div>
         <div class="apl-grid">
             <button class="apl-btn" onclick="aplPress('1')">1</button><button class="apl-btn" onclick="aplPress('2')">2</button><button class="apl-btn" onclick="aplPress('3')">3</button>
             <button class="apl-btn" onclick="aplPress('4')">4</button><button class="apl-btn" onclick="aplPress('5')">5</button><button class="apl-btn" onclick="aplPress('6')">6</button>
             <button class="apl-btn" onclick="aplPress('7')">7</button><button class="apl-btn" onclick="aplPress('8')">8</button><button class="apl-btn" onclick="aplPress('9')">9</button>
             <button class="apl-btn" onclick="aplPress('0')" style="grid-column:2">0</button>
-            <button class="apl-btn del" onclick="aplDel()">⌫</button>
+            <button class="apl-btn del" onclick="aplDel()">âŒ«</button>
         </div>
+        <p class="apl-help">Re-enter your account password to open the admin panel.</p>
+        <input class="apl-input" id="aplPasswordInput" type="password" placeholder="Account password" autocomplete="current-password"/>
         <div class="apl-error" id="aplError"></div>
+        <button class="btn-apl" onclick="checkApl()">UNLOCK ADMIN Ã¢â€ â€™</button>
         <button class="apl-cancel" onclick="closeApl()">Cancel</button>
     </div>
 
     <!-- SHARE MODAL -->
     <div class="share-modal" id="shareModal">
         <div class="share-box">
-            <h3>🔗 SHARE CODE</h3>
+            <h3>ðŸ”— SHARE CODE</h3>
             <p id="shareModalDesc">Send this code to your friend!</p>
             <div class="share-code" id="shareCodeDisplay">------</div>
-            <button class="btn-copy" onclick="copyCode()">📋 COPY CODE</button>
+            <button class="btn-copy" onclick="copyCode()">ðŸ“‹ COPY CODE</button>
             <button class="btn-share-close" onclick="shareModal.classList.remove('active')">Close</button>
         </div>
     </div>
@@ -645,7 +691,7 @@
     <!-- CLAIM MODAL (clips) -->
     <div class="claim-modal" id="claimModal">
         <div class="claim-box">
-            <h3>🔗 CLAIM CLIP</h3>
+            <h3>ðŸ”— CLAIM CLIP</h3>
             <p>Enter the 6-letter share code your friend sent you:</p>
             <input class="claim-input" id="claimCodeInput" maxlength="6" placeholder="Enter code here" oninput="this.value=this.value.toUpperCase()"/>
             <button class="btn-claim-go" onclick="claimClip()">CLAIM CLIP</button>
@@ -656,13 +702,13 @@
     <!-- FEEDBACK MODAL -->
     <div class="feedback-modal" id="feedbackModal">
         <div class="feedback-box">
-            <button class="modal-close" onclick="feedbackModal.classList.remove('active')">✕</button>
-            <h2>💬 FEEDBACK</h2>
+            <button class="modal-close" onclick="feedbackModal.classList.remove('active')">âœ•</button>
+            <h2>ðŸ’¬ FEEDBACK</h2>
             <p>Got a suggestion or bug to report? Send it to the admin, or copy it as an AI prompt to get it fixed yourself!</p>
-            <textarea class="feedback-textarea" id="feedbackText" placeholder="Type your feedback or bug description here…"></textarea>
+            <textarea class="feedback-textarea" id="feedbackText" placeholder="Type your feedback or bug description hereâ€¦"></textarea>
             <div class="feedback-btn-row">
                 <button class="btn-feedback-send" onclick="sendFeedback()">SEND TO ADMIN</button>
-                <button class="btn-feedback-ai" onclick="generateAIPrompt()" title="Format as a prompt for Claude / ChatGPT">🤖 Copy AI Prompt</button>
+                <button class="btn-feedback-ai" onclick="generateAIPrompt()" title="Format as a prompt for Claude / ChatGPT">ðŸ¤– Copy AI Prompt</button>
             </div>
             <div class="feedback-ai-note">AI Prompt = formats your feedback into a ready-to-paste message for Claude / ChatGPT</div>
         </div>
@@ -671,11 +717,11 @@
     <!-- MODERATOR PASSWORD MODAL -->
     <div class="mod-pass-modal" id="modPassModal">
         <div class="mod-pass-box">
-            <h2>👮 MODERATOR ACCESS</h2>
+            <h2>ðŸ‘® MODERATOR ACCESS</h2>
             <p>Enter the moderator password to continue</p>
             <input type="password" class="mod-pass-input" id="modPassInput" placeholder="Password" />
             <div class="mod-pass-error" id="modPassError"></div>
-            <button class="btn-mod-pass" onclick="checkModPassword()">UNLOCK →</button>
+            <button class="btn-mod-pass" onclick="checkModPassword()">UNLOCK â†’</button>
             <button class="btn-mod-pass-close" onclick="closeModPass()">Cancel</button>
         </div>
     </div>
@@ -683,10 +729,10 @@
     <!-- RENAME MODAL -->
     <div class="modal-backdrop" id="renameModal">
         <div class="modal-box">
-            <button class="modal-close" onclick="renameModal.classList.remove('active')">✕</button>
-            <h2>✏️ RENAME VIDEO</h2>
+            <button class="modal-close" onclick="renameModal.classList.remove('active')">âœ•</button>
+            <h2>âœï¸ RENAME VIDEO</h2>
             <p>Enter a new display name for this video:</p>
-            <input class="modal-input" id="renameInput" type="text" placeholder="New name…"/>
+            <input class="modal-input" id="renameInput" type="text" placeholder="New nameâ€¦"/>
             <button class="btn-modal-confirm" onclick="confirmRename()">SAVE NAME</button>
         </div>
     </div>
@@ -698,13 +744,14 @@
     <header>
         <div class="logo" onclick="logoClick()">SC<span>OO</span>L</div>
         <nav>
-            <button class="nav-tab active" onclick="switchTab('videos',this)">📁 VIDEOS</button>
-            <button class="nav-tab" onclick="switchTab('clips',this)">🎞 CLIPS</button>
-            <button class="nav-tab" onclick="switchTab('shorts',this)">📱 SHORTS</button>
-            <button class="nav-tab" onclick="switchTab('offline',this)">📴 OFFLINE</button>
-            <button class="nav-tab" onclick="switchTab('test',this)">🔗 TEST</button>
-            <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">👮 MODERATOR</button>
-            <button class="nav-tab admin-tab" id="adminNavBtn" onclick="switchTab('admin',this)" style="display:none;">⚙ ADMIN</button>
+            <button class="nav-tab active" onclick="switchTab('videos',this)">ðŸ“ VIDEOS</button>
+            <button class="nav-tab" onclick="switchTab('clips',this)">ðŸŽž CLIPS</button>
+            <button class="nav-tab" onclick="switchTab('movies',this)">MOVIES</button>
+            <button class="nav-tab" onclick="switchTab('shorts',this)">ðŸ“± SHORTS</button>
+            <button class="nav-tab" onclick="switchTab('offline',this)">ðŸ“´ OFFLINE</button>
+            <button class="nav-tab" onclick="switchTab('test',this)">ðŸ”— TEST</button>
+            <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">ðŸ‘® MODERATOR</button>
+            <button class="nav-tab admin-tab" id="adminNavBtn" onclick="openAdminPanel(this)" style="display:none;">âš™ ADMIN</button>
         </nav>
         <div class="header-right">
             <div id="headerUser" style="display:flex;align-items:center;gap:.5rem;"></div>
@@ -727,8 +774,8 @@
                 <li>Added an admin button to copy all feedback into a ready-to-paste prompt.</li>
             </ul>
         </div>
-        <div id="videosLoading" class="spinner">Loading videos…</div>
-        <div id="emptyVideos" class="empty-state" style="display:none;"><div class="icon">🎬</div><p>No videos yet — upload one!</p></div>
+        <div id="videosLoading" class="spinner">Loading videosâ€¦</div>
+        <div id="emptyVideos" class="empty-state" style="display:none;"><div class="icon">ðŸŽ¬</div><p>No videos yet â€” upload one!</p></div>
         <div class="video-grid" id="videoGrid"></div>
     </div>
 
@@ -737,28 +784,44 @@
         <div class="section-title">CLIPS &amp; LINKS</div>
         <div class="clips-toolbar">
             <div class="clip-input-row">
-                <input class="clip-input" id="clipUrlInput" type="text" placeholder="Paste a YouTube, TikTok, Twitch, Reddit or any link…"/>
+                <input class="clip-input" id="clipUrlInput" type="text" placeholder="Paste a YouTube, TikTok, Twitch, Reddit or any linkâ€¦"/>
                 <input class="clip-input" id="clipTitleInput" type="text" placeholder="Title (optional)" style="max-width:160px;"/>
                 <button class="btn-add-clip" onclick="addClip()">+ ADD</button>
             </div>
-            <button class="btn-claim-top" onclick="claimModal.classList.add('active')">🔗 Claim Code</button>
+            <button class="btn-claim-top" onclick="claimModal.classList.add('active')">ðŸ”— Claim Code</button>
         </div>
-        <div id="clipsLoading" class="spinner">Loading clips…</div>
-        <div id="emptyClips" class="empty-state" style="display:none;"><div class="icon">🎞️</div><p>No clips yet!</p></div>
+        <div id="clipsLoading" class="spinner">Loading clipsâ€¦</div>
+        <div id="emptyClips" class="empty-state" style="display:none;"><div class="icon">ðŸŽžï¸</div><p>No clips yet!</p></div>
         <div class="clips-feed" id="clipsFeed"></div>
+    </div>
+
+    <!-- MOVIES TAB -->
+    <div class="tab-panel" id="tab-movies">
+        <div class="section-title">MOVIE VOTES</div>
+        <div class="movie-toolbar">
+            <div class="movie-form">
+                <input class="movie-input" id="movieTitleInput" type="text" placeholder="Movie title"/>
+                <input class="movie-input" id="movieNoteInput" type="text" placeholder="Why add it? genre, note, link..."/>
+                <button class="btn-add-clip" onclick="addMovieOption()">+ ADD MOVIE</button>
+            </div>
+            <button class="btn-movie-pick" onclick="pickMovieWinner()">PICK WINNER</button>
+        </div>
+        <div class="movie-note" id="movieStorageNote">Loading movie voting system...</div>
+        <div id="moviesEmpty" class="empty-state" style="display:none;"><div class="icon">MOVIE</div><p>No movie suggestions yet - add one!</p></div>
+        <div class="movie-grid" id="movieGrid"></div>
     </div>
 
     <!-- SHORTS TAB -->
     <div class="tab-panel" id="tab-shorts" style="padding:0;">
         <div class="shorts-header">
-            <div class="shorts-header-title">📱 SHORTS</div>
+            <div class="shorts-header-title">ðŸ“± SHORTS</div>
             <label class="btn-upload-short" for="shortInput">+ Upload Short</label>
             <input type="file" id="shortInput" accept="video/*" onchange="uploadShort(this.files[0])">
         </div>
         <div class="shorts-feed" id="shortsFeed">
             <div class="shorts-empty" id="shortsEmpty">
-                <div class="icon">📱</div>
-                <p>No shorts yet — upload one!</p>
+                <div class="icon">ðŸ“±</div>
+                <p>No shorts yet â€” upload one!</p>
             </div>
         </div>
     </div>
@@ -766,12 +829,12 @@
     <!-- OFFLINE TAB -->
     <div class="tab-panel" id="tab-offline">
         <div class="section-title">OFFLINE VIDEOS</div>
-        <div class="offline-info-box">📴 Videos saved here work <strong>without internet</strong>. Stored in your browser only.</div>
+        <div class="offline-info-box">ðŸ“´ Videos saved here work <strong>without internet</strong>. Stored in your browser only.</div>
         <div class="offline-toolbar">
-            <label class="btn-load-pc" for="offlineInput">📂 Load from PC</label>
+            <label class="btn-load-pc" for="offlineInput">ðŸ“‚ Load from PC</label>
             <input type="file" id="offlineInput" accept="video/*" multiple onchange="loadFromPC(this.files)">
         </div>
-        <div id="emptyOffline" class="empty-state" style="display:none;"><div class="icon">📴</div><p>No offline videos yet!</p></div>
+        <div id="emptyOffline" class="empty-state" style="display:none;"><div class="icon">ðŸ“´</div><p>No offline videos yet!</p></div>
         <div class="offline-grid" id="offlineGrid"></div>
     </div>
 
@@ -783,15 +846,15 @@
             <div class="hamburger-wrap">
                 <button class="hamburger-btn" onclick="toggleHM()"><span></span><span></span><span></span></button>
                 <div class="hm" id="hm">
-                    <div class="hm-title">⚗ FEATURES</div>
-                    <div class="hm-item" onclick="setFeature('player')">📺 Link Player <span class="hm-badge hb-def">DEFAULT</span></div>
-                    <div class="hm-item" onclick="setFeature('compressor')">🗜 Compressor <span class="hm-badge hb-beta">BETA</span></div>
-                    <div class="hm-item" onclick="setFeature('vault')">🔒 Private Vault <span class="hm-badge hb-priv">PRIVATE</span></div>
-                    <div class="hm-item" onclick="setFeature('codehelper')">🎓 Code Helper <span class="hm-badge hb-ai">AI</span></div>
-                    <!-- ══ NEW: Videos Extended ══ -->
-                    <div class="hm-item" onclick="setFeature('videosext')">📹 Videos Extended <span class="hm-badge" style="background:#1e1033;color:#c084fc;border:1px solid #5b21b6;">95 MB</span></div>
-                    <div class="hm-title" style="margin-top:.3rem;">⚙ SYSTEM</div>
-                    <div class="hm-item" onclick="openAdminFromMenu()" style="color:var(--accent2);">👑 Admin Mode <span class="hm-badge hb-admin">PIN</span></div>
+                    <div class="hm-title">âš— FEATURES</div>
+                    <div class="hm-item" onclick="setFeature('player')">ðŸ“º Link Player <span class="hm-badge hb-def">DEFAULT</span></div>
+                    <div class="hm-item" onclick="setFeature('compressor')">ðŸ—œ Compressor <span class="hm-badge hb-beta">BETA</span></div>
+                    <div class="hm-item" onclick="setFeature('vault')">ðŸ”’ Private Vault <span class="hm-badge hb-priv">PRIVATE</span></div>
+                    <div class="hm-item" onclick="setFeature('codehelper')">ðŸŽ“ Code Helper <span class="hm-badge hb-ai">AI</span></div>
+                    <!-- â•â• NEW: Videos Extended â•â• -->
+                    <div class="hm-item" onclick="setFeature('videosext')">ðŸ“¹ Videos Extended <span class="hm-badge" style="background:#1e1033;color:#c084fc;border:1px solid #5b21b6;">95 MB</span></div>
+                    <div class="hm-title" style="margin-top:.3rem;">âš™ SYSTEM</div>
+                    <div class="hm-item" onclick="openAdminFromMenu()" style="color:var(--accent2);">ðŸ‘‘ Admin Mode <span class="hm-badge hb-admin">PIN</span></div>
                 </div>
             </div>
         </div>
@@ -802,15 +865,15 @@
                 <h2>PASTE &amp; WATCH</h2>
                 <p>Paste a YouTube or TikTok link and watch it right here.</p>
                 <div class="test-input-row">
-                    <input class="test-url-input" id="testUrlInput" placeholder="Paste link here…"/>
-                    <button class="btn-test-load" onclick="loadTest()">▶ LOAD</button>
+                    <input class="test-url-input" id="testUrlInput" placeholder="Paste link hereâ€¦"/>
+                    <button class="btn-test-load" onclick="loadTest()">â–¶ LOAD</button>
                 </div>
                 <div class="test-pills">
                     <span class="pill pill-yt">YouTube</span><span class="pill pill-tt">TikTok</span>
                     <span class="pill pill-tw">Twitch</span><span class="pill pill-re">Reddit</span>
                 </div>
             </div>
-            <div id="testResult"><div class="test-empty"><div class="icon">📺</div><p>Your video will appear here</p></div></div>
+            <div id="testResult"><div class="test-empty"><div class="icon">ðŸ“º</div><p>Your video will appear here</p></div></div>
         </div>
 
         <!-- Compressor -->
@@ -819,39 +882,39 @@
                 <h2>VIDEO COMPRESSOR</h2>
                 <p>Make your video smaller. 100% in your browser.</p>
                 <div class="drop-zone" id="compDrop" onclick="document.getElementById('compInput').click()">
-                    <div class="dicon">🗜️</div><p>Click or drag a video here</p>
+                    <div class="dicon">ðŸ—œï¸</div><p>Click or drag a video here</p>
                 </div>
                 <input type="file" id="compInput" accept="video/*" onchange="loadComp(this.files[0])">
-                <div class="comp-info" id="compInfo" style="display:none;">Original: <span id="compName">—</span> | Size: <span id="compSize">—</span></div>
+                <div class="comp-info" id="compInfo" style="display:none;">Original: <span id="compName">â€”</span> | Size: <span id="compSize">â€”</span></div>
                 <div class="comp-settings" id="compSettings">
                     <div class="comp-row"><div class="comp-label">Quality</div><select class="comp-select" id="compQ"><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low (smallest)</option></select></div>
                     <div class="comp-row"><div class="comp-label">Max width</div><select class="comp-select" id="compW"><option value="1920">1920px</option><option value="1280" selected>1280px</option><option value="854">854px</option><option value="640">640px</option></select></div>
                 </div>
-                <button class="btn-compress" id="btnCompress" onclick="startCompress()">🗜 COMPRESS VIDEO</button>
-                <div class="comp-prog" id="compProg"><div class="comp-prog-bar"><div class="comp-prog-fill" id="compProgFill"></div></div><div class="comp-prog-label" id="compProgLabel">Processing…</div></div>
-                <div class="comp-result" id="compResult"><div class="comp-result-title">✓ DONE!</div><div class="comp-result-info" id="compResultInfo"></div><button class="btn-dl-comp" id="btnDlComp">⬇ Download</button></div>
+                <button class="btn-compress" id="btnCompress" onclick="startCompress()">ðŸ—œ COMPRESS VIDEO</button>
+                <div class="comp-prog" id="compProg"><div class="comp-prog-bar"><div class="comp-prog-fill" id="compProgFill"></div></div><div class="comp-prog-label" id="compProgLabel">Processingâ€¦</div></div>
+                <div class="comp-result" id="compResult"><div class="comp-result-title">âœ“ DONE!</div><div class="comp-result-info" id="compResultInfo"></div><button class="btn-dl-comp" id="btnDlComp">â¬‡ Download</button></div>
             </div>
         </div>
 
         <!-- Vault -->
         <div class="test-feature" id="feature-vault">
             <div class="vault-box">
-                <h2>🔒 PRIVATE VAULT</h2>
+                <h2>ðŸ”’ PRIVATE VAULT</h2>
                 <p>Upload private videos or claim shared ones. Stored in your browser only.</p>
                 <div class="vault-claim-row">
-                    <input class="vault-claim-input" id="vaultClaimInput" maxlength="6" placeholder="Enter 6-letter code to claim a shared file…" oninput="this.value=this.value.toUpperCase()"/>
-                    <button class="btn-vault-claim" onclick="claimVaultFile()">🔗 CLAIM FILE</button>
+                    <input class="vault-claim-input" id="vaultClaimInput" maxlength="6" placeholder="Enter 6-letter code to claim a shared fileâ€¦" oninput="this.value=this.value.toUpperCase()"/>
+                    <button class="btn-vault-claim" onclick="claimVaultFile()">ðŸ”— CLAIM FILE</button>
                 </div>
                 <div class="vault-drop" id="vaultDrop" onclick="document.getElementById('vaultInput').click()">
-                    <div class="dicon">🔒</div><p>Click or drag any video — no size limit</p>
+                    <div class="dicon">ðŸ”’</div><p>Click or drag any video â€” no size limit</p>
                 </div>
                 <input type="file" id="vaultInput" accept="video/*" onchange="saveVault(this.files[0])">
                 <div class="vault-prog-wrap" id="vaultProgWrap"><div class="vault-prog-fill" id="vaultProgFill"></div></div>
                 <div class="vault-status" id="vaultStatus"></div>
-                <div class="vault-sec-title">📹 PRIVATE VIDEOS</div>
-                <div id="vaultEmpty" class="empty-state" style="display:none;padding:1rem;"><div class="icon" style="font-size:2rem;">🔒</div><p>No private videos</p></div>
+                <div class="vault-sec-title">ðŸ“¹ PRIVATE VIDEOS</div>
+                <div id="vaultEmpty" class="empty-state" style="display:none;padding:1rem;"><div class="icon" style="font-size:2rem;">ðŸ”’</div><p>No private videos</p></div>
                 <div class="vault-grid" id="vaultGrid"></div>
-                <div class="vault-sec-title">🎞 SHARED CLIPS</div>
+                <div class="vault-sec-title">ðŸŽž SHARED CLIPS</div>
                 <div id="sharedClipsEmpty" style="color:var(--muted);font-size:.83rem;padding:.4rem 0;display:none;">No shared clips yet.</div>
                 <div id="sharedClipsList"></div>
             </div>
@@ -860,16 +923,16 @@
         <!-- Code Helper -->
         <div class="test-feature" id="feature-codehelper">
             <div class="ch-box">
-                <h2>🎓 CODE HELPER</h2>
-                <p>Paste any snippet from the Scool source code and get a plain-English explanation — or ask a question about how it works. Powered by AI.</p>
+                <h2>ðŸŽ“ CODE HELPER</h2>
+                <p>Paste any snippet from the Scool source code and get a plain-English explanation â€” or ask a question about how it works. Powered by AI.</p>
                 <div class="ch-examples">
-                    <button class="ch-pill" onclick="chExample('auth')">🔐 How does login work?</button>
-                    <button class="ch-pill" onclick="chExample('vault')">🔒 What is the Vault?</button>
-                    <button class="ch-pill" onclick="chExample('clips')">🎞 How are clips stored?</button>
-                    <button class="ch-pill" onclick="chExample('offline')">📴 How does offline work?</button>
-                    <button class="ch-pill" onclick="chExample('supabase')">☁️ What is Supabase?</button>
+                    <button class="ch-pill" onclick="chExample('auth')">ðŸ” How does login work?</button>
+                    <button class="ch-pill" onclick="chExample('vault')">ðŸ”’ What is the Vault?</button>
+                    <button class="ch-pill" onclick="chExample('clips')">ðŸŽž How are clips stored?</button>
+                    <button class="ch-pill" onclick="chExample('offline')">ðŸ“´ How does offline work?</button>
+                    <button class="ch-pill" onclick="chExample('supabase')">â˜ï¸ What is Supabase?</button>
                 </div>
-                <textarea class="ch-textarea" id="chInput" placeholder="Paste a code snippet here, or type a question like 'What does renderVideos() do?'…" rows="6"></textarea>
+                <textarea class="ch-textarea" id="chInput" placeholder="Paste a code snippet here, or type a question like 'What does renderVideos() do?'â€¦" rows="6"></textarea>
                 <div class="ch-controls">
                     <select class="ch-mode" id="chMode">
                         <option value="explain">Explain this code</option>
@@ -877,47 +940,52 @@
                         <option value="debug">Help me debug this</option>
                         <option value="improve">Suggest improvements</option>
                     </select>
-                    <button class="btn-ch-ask" id="chAskBtn" onclick="askCodeHelper()">🎓 ASK AI</button>
+                    <button class="btn-ch-ask" id="chAskBtn" onclick="askCodeHelper()">ðŸŽ“ ASK AI</button>
                 </div>
                 <div class="ch-result" id="chResult">
                     <div class="ch-result-label">AI EXPLANATION</div>
                     <div id="chResultText"></div>
-                    <button class="ch-copy-btn" onclick="copyChResult()">📋 Copy answer</button>
+                    <button class="ch-copy-btn" onclick="copyChResult()">ðŸ“‹ Copy answer</button>
                 </div>
             </div>
         </div>
 
-        <!-- ══ NEW: Videos Extended ══ -->
+        <!-- â•â• NEW: Videos Extended â•â• -->
         <div class="test-feature" id="feature-videosext">
             <div class="vext-box">
-                <h2>📹 VIDEOS EXTENDED</h2>
-                <p>Upload heavier videos up to <strong style="color:#c084fc;">95 MB</strong>. Stored in a dedicated bucket — the whole crew can watch, download, and save offline.</p>
+                <h2>ðŸ“¹ VIDEOS EXTENDED</h2>
+                <p>Upload heavier videos up to <strong style="color:#c084fc;">95 MB</strong>. Stored in a dedicated bucket â€” the whole crew can watch, download, and save offline.</p>
                 <div class="vext-setup-note">
-                    ⚠️ <strong style="color:#c084fc;">One-time Supabase setup needed:</strong><br>
-                    1. Go to <strong>Storage</strong> → New bucket → Name: <code>big-videos</code> → Enable "Public bucket" → Set file size limit: <code>100 MB</code> → Create<br>
-                    2. Go to <strong>Table Editor</strong> → New table → Name: <code>big_video_posts</code> → Add columns: <code>filename</code> (text), <code>display_name</code> (text), <code>username</code> (text), <code>rank</code> (text) — then this works!
+                    âš ï¸ <strong style="color:#c084fc;">One-time Supabase setup needed:</strong><br>
+                    1. Go to <strong>Storage</strong> â†’ New bucket â†’ Name: <code>big-videos</code> â†’ Enable "Public bucket" â†’ Set file size limit: <code>100 MB</code> â†’ Create<br>
+                    2. Go to <strong>Table Editor</strong> â†’ New table â†’ Name: <code>big_video_posts</code> â†’ Add columns: <code>filename</code> (text), <code>display_name</code> (text), <code>username</code> (text), <code>rank</code> (text) â€” then this works!
                 </div>
-                <div class="vext-quota-note" id="vextQuotaNote">Loading storage quota info…</div>
+                <div class="vext-quota-note" id="vextQuotaNote">Loading storage quota infoâ€¦</div>
                 <div class="vext-onedrive-note">OneDrive sync is not available in this browser-only version. Use the TEMP button to watch a copy, or save offline to keep it in your browser.</div>
                 <div class="vext-drop" id="vextDrop" onclick="document.getElementById('vextFileInput').click()">
-                    <div class="vext-drop-icon">📹</div>
+                    <div class="vext-drop-icon">ðŸ“¹</div>
                     <div class="vext-drop-title">DRAG & DROP OR CLICK TO CHOOSE</div>
-                    <div class="vext-drop-sub">MP4 · MOV · WebM · max 95 MB</div>
+                    <div class="vext-drop-sub">MP4 Â· MOV Â· WebM Â· max 95 MB</div>
                 </div>
                 <input type="file" id="vextFileInput" accept="video/*" style="display:none" onchange="uploadBigVideo(this.files[0])">
+                <div style="margin-top:.8rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;">
+                    <button class="vext-refresh-btn" id="oneDriveSetClientBtn" onclick="setOneDriveClientId()">Set OneDrive App</button>
+                    <button class="vext-refresh-btn" id="oneDriveConnectBtn" onclick="connectOneDrive()">Connect OneDrive</button>
+                    <label style="color:var(--muted);font-size:.9rem;display:flex;align-items:center;gap:.4rem;margin-left:auto;"><input type="checkbox" id="useOneDriveToggle" onchange="toggleUseOneDrive()"> Use OneDrive for big videos</label>
+                </div>
                 <div class="vext-prog-wrap" id="vextProgWrap">
                     <div class="vext-prog-track"><div class="vext-prog-fill" id="vextProgFill"></div></div>
                     <div class="vext-prog-info">
-                        <span id="vextProgLabel">Preparing…</span>
+                        <span id="vextProgLabel">Preparingâ€¦</span>
                         <span id="vextProgPct">0%</span>
                     </div>
                 </div>
                 <div class="vext-grid-header">
                     <div class="section-title" style="margin:0;font-size:1.1rem;">ALL BIG VIDEOS</div>
-                    <button class="vext-refresh-btn" onclick="renderBigVideos()">↻ Refresh</button>
+                    <button class="vext-refresh-btn" onclick="renderBigVideos()">â†» Refresh</button>
                 </div>
-                <div id="vextLoading" class="spinner" style="padding:1.5rem;">Loading…</div>
-                <div id="vextEmpty" class="empty-state" style="display:none;padding:2rem;"><div class="icon" style="font-size:3rem;opacity:.35;">📹</div><p>No big videos yet — upload one above!</p></div>
+                <div id="vextLoading" class="spinner" style="padding:1.5rem;">Loadingâ€¦</div>
+                <div id="vextEmpty" class="empty-state" style="display:none;padding:2rem;"><div class="icon" style="font-size:3rem;opacity:.35;">ðŸ“¹</div><p>No big videos yet â€” upload one above!</p></div>
                 <div class="video-grid" id="vextGrid"></div>
             </div>
         </div>
@@ -928,52 +996,52 @@
     <!-- MODERATOR TAB -->
     <div class="tab-panel" id="tab-moderator">
         <div class="mod-locked" id="modLocked">
-            <h2>👮 MODERATOR ONLY</h2>
+            <h2>ðŸ‘® MODERATOR ONLY</h2>
             <p>This section requires moderator role and password verification.</p>
         </div>
         <div class="mod-content" id="modContent">
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;">
                 <div class="section-title" style="margin-bottom:0;">MODERATOR PANEL</div>
-                <button class="btn-logout" onclick="closeModeratorAccess()">🔒 Lock</button>
+                <button class="btn-logout" onclick="closeModeratorAccess()">ðŸ”’ Lock</button>
             </div>
             
             <!-- Moderator Tabs -->
             <div class="mod-tabs">
-                <button class="mod-tab active" onclick="switchModTab('websites',this)">🌐 WEBSITES</button>
-                <button class="mod-tab" onclick="switchModTab('proxy',this)">🌍 PROXY SERVERS</button>
-                <button class="mod-tab" onclick="switchModTab('vpn',this)">🔐 VPN SERVERS</button>
+                <button class="mod-tab active" onclick="switchModTab('websites',this)">ðŸŒ WEBSITES</button>
+                <button class="mod-tab" onclick="switchModTab('proxy',this)">ðŸŒ PROXY SERVERS</button>
+                <button class="mod-tab" onclick="switchModTab('vpn',this)">ðŸ” VPN SERVERS</button>
             </div>
 
             <!-- Websites Subtab -->
             <div class="mod-subtab active" id="mod-websites">
                 <div class="mod-toolbar">
-                    <input type="text" class="mod-search" id="modWebSearch" placeholder="Search websites…" onkeyup="filterModList('websites')" />
+                    <input type="text" class="mod-search" id="modWebSearch" placeholder="Search websitesâ€¦" onkeyup="filterModList('websites')" />
                     <button class="btn-mod-add" onclick="openModAddModal('websites')">+ ADD</button>
                 </div>
                 <div class="mod-list" id="mod-websitesList">
-                    <div class="mod-empty">Loading websites…</div>
+                    <div class="mod-empty">Loading websitesâ€¦</div>
                 </div>
             </div>
 
             <!-- Proxy Servers Subtab -->
             <div class="mod-subtab" id="mod-proxy">
                 <div class="mod-toolbar">
-                    <input type="text" class="mod-search" id="modProxySearch" placeholder="Search proxies…" onkeyup="filterModList('proxy')" />
+                    <input type="text" class="mod-search" id="modProxySearch" placeholder="Search proxiesâ€¦" onkeyup="filterModList('proxy')" />
                     <button class="btn-mod-add" onclick="openModAddModal('proxy')">+ ADD</button>
                 </div>
                 <div class="mod-list" id="mod-proxyList">
-                    <div class="mod-empty">Loading proxies…</div>
+                    <div class="mod-empty">Loading proxiesâ€¦</div>
                 </div>
             </div>
 
             <!-- VPN Servers Subtab -->
             <div class="mod-subtab" id="mod-vpn">
                 <div class="mod-toolbar">
-                    <input type="text" class="mod-search" id="modVpnSearch" placeholder="Search VPNs…" onkeyup="filterModList('vpn')" />
+                    <input type="text" class="mod-search" id="modVpnSearch" placeholder="Search VPNsâ€¦" onkeyup="filterModList('vpn')" />
                     <button class="btn-mod-add" onclick="openModAddModal('vpn')">+ ADD</button>
                 </div>
                 <div class="mod-list" id="mod-vpnList">
-                    <div class="mod-empty">Loading VPNs…</div>
+                    <div class="mod-empty">Loading VPNsâ€¦</div>
                 </div>
             </div>
         </div>
@@ -981,29 +1049,29 @@
 
     <!-- ADMIN TAB -->
     <div class="tab-panel" id="tab-admin">
-        <div class="admin-locked" id="adminLocked"><h2>🔒 ADMIN ONLY</h2><p>Use hamburger menu in TEST → Admin Mode</p></div>
+        <div class="admin-locked" id="adminLocked"><h2>ðŸ”’ ADMIN ONLY</h2><p>Use hamburger menu in TEST â†’ Admin Mode</p></div>
         <div class="admin-content" id="adminContent">
             <div class="admin-hdr">
                 <div><div class="section-title" style="margin-bottom:.3rem;">ADMIN PANEL</div><span class="admin-badge">ADMIN MODE</span></div>
-                <button class="btn-admin-lock" onclick="adminLogout()">🔒 Lock</button>
+                <button class="btn-admin-lock" onclick="adminLogout()">ðŸ”’ Lock</button>
             </div>
             <div class="admin-stats">
-                <div class="astat"><div class="astat-label">Videos</div><div class="astat-val" id="statV">—</div></div>
-                <div class="astat"><div class="astat-label">Shorts</div><div class="astat-val" id="statS">—</div></div>
-                <div class="astat"><div class="astat-label">Clips</div><div class="astat-val" id="statC">—</div></div>
-                <div class="astat"><div class="astat-label">Users</div><div class="astat-val" id="statU">—</div></div>
-                <div class="astat"><div class="astat-label">Pending</div><div class="astat-val" id="statP" style="color:var(--accent2);">—</div></div>
-                <div class="astat"><div class="astat-label">Feedback</div><div class="astat-val" id="statF" style="color:var(--accent);">—</div></div>
+                <div class="astat"><div class="astat-label">Videos</div><div class="astat-val" id="statV">â€”</div></div>
+                <div class="astat"><div class="astat-label">Shorts</div><div class="astat-val" id="statS">â€”</div></div>
+                <div class="astat"><div class="astat-label">Clips</div><div class="astat-val" id="statC">â€”</div></div>
+                <div class="astat"><div class="astat-label">Users</div><div class="astat-val" id="statU">â€”</div></div>
+                <div class="astat"><div class="astat-label">Pending</div><div class="astat-val" id="statP" style="color:var(--accent2);">â€”</div></div>
+                <div class="astat"><div class="astat-label">Feedback</div><div class="astat-val" id="statF" style="color:var(--accent);">â€”</div></div>
             </div>
-            <div class="admin-sec"><div class="admin-sec-title">⏳ PENDING USERS</div><div id="pendingList"><div class="spinner">Loading…</div></div></div>
-            <div class="admin-sec"><div class="admin-sec-title">👥 ALL USERS</div><div id="allUsersList"><div class="spinner">Loading…</div></div></div>
-            <div class="admin-sec"><div class="admin-feedback-header"><div class="admin-sec-title">💬 FEEDBACK</div><button class="btn-quota" onclick="copyAllFeedback()">📋 COPY ALL FEEDBACK</button></div><div id="feedbackList"><div class="spinner">Loading…</div></div></div>
-            <div class="admin-sec"><div class="admin-sec-title">🎬 MANAGE VIDEOS</div><div id="adminVidList"><div class="spinner">Loading…</div></div></div>
+            <div class="admin-sec"><div class="admin-sec-title">â³ PENDING USERS</div><div id="pendingList"><div class="spinner">Loadingâ€¦</div></div></div>
+            <div class="admin-sec"><div class="admin-sec-title">ðŸ‘¥ ALL USERS</div><div id="allUsersList"><div class="spinner">Loadingâ€¦</div></div></div>
+            <div class="admin-sec"><div class="admin-feedback-header"><div class="admin-sec-title">ðŸ’¬ FEEDBACK</div><button class="btn-quota" onclick="copyAllFeedback()">ðŸ“‹ COPY ALL FEEDBACK</button></div><div id="feedbackList"><div class="spinner">Loadingâ€¦</div></div></div>
+            <div class="admin-sec"><div class="admin-sec-title">ðŸŽ¬ MANAGE VIDEOS</div><div id="adminVidList"><div class="spinner">Loadingâ€¦</div></div></div>
             <div class="admin-sec">
-                <div class="admin-sec-title">🔑 CHANGE ADMIN PIN</div>
+                <div class="admin-sec-title">ðŸ”‘ CHANGE ADMIN PIN</div>
                 <div class="admin-pin-sec"><h3>Set New PIN</h3>
                     <div class="pin-change-row">
-                        <input class="pin-input" id="newPinInput" type="password" maxlength="4" placeholder="••••" inputmode="numeric"/>
+                        <input class="pin-input" id="newPinInput" type="password" maxlength="4" placeholder="â€¢â€¢â€¢â€¢" inputmode="numeric"/>
                         <button class="btn-change-pin" onclick="changeAdminPin()">SAVE PIN</button>
                     </div>
                     <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">Default admin PIN is 1103.</div>
@@ -1018,9 +1086,9 @@
     <!-- UPLOAD MODAL -->
     <div class="upload-zone" id="uploadZone">
         <div class="upload-box" id="dropArea">
-            <button class="close-btn" onclick="closeUpload()">✕</button>
+            <button class="close-btn" onclick="closeUpload()">âœ•</button>
             <h2>Upload Video</h2>
-            <p>Drop a video here or click to browse.<br><small>Everyone can see it! 🌍</small></p>
+            <p>Drop a video here or click to browse.<br><small>Everyone can see it! ðŸŒ</small></p>
             <label class="file-input-label" for="fileInput">Choose File</label>
             <input type="file" id="fileInput" accept="video/*" onchange="handleFile(this.files[0])">
             <div class="prog-wrap" id="progWrap"><div class="prog-fill" id="progFill"></div></div>
@@ -1033,24 +1101,26 @@
         <div class="player-header">
             <div class="player-title" id="playerTitle">Video</div>
             <div class="player-controls">
-                <button class="pctrl" id="theaterBtn" onclick="toggleTheater()" title="Theater">⛶</button>
-                <button class="pctrl" onclick="closePlayer()">✕</button>
+                <button class="pctrl" id="theaterBtn" onclick="toggleTheater()" title="Theater">â›¶</button>
+                <button class="pctrl" onclick="closePlayer()">âœ•</button>
             </div>
         </div>
         <video class="player-video" id="playerVideo" controls></video>
     </div>
 
     <!-- FEEDBACK FAB -->
-    <button class="feedback-fab" id="feedbackFab" onclick="feedbackModal.classList.add('active')" style="display:none;" title="Send feedback">💬</button>
+    <button class="feedback-fab" id="feedbackFab" onclick="feedbackModal.classList.add('active')" style="display:none;" title="Send feedback">ðŸ’¬</button>
 
     <script>
-    // ══ SUPABASE ══
+    // â•â• SUPABASE â•â•
     const SUPABASE_URL='https://xptnaevvrwnsfklpqbhl.supabase.co';
     const SUPABASE_KEY='sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
     const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
     const BUCKET='videos', SBUCKET='shorts', BIGBUCKET='big-videos';
     const VAULT_SHARE_PREFIX='vault_share_';
     const DEFAULT_STORAGE_QUOTA=5*1024*1024*1024;
+    const DEFAULT_MOD_PASSWORD='Digre pyscool';
+    const MOVIE_TABLE='movie_polls', MOVIE_VOTE_TABLE='movie_votes';
     let tempPlayerUrl=null;
 
     async function getUserStorageQuota(username){
@@ -1076,24 +1146,92 @@
         const usage= username ? await getUserBigVideoUsage(username) : 0;
         if(el){
             const status=usage>=quota ? `<strong style="color:#f39c12;">Limit reached.</strong> Ask admin to increase your storage.` : `${fmtSize(Math.max(quota-usage,0))} left before your ${fmtSize(quota)} quota.`;
-            el.innerHTML=`<strong>Storage limit:</strong> ${fmtSize(usage)} / ${fmtSize(quota)}. ${status}`;
+            el.innerHTML=`<strong>Storage limit:</strong> ${fmtSize(usage)} / ${fmtSize(quota)}. ${status} Rank upload cap: ${getBigVideoUploadLimitLabel()}.`;
         }
         return {usage,quota};
     }
 
-    // ══ STATE ══
+    // â•â• STATE â•â•
     let currentUser=null, pendingUser=null, adminUnlocked=false;
-    let accPinStr='', aplPinStr='';
+    let accPinStr='';
     let renameTarget=null;
     let shareModalMode='clip';
+    let movieBackend='checking', moviePolls=[], movieVotes=[], movieWinnerId=null;
+    let modSecretVisible={};
 
-    // ══ HELPERS ══
+    // â•â• HELPERS â•â•
     function showToast(msg,dur=2800){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
     function fmtSize(b){if(!b)return'';if(b<1048576)return(b/1024).toFixed(1)+' KB';if(b<1073741824)return(b/1048576).toFixed(1)+' MB';return(b/1073741824).toFixed(2)+' GB';}
     function fmtDate(ts){return new Date(ts).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}
     function rankBadge(r){return`<span class="rank-badge rank-${r||'Member'}">${r||'Member'}</span>`;}
+    function escapeHtml(value=''){return String(value).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+    function isAdminUser(){return ['Admin','Owner'].includes(currentUser?.rank);}
+    function getModeratorPassword(){return localStorage.getItem('scool_mod_password')||DEFAULT_MOD_PASSWORD;}
+    function getBigVideoUploadLimit(rank=currentUser?.rank){
+        if(rank==='Admin'||rank==='Owner') return 150*1024*1024;
+        if(rank==='VIP') return 120*1024*1024;
+        return 95*1024*1024;
+    }
+    function getBigVideoUploadLimitLabel(rank=currentUser?.rank){return `${Math.round(getBigVideoUploadLimit(rank)/1024/1024)} MB`;}
+    function getFeedbackPoints(message=''){
+        const len=String(message||'').trim().length;
+        if(len>=300) return 4;
+        if(len>=180) return 3;
+        if(len>=90) return 2;
+        return 1;
+    }
+    function sortByNewest(items=[]){
+        return [...items].sort((a,b)=>{
+            const ad=new Date(a?.created_at||a?.inserted_at||a?.timetz||0).getTime();
+            const bd=new Date(b?.created_at||b?.inserted_at||b?.timetz||0).getTime();
+            if(!Number.isNaN(ad)&&!Number.isNaN(bd)&&ad!==bd) return bd-ad;
+            return (b?.id||0)-(a?.id||0);
+        });
+    }
+    function updateStaticLabels(){
+        const vextIntro=document.querySelector('.vext-box > p');
+        if(vextIntro)vextIntro.innerHTML=`Upload heavier videos with extended limits. <strong style="color:#c084fc;">Your current upload cap is ${getBigVideoUploadLimitLabel()}.</strong> Members and Regular users get 95 MB, VIP gets 120 MB, and Admin/Owner gets 150 MB.`;
+        const vextSub=document.querySelector('.vext-drop-sub');
+        if(vextSub)vextSub.textContent=`MP4 Ã‚Â· MOV Ã‚Â· WebM Ã‚Â· max ${getBigVideoUploadLimitLabel()}`;
+        const hmAdmin=[...document.querySelectorAll('.hm-item')].find(el=>el.getAttribute('onclick')==='openAdminFromMenu()');
+        if(hmAdmin)hmAdmin.innerHTML='Ã°Å¸â€˜â€˜ Open Admin <span class="hm-badge hb-admin">PASSWORD</span>';
+        const hmVext=[...document.querySelectorAll('.hm-item')].find(el=>el.getAttribute('onclick')==="setFeature('videosext')");
+        if(hmVext)hmVext.innerHTML='Ã°Å¸â€œÂ¹ Videos Extended <span class="hm-badge" style="background:#1e1033;color:#c084fc;border:1px solid #5b21b6;">95-150 MB</span>';
+        const adminLocked=document.getElementById('adminLocked');
+        if(adminLocked)adminLocked.innerHTML='<h2>Ã°Å¸â€â€™ ADMIN ONLY</h2><p>Use the Admin tab in the main navigation and unlock with your password.</p>';
+        const adminTitle=[...document.querySelectorAll('.admin-sec-title')].find(el=>el.textContent.includes('CHANGE ADMIN PIN'));
+        if(adminTitle)adminTitle.textContent='Ã°Å¸â€â€˜ ACCESS SETTINGS';
+        const adminPinHeading=document.querySelector('.admin-pin-sec h3');
+        if(adminPinHeading)adminPinHeading.textContent='Shared Moderator Password';
+        const adminPinInfo=document.querySelector('.admin-pin-sec div[style*="Default admin PIN"]');
+        if(adminPinInfo){adminPinInfo.id='adminAccessNote';adminPinInfo.className='admin-note';adminPinInfo.removeAttribute('style');adminPinInfo.textContent='Admin users unlock this panel with their own account password. Moderator access uses the shared password set here.';}
+        const newPinInput=document.getElementById('newPinInput');
+        if(newPinInput){newPinInput.placeholder='Set moderator password';newPinInput.maxLength='';newPinInput.removeAttribute('inputmode');}
+        const pinBtn=document.querySelector('.btn-change-pin');
+        if(pinBtn){pinBtn.textContent='SAVE PASSWORD';pinBtn.setAttribute('onclick','changeModeratorPassword()');}
+        if(!document.getElementById('statFXP')&&document.querySelector('.admin-stats')){
+            const stat=document.createElement('div');
+            stat.className='astat';
+            stat.innerHTML='<div class="astat-label">Feedback XP</div><div class="astat-val" id="statFXP" style="color:#f3d274;">Ã¢â‚¬â€</div>';
+            document.querySelector('.admin-stats').appendChild(stat);
+        }
+    }
+    function getMovieLocalState(){
+        try{
+            const raw=JSON.parse(localStorage.getItem('scool_movie_state')||'{}');
+            return {movies:Array.isArray(raw.movies)?raw.movies:[],votes:Array.isArray(raw.votes)?raw.votes:[]};
+        }catch(e){return {movies:[],votes:[]};}
+    }
+    function saveMovieLocalState(){localStorage.setItem('scool_movie_state',JSON.stringify({movies:moviePolls,votes:movieVotes}));}
+    function setMovieStorageNote(message,isFallback=false){
+        const el=document.getElementById('movieStorageNote');
+        if(!el)return;
+        el.innerHTML=message;
+        el.style.borderColor=isFallback?'#5d4320':'#23304a';
+        el.style.borderLeftColor=isFallback?'#f0c040':'var(--blue)';
+    }
 
-    // ══ AUTH ══
+    // â•â• AUTH â•â•
     function switchAuthTab(n,btn){
         document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
         document.querySelectorAll('.auth-form').forEach(f=>f.classList.remove('active'));
@@ -1133,7 +1271,7 @@
         if(ex&&ex.length){err.textContent='Username already taken.';return;}
         const{error}=await sb.from('users').insert([{username:u,password:p,pin,rank:'Member',verified:false}]);
         if(error){err.textContent='Error: '+error.message;return;}
-        err.style.color='var(--green)';err.textContent='✓ Account created! Waiting for admin approval.';
+        err.style.color='var(--green)';err.textContent='âœ“ Account created! Waiting for admin approval.';
         document.getElementById('signupUsername').value='';
         document.getElementById('signupPassword').value='';
         document.getElementById('signupPin').value='';
@@ -1173,18 +1311,21 @@
         document.getElementById('adminLocked').style.display='flex';
         document.getElementById('modContent').classList.remove('unlocked');
         document.getElementById('modLocked').style.display='flex';
+        document.getElementById('aplModal').classList.remove('active');
     }
 
-    // ══ SITE INIT ══
+    // â•â• SITE INIT â•â•
     function initSite(){
         document.getElementById('siteContainer').style.display='block';
         document.getElementById('feedbackFab').style.display='flex';
         document.getElementById('headerUser').innerHTML=`${rankBadge(currentUser.rank)}<span class="header-username">${currentUser.username}</span>`;
+        checkAdminButtonVisibility();
         checkModeratorButtonVisibility();
+        updateStaticLabels();
         openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();});
     }
 
-    // ══ TAB SWITCHING ══
+    // â•â• TAB SWITCHING â•â•
     function switchTab(name,btn){
         document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
         document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
@@ -1195,13 +1336,14 @@
         document.getElementById('mainContent').style.padding=name==='shorts'?'0':'2rem';
         if(name==='admin'&&adminUnlocked)loadAdminData();
         if(name==='moderator'&&modUnlocked)loadModeratorData();
+        if(name==='movies')loadMovieData();
         if(name==='offline')renderOffline();
         if(name==='test'&&curFeature==='vault')renderVault();
         if(name==='test'&&curFeature==='videosext')renderBigVideos();
         if(name==='shorts')renderShorts();
     }
 
-    // ══ LOGO → ADMIN ══
+    // â•â• LOGO â†’ ADMIN â•â•
     let logoClicks=0,logoTimer=null;
     function logoClick(){
         logoClicks++;clearTimeout(logoTimer);
@@ -1209,57 +1351,67 @@
         if(logoClicks>=5){logoClicks=0;openApl();}
     }
 
-    // ══ ADMIN PIN ══
-    function getAdminPin(){return localStorage.getItem('scool_admin_pin')||'1103';}
-    function openApl(){aplPinStr='';updateAplDots();document.getElementById('aplError').textContent='';document.getElementById('aplModal').classList.add('active');}
-    function closeApl(){document.getElementById('aplModal').classList.remove('active');aplPinStr='';updateAplDots();}
-    function aplPress(n){if(aplPinStr.length>=4)return;aplPinStr+=n;updateAplDots();if(aplPinStr.length===4)setTimeout(checkApl,150);}
-    function aplDel(){aplPinStr=aplPinStr.slice(0,-1);updateAplDots();document.getElementById('aplError').textContent='';}
-    function updateAplDots(){for(let i=0;i<4;i++)document.getElementById('ad'+i).classList.toggle('filled',i<aplPinStr.length);}
-    function checkApl(){
-        if(aplPinStr===getAdminPin()){
-            adminUnlocked=true;closeApl();
-            document.getElementById('adminNavBtn').style.display='';
-            document.getElementById('adminContent').classList.add('unlocked');
-            document.getElementById('adminLocked').style.display='none';
-            document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
-            document.getElementById('tab-admin').classList.add('active');
-            document.getElementById('adminNavBtn').classList.add('active');
-            document.getElementById('uploadHeaderBtn').classList.add('hidden');
-            loadAdminData();showToast('Welcome, Admin! 👑');
-        } else {
-            document.getElementById('aplError').textContent='Wrong PIN';
-            aplPinStr='';updateAplDots();
-        }
+    // â•â• ADMIN PIN â•â•
+    function checkAdminButtonVisibility(){
+    const adminBtn=document.getElementById('adminNavBtn');
+    if(adminBtn)adminBtn.style.display=isAdminUser()?'':'none';
+}
+function openApl(){
+    if(!isAdminUser()){showToast('Only Admin and Owner accounts can open this panel.');return;}
+    document.getElementById('aplError').textContent='';
+    if(document.getElementById('aplPasswordInput'))document.getElementById('aplPasswordInput').value='';
+    document.getElementById('aplModal').classList.add('active');
+    setTimeout(()=>document.getElementById('aplPasswordInput')?.focus(),30);
+}
+function closeApl(){
+    document.getElementById('aplModal').classList.remove('active');
+    document.getElementById('aplError').textContent='';
+    if(document.getElementById('aplPasswordInput'))document.getElementById('aplPasswordInput').value='';
+}
+function checkApl(){
+    const pass=document.getElementById('aplPasswordInput')?.value||'';
+    if(pass===currentUser?.password){
+        adminUnlocked=true;closeApl();
+        document.getElementById('adminContent').classList.add('unlocked');
+        document.getElementById('adminLocked').style.display='none';
+        document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+        document.getElementById('tab-admin').classList.add('active');
+        document.getElementById('adminNavBtn').classList.add('active');
+        document.getElementById('uploadHeaderBtn').classList.add('hidden');
+        loadAdminData();showToast('Welcome, Admin!');
+    } else {
+        document.getElementById('aplError').textContent='Wrong password';
+        if(document.getElementById('aplPasswordInput'))document.getElementById('aplPasswordInput').value='';
     }
-    function adminLogout(){
-        adminUnlocked=false;
-        document.getElementById('adminNavBtn').style.display='none';
-        document.getElementById('adminContent').classList.remove('unlocked');
-        document.getElementById('adminLocked').style.display='flex';
-        const firstTab=document.querySelector('.nav-tab:not(.admin-tab)');
-        switchTab('videos',firstTab);firstTab.classList.add('active');
-        showToast('Admin locked 🔒');
-    }
-    function changeAdminPin(){
-        const np=document.getElementById('newPinInput').value.trim();
-        if(!/^\d{4}$/.test(np)){showToast('PIN must be 4 digits!');return;}
-        localStorage.setItem('scool_admin_pin',np);document.getElementById('newPinInput').value='';showToast('Admin PIN changed! ✓');
-    }
-    function openAdminFromMenu(){
-        document.getElementById('hm').classList.remove('open');
-        if(adminUnlocked){
-            document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
-            document.getElementById('tab-admin').classList.add('active');
-            document.getElementById('adminNavBtn').classList.add('active');
-            document.getElementById('uploadHeaderBtn').classList.add('hidden');
-            loadAdminData();
-        } else openApl();
-    }
+}
+function openAdminPanel(btn){
+    if(!isAdminUser()){showToast('Only Admin and Owner accounts can open this panel.');return;}
+    if(adminUnlocked){switchTab('admin',btn);loadAdminData();return;}
+    openApl();
+}
+function adminLogout(){
+    adminUnlocked=false;
+    document.getElementById('adminContent').classList.remove('unlocked');
+    document.getElementById('adminLocked').style.display='flex';
+    const firstTab=document.querySelector('.nav-tab:not(.admin-tab)');
+    switchTab('videos',firstTab);firstTab.classList.add('active');
+    showToast('Admin locked');
+}
+function changeModeratorPassword(){
+    if(!adminUnlocked){showToast('Unlock admin first.');return;}
+    const np=document.getElementById('newPinInput').value.trim();
+    if(np.length<4){showToast('Moderator password must be at least 4 characters.');return;}
+    localStorage.setItem('scool_mod_password',np);
+    document.getElementById('newPinInput').value='';
+    showToast('Moderator password changed!');
+}
+function openAdminFromMenu(){
+    document.getElementById('hm').classList.remove('open');
+    openAdminPanel(document.getElementById('adminNavBtn'));
+}
 
-    // ══ VIDEOS TAB ══
+    // â•â• VIDEOS TAB â•â•
     async function renderVideos(){
         document.getElementById('videosLoading').style.display='block';
         document.getElementById('emptyVideos').style.display='none';
@@ -1287,13 +1439,13 @@
                 <div class="video-info">
                     ${poster}
                     <div class="video-name" title="${dname}">${dname}</div>
-                    <div class="video-meta">${fmtSize(file.metadata?.size)} · ${fmtDate(file.created_at)}</div>
+                    <div class="video-meta">${fmtSize(file.metadata?.size)} Â· ${fmtDate(file.created_at)}</div>
                     <div class="card-actions">
-                        <button class="btn-v bv-watch" onclick="watchVideo('${su}','${dname.replace(/'/g,"\\'")}')">▶ WATCH</button>
-                        <button class="btn-v bv-dl" onclick="dlVideo('${su}','${sn}')">⬇ SAVE</button>
-                        <button class="btn-v bv-off" onclick="saveOffline('${su}','${sn}')">📴 OFFLINE</button>
-                        <button class="btn-v bv-ren" onclick="openRename('${sn}','${dname.replace(/'/g,"\\'")}')">✏️ RENAME</button>
-                        <button class="btn-v bv-del" onclick="delVideo('${sn}',this)">✕ DEL</button>
+                        <button class="btn-v bv-watch" onclick="watchVideo('${su}','${dname.replace(/'/g,"\\'")}')">â–¶ WATCH</button>
+                        <button class="btn-v bv-dl" onclick="dlVideo('${su}','${sn}')">â¬‡ SAVE</button>
+                        <button class="btn-v bv-off" onclick="saveOffline('${su}','${sn}')">ðŸ“´ OFFLINE</button>
+                        <button class="btn-v bv-ren" onclick="openRename('${sn}','${dname.replace(/'/g,"\\'")}')">âœï¸ RENAME</button>
+                        <button class="btn-v bv-del" onclick="delVideo('${sn}',this)">âœ• DEL</button>
                     </div>
                 </div>`;
             grid.appendChild(card);
@@ -1305,7 +1457,7 @@
         document.getElementById('playerModal').classList.add('active');
     }
     async function watchTempVideo(url,name){
-        showToast('Downloading a temporary copy…');
+        showToast('Downloading a temporary copyâ€¦');
         try{
             const resp=await fetch(url);
             if(!resp.ok)throw new Error('Download failed');
@@ -1322,7 +1474,7 @@
     }
     function dlVideo(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.target='_blank';a.click();}
     async function delVideo(name,btn){
-        if(!confirm('Delete "'+name+'"?'))return;btn.textContent='…';
+        if(!confirm('Delete "'+name+'"?'))return;btn.textContent='â€¦';
         await sb.storage.from(BUCKET).remove([name]);
         await sb.from('video_posts').delete().eq('filename',name);
         showToast('Deleted!');renderVideos();
@@ -1338,7 +1490,7 @@
         if(!renameTarget)return;
         await sb.from('video_posts').upsert([{filename:renameTarget,display_name:newName,username:currentUser.username,rank:currentUser.rank}],{onConflict:'filename'});
         document.getElementById('renameModal').classList.remove('active');
-        showToast('Renamed! ✓');renderVideos();renameTarget=null;
+        showToast('Renamed! âœ“');renderVideos();renameTarget=null;
     }
     function toggleTheater(){
         const m=document.getElementById('playerModal');const b=document.getElementById('theaterBtn');
@@ -1368,13 +1520,13 @@
         const status=document.getElementById('uploadStatus');
         document.getElementById('progWrap').style.display='block';
         document.getElementById('progFill').style.width='5%';
-        status.textContent='Uploading…';
+        status.textContent='Uploadingâ€¦';
         const safeName=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
         const{error}=await sb.storage.from(BUCKET).upload(safeName,file,{cacheControl:'3600',upsert:false,contentType:file.type});
-        if(error){status.textContent='❌ '+error.message;document.getElementById('progFill').style.width='0%';return;}
+        if(error){status.textContent='âŒ '+error.message;document.getElementById('progFill').style.width='0%';return;}
         await sb.from('video_posts').insert([{filename:safeName,display_name:file.name,username:currentUser.username,rank:currentUser.rank}]);
         document.getElementById('progFill').style.width='100%';
-        status.textContent='✓ Done! 🎉';
+        status.textContent='âœ“ Done! ðŸŽ‰';
         setTimeout(()=>{closeUpload();renderVideos();},1200);
     }
     const dropArea=document.getElementById('dropArea');
@@ -1382,15 +1534,15 @@
     dropArea.addEventListener('dragleave',()=>{dropArea.style.borderColor='var(--accent)';});
     dropArea.addEventListener('drop',e=>{e.preventDefault();dropArea.style.borderColor='var(--accent)';handleFile(e.dataTransfer.files[0]);});
 
-    // ══ SHORTS TAB ══
+    // â•â• SHORTS TAB â•â•
     async function uploadShort(file){
         if(!file||!file.type.startsWith('video/')){showToast('Select a video file!');return;}
-        showToast('Uploading short…');
+        showToast('Uploading shortâ€¦');
         const safeName=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
         const{error}=await sb.storage.from(SBUCKET).upload(safeName,file,{cacheControl:'3600',upsert:false,contentType:file.type});
         if(error){showToast('Error: '+error.message);return;}
         await sb.from('shorts_posts').insert([{filename:safeName,display_name:file.name,username:currentUser.username,rank:currentUser.rank}]);
-        showToast('Short uploaded! 📱');
+        showToast('Short uploaded! ðŸ“±');
         document.getElementById('shortInput').value='';
         renderShorts();
     }
@@ -1416,15 +1568,15 @@
             slide.innerHTML=`
                 <video class="short-video" src="${url}" loop muted playsinline preload="metadata" onclick="toggleShortPlay(this)"></video>
                 <div class="short-progress"><div class="short-progress-fill" id="sp${i}"></div></div>
-                <button class="short-mute-btn" onclick="toggleMute(this)">🔇</button>
+                <button class="short-mute-btn" onclick="toggleMute(this)">ðŸ”‡</button>
                 <div class="short-overlay">
                     <div class="short-poster-row">${rankBadge(rank)}<span style="color:rgba(255,255,255,.85);font-size:.8rem;font-weight:600;">${poster}</span></div>
                     <div class="short-title">${dname}</div>
                     <div class="short-meta">${fmtSize(file.metadata?.size)}</div>
                 </div>
                 <div class="short-side">
-                    <button class="short-side-btn" onclick="dlVideo('${url.replace(/'/g,"\\'")}','${file.name.replace(/'/g,"\\'")}')">⬇</button>
-                    <button class="short-side-btn" onclick="saveOffline('${url.replace(/'/g,"\\'")}','${file.name.replace(/'/g,"\\'")}')">📴</button>
+                    <button class="short-side-btn" onclick="dlVideo('${url.replace(/'/g,"\\'")}','${file.name.replace(/'/g,"\\'")}')">â¬‡</button>
+                    <button class="short-side-btn" onclick="saveOffline('${url.replace(/'/g,"\\'")}','${file.name.replace(/'/g,"\\'")}')">ðŸ“´</button>
                 </div>`;
             feed.appendChild(slide);
             const video=slide.querySelector('video');
@@ -1443,10 +1595,10 @@
     function toggleMute(btn){
         shortsMuted=!shortsMuted;
         document.querySelectorAll('.short-video').forEach(v=>{v.muted=shortsMuted;});
-        document.querySelectorAll('.short-mute-btn').forEach(b=>{b.textContent=shortsMuted?'🔇':'🔊';});
+        document.querySelectorAll('.short-mute-btn').forEach(b=>{b.textContent=shortsMuted?'ðŸ”‡':'ðŸ”Š';});
     }
 
-    // ══ CLIPS TAB ══
+    // â•â• CLIPS TAB â•â•
     function detectPlat(url){
         if(/youtube\.com|youtu\.be/.test(url))return'youtube';
         if(/tiktok\.com/.test(url))return'tiktok';
@@ -1472,7 +1624,7 @@
         const{error}=await sb.from('Clips').insert([{url,platform:detectPlat(url),titel:title||url,date:new Date().toISOString(),username:currentUser.username,rank:currentUser.rank}]);
         if(error){showToast('Error: '+error.message);return;}
         document.getElementById('clipUrlInput').value='';document.getElementById('clipTitleInput').value='';
-        showToast('Clip saved! 🎉');renderClips();
+        showToast('Clip saved! ðŸŽ‰');renderClips();
     }
     async function renderClips(){
         document.getElementById('clipsLoading').style.display='block';
@@ -1485,7 +1637,7 @@
         const feed=document.getElementById('clipsFeed');
         data.forEach(c=>{
             const embed=buildEmbed(c.url,c.platform);
-            const noEmbed=c.platform==='tiktok'?'<div style="padding:.8rem;color:var(--muted);font-size:.82rem;">⚠️ TikTok blocks embedding — open in new tab.</div>':c.platform==='reddit'?'<div style="padding:.8rem;color:var(--muted);font-size:.82rem;">⚠️ Reddit — open in new tab.</div>':'';
+            const noEmbed=c.platform==='tiktok'?'<div style="padding:.8rem;color:var(--muted);font-size:.82rem;">âš ï¸ TikTok blocks embedding â€” open in new tab.</div>':c.platform==='reddit'?'<div style="padding:.8rem;color:var(--muted);font-size:.82rem;">âš ï¸ Reddit â€” open in new tab.</div>':'';
             const su=c.url.replace(/'/g,"\\'");
             const isOwn=c.username===currentUser.username;
             const card=document.createElement('div');card.className='clip-card';
@@ -1495,13 +1647,13 @@
                     <div class="clip-title">${c.titel}</div>
                     ${c.username?`<span class="clip-poster">${rankBadge(c.rank||'Member')} ${c.username}</span>`:''}
                     <span class="clip-date">${fmtDate(c.date)}</span>
-                    ${isOwn?`<button class="clip-action-btn share" onclick="shareClip(${c.id},'${su}','${c.titel.replace(/'/g,"\\'")}','${c.platform}')" title="Share">🔗</button>`:''}
-                    ${isOwn?`<button class="clip-action-btn del" onclick="delClip(${c.id})">✕</button>`:''}
+                    ${isOwn?`<button class="clip-action-btn share" onclick="shareClip(${c.id},'${su}','${c.titel.replace(/'/g,"\\'")}','${c.platform}')" title="Share">ðŸ”—</button>`:''}
+                    ${isOwn?`<button class="clip-action-btn del" onclick="delClip(${c.id})">âœ•</button>`:''}
                 </div>
                 ${embed?`<div class="clip-embed"><iframe src="${embed}" allowfullscreen allow="autoplay;encrypted-media"></iframe></div>`:noEmbed}
                 <div class="clip-footer">
                     <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.url}</span>
-                    <button class="btn-open" onclick="window.open('${su}','_blank')">Open ↗</button>
+                    <button class="btn-open" onclick="window.open('${su}','_blank')">Open â†—</button>
                 </div>`;
             feed.appendChild(card);
         });
@@ -1516,13 +1668,13 @@
         const{error}=await sb.from('shared_clips').insert([{share_code:code,url,titel:title,platform,from_user:currentUser.username}]);
         if(error){showToast('Error: '+error.message);return;}
         shareModalMode='clip';
-        document.getElementById('shareModalDesc').textContent="Send this code to your friend — they enter it in their Vault to claim the clip!";
+        document.getElementById('shareModalDesc').textContent="Send this code to your friend â€” they enter it in their Vault to claim the clip!";
         document.getElementById('shareCodeDisplay').textContent=code;
         document.getElementById('shareModal').classList.add('active');
     }
     function copyCode(){
         const code=document.getElementById('shareCodeDisplay').textContent;
-        navigator.clipboard.writeText(code).then(()=>showToast('Code copied! 📋')).catch(()=>showToast('Code: '+code));
+        navigator.clipboard.writeText(code).then(()=>showToast('Code copied! ðŸ“‹')).catch(()=>showToast('Code: '+code));
     }
     async function claimClip(){
         const code=document.getElementById('claimCodeInput').value.trim().toUpperCase();
@@ -1534,26 +1686,199 @@
         await sb.from('shared_clips').delete().eq('share_code',code);
         document.getElementById('claimCodeInput').value='';
         document.getElementById('claimModal').classList.remove('active');
-        showToast('Clip claimed! Check your Vault 🎉');
+        showToast('Clip claimed! Check your Vault ðŸŽ‰');
         setFeature('vault');
         document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
         document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
         document.getElementById('tab-test').classList.add('active');
-        document.querySelectorAll('.nav-tab')[4].classList.add('active');
+        [...document.querySelectorAll('.nav-tab')].find(btn=>btn.getAttribute('onclick')?.includes(\"switchTab('test'\"))?.classList.add('active');
         renderVault();
     }
 
-    // ══ FEEDBACK AI PROMPT ══
+    // MOVIES
+    async function loadMovieData(){
+        try{
+            const pollRes=await sb.from(MOVIE_TABLE).select('*').order('created_at',{ascending:false});
+            const voteRes=await sb.from(MOVIE_VOTE_TABLE).select('*').order('created_at',{ascending:true});
+            if(pollRes.error||voteRes.error)throw(pollRes.error||voteRes.error);
+            movieBackend='supabase';
+            moviePolls=sortByNewest(pollRes.data||[]);
+            movieVotes=sortByNewest(voteRes.data||[]);
+            setMovieStorageNote('Shared live mode is active. Public votes are visible to everyone, while anonymous voters are only revealed to Admin and Owner users.');
+        }catch(e){
+            const local=getMovieLocalState();
+            movieBackend='local';
+            moviePolls=sortByNewest(local.movies);
+            movieVotes=sortByNewest(local.votes);
+            setMovieStorageNote('Local fallback mode is active in this browser. To make movie voting shared for the whole crew, add Supabase tables named movie_polls and movie_votes.',true);
+        }
+        renderMovies();
+    }
+    function getMovieVotesFor(movieId){return movieVotes.filter(v=>String(v.movie_id)===String(movieId));}
+    function getCurrentMovieVote(movieId){return movieVotes.find(v=>String(v.movie_id)===String(movieId)&&v.username===currentUser.username);}
+    function formatMovieVoteChip(vote){
+        const isSkip=Number(vote.vote_value)===-1;
+        const anonymous=!!vote.anonymous;
+        const who=anonymous?(isAdminUser()?`${escapeHtml(vote.username||'Unknown')} (anon)`:'Anonymous'):escapeHtml(vote.username||'Unknown');
+        const classes=['movie-vote-chip'];
+        if(anonymous)classes.push('anon');
+        if(isSkip)classes.push('skip');
+        return `<span class="${classes.join(' ')}">${isSkip?'NO':'YES'} ${who}</span>`;
+    }
+    function renderMovies(){
+        const grid=document.getElementById('movieGrid');
+        const empty=document.getElementById('moviesEmpty');
+        if(!grid||!empty)return;
+        grid.innerHTML='';
+        if(!moviePolls.length){empty.style.display='block';return;}
+        empty.style.display='none';
+        moviePolls.forEach(movie=>{
+            const votes=getMovieVotesFor(movie.id);
+            const watchVotes=votes.filter(v=>Number(v.vote_value)===1);
+            const skipVotes=votes.filter(v=>Number(v.vote_value)===-1);
+            const score=watchVotes.length-skipVotes.length;
+            const myVote=getCurrentMovieVote(movie.id);
+            const winner=movieWinnerId&&String(movieWinnerId)===String(movie.id);
+            const canDelete=isAdminUser()||movie.added_by===currentUser.username;
+            const card=document.createElement('div');
+            card.className='movie-card';
+            if(winner)card.style.borderColor='var(--accent)';
+            card.innerHTML=`
+                <div class="movie-top">
+                    <div class="movie-title-wrap">
+                        <div class="movie-title">${winner?'WINNER: ':''}${escapeHtml(movie.title||'Untitled movie')}</div>
+                        <div class="movie-meta">Added by ${escapeHtml(movie.added_by||'Unknown')} on ${fmtDate(movie.created_at||Date.now())}</div>
+                    </div>
+                    <div class="movie-score"><strong>${score>=0?`+${score}`:score}</strong><span>score</span></div>
+                </div>
+                ${movie.notes?`<div class="movie-desc">${escapeHtml(movie.notes)}</div>`:''}
+                <div class="movie-stats">
+                    <span class="movie-pill">YES ${watchVotes.length}</span>
+                    <span class="movie-pill">NO ${skipVotes.length}</span>
+                    <span class="movie-pill">ANON ${votes.filter(v=>v.anonymous).length}</span>
+                </div>
+                <div class="movie-actions">
+                    <button class="btn-movie btn-movie-watch" onclick="voteMovie('${movie.id}',1,false)">PUBLIC VOTE</button>
+                    <button class="btn-movie btn-movie-anon" onclick="voteMovie('${movie.id}',1,true)">ANON VOTE</button>
+                    <button class="btn-movie btn-movie-skip" onclick="voteMovie('${movie.id}',-1,false)">PASS</button>
+                    ${canDelete?`<button class="btn-movie btn-movie-skip" onclick="deleteMovieOption('${movie.id}')">REMOVE</button>`:''}
+                </div>
+                <div class="movie-votes">${votes.length?votes.map(formatMovieVoteChip).join(''):'<span class="movie-pill">No votes yet</span>'}</div>
+                <div class="movie-footer">
+                    <div class="movie-my-vote">${myVote?`Your vote: ${Number(myVote.vote_value)===1?'Want to watch':'Pass'}${myVote.anonymous?' (anonymous)':''}`:'You have not voted yet.'}</div>
+                    <div class="movie-my-vote">${movieBackend==='supabase'?'Shared with the crew':'Saved in this browser only'}</div>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+    async function addMovieOption(){
+        const title=document.getElementById('movieTitleInput').value.trim();
+        const notes=document.getElementById('movieNoteInput').value.trim();
+        if(!title){showToast('Type a movie title first.');return;}
+        const payload={title,notes,added_by:currentUser.username,rank:currentUser.rank,created_at:new Date().toISOString()};
+        if(movieBackend==='supabase'){
+            const {data,error}=await sb.from(MOVIE_TABLE).insert([payload]).select().single();
+            if(!error&&data){
+                moviePolls=sortByNewest([data,...moviePolls]);
+                document.getElementById('movieTitleInput').value='';
+                document.getElementById('movieNoteInput').value='';
+                showToast('Movie added.');
+                renderMovies();
+                return;
+            }
+            movieBackend='local';
+            setMovieStorageNote('Movie tables were not ready, so movie voting switched to local browser mode.',true);
+        }
+        const localMovie={...payload,id:`local_movie_${Date.now()}`};
+        moviePolls=sortByNewest([localMovie,...moviePolls]);
+        saveMovieLocalState();
+        document.getElementById('movieTitleInput').value='';
+        document.getElementById('movieNoteInput').value='';
+        showToast('Movie added locally.');
+        renderMovies();
+    }
+    async function voteMovie(movieId,voteValue,anonymous){
+        const existing=getCurrentMovieVote(movieId);
+        const payload={movie_id:movieId,username:currentUser.username,rank:currentUser.rank,vote_value:voteValue,anonymous,created_at:existing?.created_at||new Date().toISOString()};
+        if(movieBackend==='supabase'){
+            if(existing){
+                const {data,error}=await sb.from(MOVIE_VOTE_TABLE).update({vote_value:voteValue,anonymous,rank:currentUser.rank}).eq('id',existing.id).select().single();
+                if(!error&&data){
+                    movieVotes=movieVotes.map(v=>String(v.id)===String(existing.id)?data:v);
+                    showToast('Vote updated.');
+                    renderMovies();
+                    return;
+                }
+            }else{
+                const {data,error}=await sb.from(MOVIE_VOTE_TABLE).insert([payload]).select().single();
+                if(!error&&data){
+                    movieVotes=sortByNewest([data,...movieVotes]);
+                    showToast('Vote saved.');
+                    renderMovies();
+                    return;
+                }
+            }
+            movieBackend='local';
+            setMovieStorageNote('Movie voting switched to local browser mode because the shared vote table was unavailable.',true);
+        }
+        const idx=movieVotes.findIndex(v=>String(v.movie_id)===String(movieId)&&v.username===currentUser.username);
+        if(idx>=0)movieVotes[idx]={...movieVotes[idx],vote_value:voteValue,anonymous,rank:currentUser.rank};
+        else movieVotes.unshift({...payload,id:`local_vote_${Date.now()}_${Math.random().toString(36).slice(2,7)}`});
+        saveMovieLocalState();
+        showToast('Vote saved locally.');
+        renderMovies();
+    }
+    async function deleteMovieOption(movieId){
+        const movie=moviePolls.find(m=>String(m.id)===String(movieId));
+        if(!movie){showToast('Movie not found.');return;}
+        if(!(isAdminUser()||movie.added_by===currentUser.username)){showToast('Only the person who added it or an admin can remove it.');return;}
+        if(!confirm(`Remove \"${movie.title}\" from movie voting?`))return;
+        if(movieBackend==='supabase'){
+            const voteDelete=await sb.from(MOVIE_VOTE_TABLE).delete().eq('movie_id',movieId);
+            const movieDelete=await sb.from(MOVIE_TABLE).delete().eq('id',movieId);
+            if(!voteDelete.error&&!movieDelete.error){
+                moviePolls=moviePolls.filter(m=>String(m.id)!==String(movieId));
+                movieVotes=movieVotes.filter(v=>String(v.movie_id)!==String(movieId));
+                showToast('Movie removed.');
+                renderMovies();
+                return;
+            }
+            movieBackend='local';
+            setMovieStorageNote('Movie voting switched to local browser mode because shared delete access failed.',true);
+        }
+        moviePolls=moviePolls.filter(m=>String(m.id)!==String(movieId));
+        movieVotes=movieVotes.filter(v=>String(v.movie_id)!==String(movieId));
+        saveMovieLocalState();
+        showToast('Movie removed locally.');
+        renderMovies();
+    }
+    function pickMovieWinner(){
+        if(!moviePolls.length){showToast('Add a movie first.');return;}
+        const scored=moviePolls.map(movie=>{
+            const votes=getMovieVotesFor(movie.id);
+            const score=votes.filter(v=>Number(v.vote_value)===1).length-votes.filter(v=>Number(v.vote_value)===-1).length;
+            return {movie,score};
+        });
+        const topScore=Math.max(...scored.map(item=>item.score));
+        const finalists=scored.filter(item=>item.score===topScore);
+        const winner=finalists[Math.floor(Math.random()*finalists.length)]?.movie;
+        if(!winner){showToast('Could not pick a winner.');return;}
+        movieWinnerId=winner.id;
+        renderMovies();
+        showToast(`Tonight's pick: ${winner.title}`);
+    }
+
+    // â•â• FEEDBACK AI PROMPT â•â•
     function generateAIPrompt(){
         const text=document.getElementById('feedbackText').value.trim();
         if(!text){showToast('Write your feedback or bug first!');return;}
-        const prompt=`I'm working on a private web app called "Scool" — a video sharing platform for a friend group.\n\nTech stack:\n- Frontend: Vanilla HTML, CSS, JavaScript (single HTML file)\n- Backend: Supabase (PostgreSQL database + Storage buckets)\n- Auth: custom username/password stored in a "users" table, with a 4-digit PIN on login\n- Features: Videos tab (upload/watch from Supabase storage), Clips tab (YouTube/TikTok/Twitch links), Shorts tab (vertical video feed), Offline tab (IndexedDB), Test Lab (link player, video compressor, private Vault, Videos Extended up to 95MB)\n\nHere is my feedback / bug report:\n"${text}"\n\nPlease help me understand or fix this. If code changes are needed, show the exact lines to change and what to change them to.`;
+        const prompt=`I'm working on a private web app called "Scool" â€” a video sharing platform for a friend group.\n\nTech stack:\n- Frontend: Vanilla HTML, CSS, JavaScript (single HTML file)\n- Backend: Supabase (PostgreSQL database + Storage buckets)\n- Auth: custom username/password stored in a "users" table, with a 4-digit PIN on login\n- Features: Videos tab (upload/watch from Supabase storage), Clips tab (YouTube/TikTok/Twitch links), Shorts tab (vertical video feed), Offline tab (IndexedDB), Test Lab (link player, video compressor, private Vault, Videos Extended up to 95MB)\n\nHere is my feedback / bug report:\n"${text}"\n\nPlease help me understand or fix this. If code changes are needed, show the exact lines to change and what to change them to.`;
         navigator.clipboard.writeText(prompt)
-            .then(()=>showToast('AI prompt copied to clipboard! 📋'))
-            .catch(()=>{const ta=document.createElement('textarea');ta.value=prompt;ta.style.cssText='position:fixed;left:-9999px;top:0;';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('AI prompt copied! 📋');});
+            .then(()=>showToast('AI prompt copied to clipboard! ðŸ“‹'))
+            .catch(()=>{const ta=document.createElement('textarea');ta.value=prompt;ta.style.cssText='position:fixed;left:-9999px;top:0;';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('AI prompt copied! ðŸ“‹');});
     }
 
-    // ══ FEEDBACK ══
+    // â•â• FEEDBACK â•â•
     async function sendFeedback(){
         const msg=document.getElementById('feedbackText').value.trim();
         if(!msg){showToast('Write something first!');return;}
@@ -1561,18 +1886,18 @@
         if(error){showToast('Error: '+error.message);return;}
         document.getElementById('feedbackText').value='';
         document.getElementById('feedbackModal').classList.remove('active');
-        showToast('Feedback sent! Thanks 💬');
+        showToast(`Feedback sent! +${getFeedbackPoints(msg)} admin XP`);
     }
     async function copyAllFeedback(){
         const {data,error}=await sb.from('feedback').select('*').order('created_at',{ascending:true});
         if(error){showToast('Error: '+error.message);return;}
         if(!data||!data.length){showToast('No feedback to copy');return;}
-        const text=data.map(f=>`${fmtDate(f.created_at||Date.now())} — ${f.username||'Unknown'} (${f.rank||'Member'}): ${f.message}`).join('\n');
+        const text=data.map(f=>`${fmtDate(f.created_at||Date.now())} - ${f.username||'Unknown'} (${f.rank||'Member'}) [+${getFeedbackPoints(f.message)}]: ${f.message}`).join('\n');
         const prompt=`SCool admin feedback summary:\n\n${text}\n\nUse this for an AI analysis prompt.`;
-        navigator.clipboard.writeText(prompt).then(()=>showToast('Copied feedback summary to clipboard! 📋')).catch(()=>showToast('Could not copy to clipboard'));
+        navigator.clipboard.writeText(prompt).then(()=>showToast('Copied feedback summary to clipboard! ðŸ“‹')).catch(()=>showToast('Could not copy to clipboard'));
     }
 
-    // ══ INDEXEDDB ══
+    // â•â• INDEXEDDB â•â•
     let offlineDB;
     function openOfflineDB(){
         return new Promise((res,rej)=>{
@@ -1592,11 +1917,11 @@
     function dbDel(store,id){return new Promise((res,rej)=>{const tx=offlineDB.transaction(store,'readwrite');tx.objectStore(store).delete(id);tx.oncomplete=res;tx.onerror=rej;});}
 
     async function saveOffline(url,name){
-        showToast('Saving for offline… please wait');
+        showToast('Saving for offlineâ€¦ please wait');
         try{
             const resp=await fetch(url);const blob=await resp.blob();const arr=await blob.arrayBuffer();
             await dbPut('videos',{id:'off_'+Date.now(),name,type:blob.type,size:blob.size,date:Date.now(),data:arr});
-            showToast('✓ Saved for offline! 📴');
+            showToast('âœ“ Saved for offline! ðŸ“´');
         }catch(e){showToast('Error: '+e.message);}
     }
     function loadFromPC(files){
@@ -1607,7 +1932,7 @@
         showToast('Loaded '+files.length+' video(s)!');setTimeout(renderOffline,400);
     }
 
-    // ══ OFFLINE TAB ══
+    // â•â• OFFLINE TAB â•â•
     async function renderOffline(){
         const vids=await dbGetAll('videos');
         const grid=document.getElementById('offlineGrid');const empty=document.getElementById('emptyOffline');
@@ -1624,13 +1949,13 @@
                     <div class="off-play-overlay"><div class="off-play-icon"></div></div>
                 </div>
                 <div class="offline-info">
-                    <div class="offline-badge">📴 OFFLINE</div>
+                    <div class="offline-badge">ðŸ“´ OFFLINE</div>
                     <div class="offline-name">${v.name}</div>
-                    <div class="offline-meta">${fmtSize(v.size)} · ${fmtDate(v.date)}</div>
+                    <div class="offline-meta">${fmtSize(v.size)} Â· ${fmtDate(v.date)}</div>
                     <div class="offline-actions">
-                        <button class="btn-off bo-watch" onclick="watchVideo('${su}','${sn}')">▶ WATCH</button>
-                        <button class="btn-off bo-dl" onclick="dlOff('${su}','${sn}')">⬇ SAVE</button>
-                        <button class="btn-off bo-del" onclick="delOff('${sid}')">✕ DEL</button>
+                        <button class="btn-off bo-watch" onclick="watchVideo('${su}','${sn}')">â–¶ WATCH</button>
+                        <button class="btn-off bo-dl" onclick="dlOff('${su}','${sn}')">â¬‡ SAVE</button>
+                        <button class="btn-off bo-del" onclick="delOff('${sid}')">âœ• DEL</button>
                     </div>
                 </div>`;
             grid.appendChild(card);
@@ -1639,7 +1964,7 @@
     function dlOff(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.click();}
     async function delOff(id){if(!confirm('Remove?'))return;await dbDel('videos',id);showToast('Removed!');renderOffline();}
 
-    // ══ TEST TAB ══
+    // â•â• TEST TAB â•â•
     let curFeature='player';
     function toggleHM(){document.getElementById('hm').classList.toggle('open');}
     function setFeature(name){
@@ -1657,20 +1982,20 @@
         if(!/^https?:\/\//.test(url))url='https://'+url;
         const plat=detectPlat(url);const embed=buildEmbed(url,plat);
         const result=document.getElementById('testResult');const su=url.replace(/'/g,"\\'");
-        const dlBox=`<div class="dl-box"><div class="dl-title">⬇ Download</div>
-            ${plat==='youtube'||plat==='link'?'<div>🔴 <a href="https://downr.org/free-media-downloader/" target="_blank">downloade.tools</a></div>':''}
-            ${plat==='tiktok'?'<div>⚫ <a href="https://snaptik.app/" target="_blank">snaptik.app</a></div>':''}
-            ${plat==='twitch'?'<div>🟣 <a href="https://twitch-dl.stevearc.com/" target="_blank">twitch-dl</a></div>':''}
-            ${plat==='reddit'?'<div>🟠 <a href="https://redditsave.com/" target="_blank">redditsave.com</a></div>':''}
+        const dlBox=`<div class="dl-box"><div class="dl-title">â¬‡ Download</div>
+            ${plat==='youtube'||plat==='link'?'<div>ðŸ”´ <a href="https://downr.org/free-media-downloader/" target="_blank">downloade.tools</a></div>':''}
+            ${plat==='tiktok'?'<div>âš« <a href="https://snaptik.app/" target="_blank">snaptik.app</a></div>':''}
+            ${plat==='twitch'?'<div>ðŸŸ£ <a href="https://twitch-dl.stevearc.com/" target="_blank">twitch-dl</a></div>':''}
+            ${plat==='reddit'?'<div>ðŸŸ  <a href="https://redditsave.com/" target="_blank">redditsave.com</a></div>':''}
         </div>`;
         if(plat==='tiktok'||plat==='reddit'){
-            result.innerHTML=`<div class="test-result-header"><div class="test-result-title">${plat.toUpperCase()}</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open ↗</button></div></div><div class="test-embed" style="display:flex;align-items:center;justify-content:center;"><div style="color:var(--muted);">Can't embed this. Click Open to watch.</div></div>${dlBox}`;return;
+            result.innerHTML=`<div class="test-result-header"><div class="test-result-title">${plat.toUpperCase()}</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open â†—</button></div></div><div class="test-embed" style="display:flex;align-items:center;justify-content:center;"><div style="color:var(--muted);">Can't embed this. Click Open to watch.</div></div>${dlBox}`;return;
         }
-        if(embed){result.innerHTML=`<div class="test-result-header"><div class="test-result-title">${plat.toUpperCase()}</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open ↗</button></div></div><div class="test-embed"><iframe src="${embed}" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div>${dlBox}`;}
-        else{result.innerHTML=`<div class="test-result-header"><div class="test-result-title">VIDEO LINK</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open ↗</button></div></div><div class="test-embed" style="display:flex;align-items:center;justify-content:center;"><div style="color:var(--muted);">Can't embed. Click Open to watch.</div></div>${dlBox}`;}
+        if(embed){result.innerHTML=`<div class="test-result-header"><div class="test-result-title">${plat.toUpperCase()}</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open â†—</button></div></div><div class="test-embed"><iframe src="${embed}" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"></iframe></div>${dlBox}`;}
+        else{result.innerHTML=`<div class="test-result-header"><div class="test-result-title">VIDEO LINK</div><div><button class="btn-res" onclick="window.open('${su}','_blank')">Open â†—</button></div></div><div class="test-embed" style="display:flex;align-items:center;justify-content:center;"><div style="color:var(--muted);">Can't embed. Click Open to watch.</div></div>${dlBox}`;}
     }
 
-    // ── Compressor ──
+    // â”€â”€ Compressor â”€â”€
     let compFile=null;
     function loadComp(file){
         if(!file)return;compFile=file;
@@ -1691,7 +2016,7 @@
         const q=document.getElementById('compQ').value;const maxW=parseInt(document.getElementById('compW').value);
         const prog=document.getElementById('compProg');const fill=document.getElementById('compProgFill');const label=document.getElementById('compProgLabel');
         prog.classList.add('show');document.getElementById('compResult').classList.remove('show');
-        fill.style.width='10%';label.textContent='Loading video…';
+        fill.style.width='10%';label.textContent='Loading videoâ€¦';
         const bpp=q==='high'?0.12:q==='medium'?0.07:0.03;
         try{
             const url=URL.createObjectURL(compFile);const vid=document.createElement('video');vid.src=url;
@@ -1699,34 +2024,34 @@
             let w=vid.videoWidth,h=vid.videoHeight;if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
             const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;
             const fps=30,bitrate=Math.round(w*h*fps*bpp);
-            let stream;try{stream=canvas.captureStream(fps);}catch(e){label.textContent='❌ Not supported in this browser.';return;}
+            let stream;try{stream=canvas.captureStream(fps);}catch(e){label.textContent='âŒ Not supported in this browser.';return;}
             let actx;try{actx=new AudioContext();const s=actx.createMediaElementSource(vid);const d=actx.createMediaStreamDestination();s.connect(d);s.connect(actx.destination);d.stream.getAudioTracks().forEach(t=>stream.addTrack(t));}catch(e){}
             const mimeType=MediaRecorder.isTypeSupported('video/webm;codecs=vp9')?'video/webm;codecs=vp9':'video/webm';
             const rec=new MediaRecorder(stream,{mimeType,videoBitsPerSecond:bitrate});const chunks=[];
             rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
-            fill.style.width='20%';label.textContent='Compressing…';
+            fill.style.width='20%';label.textContent='Compressingâ€¦';
             rec.start(100);vid.currentTime=0;await vid.play();
             const dur=vid.duration;
-            vid.ontimeupdate=()=>{fill.style.width=Math.min(95,20+(vid.currentTime/dur)*75)+'%';label.textContent=`Compressing… ${Math.round(vid.currentTime)}s / ${Math.round(dur)}s`;};
+            vid.ontimeupdate=()=>{fill.style.width=Math.min(95,20+(vid.currentTime/dur)*75)+'%';label.textContent=`Compressingâ€¦ ${Math.round(vid.currentTime)}s / ${Math.round(dur)}s`;};
             await new Promise(r=>{vid.onended=r;});rec.stop();await new Promise(r=>{rec.onstop=r;});
             fill.style.width='100%';label.textContent='Done!';
             const blob=new Blob(chunks,{type:mimeType});
             const savings=Math.round((1-blob.size/compFile.size)*100);
-            document.getElementById('compResultInfo').textContent=`${fmtSize(compFile.size)} → ${fmtSize(blob.size)} (${savings}% smaller)`;
+            document.getElementById('compResultInfo').textContent=`${fmtSize(compFile.size)} â†’ ${fmtSize(blob.size)} (${savings}% smaller)`;
             document.getElementById('compResult').classList.add('show');
             document.getElementById('btnDlComp').onclick=()=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='compressed_'+compFile.name.replace(/\.[^.]+$/,'')+'.webm';a.click();};
             URL.revokeObjectURL(url);if(actx)actx.close();
-        }catch(err){label.textContent='❌ '+err.message;}
+        }catch(err){label.textContent='âŒ '+err.message;}
     }
 
-    // ── Vault ──
+    // â”€â”€ Vault â”€â”€
     async function saveVault(file){
         if(!file)return;
         const wrap=document.getElementById('vaultProgWrap');const fill=document.getElementById('vaultProgFill');const status=document.getElementById('vaultStatus');
-        wrap.style.display='block';fill.style.width='10%';status.textContent='Saving to vault…';
+        wrap.style.display='block';fill.style.width='10%';status.textContent='Saving to vaultâ€¦';
         const arr=await file.arrayBuffer();fill.style.width='80%';
         await dbPut('vault',{id:'v_'+Date.now(),name:file.name,type:file.type,size:file.size,date:Date.now(),data:arr});
-        fill.style.width='100%';status.textContent='✓ Saved!';
+        fill.style.width='100%';status.textContent='âœ“ Saved!';
         document.getElementById('vaultInput').value='';
         setTimeout(()=>{wrap.style.display='none';status.textContent='';},1500);
         renderVault();
@@ -1740,7 +2065,7 @@
         const vids=await dbGetAll('vault');
         const vid=vids.find(v=>v.id===vaultId);
         if(!vid){showToast('File not found!');return;}
-        showToast('Uploading to share… this may take a moment ⏳');
+        showToast('Uploading to shareâ€¦ this may take a moment â³');
         try{
             const code=Math.random().toString(36).slice(2,8).toUpperCase();
             const filename=VAULT_SHARE_PREFIX+code+'_'+vid.name.replace(/[^a-zA-Z0-9._-]/g,'_');
@@ -1750,21 +2075,21 @@
             const{error:dbErr}=await sb.from('vault_shares').insert([{share_code:code,filename,from_user:currentUser.username,title:vid.name,file_size:vid.size}]);
             if(dbErr){showToast('Note: Create a "vault_shares" table in Supabase first!');await sb.storage.from(BUCKET).remove([filename]);return;}
             shareModalMode='vault';
-            document.getElementById('shareModalDesc').textContent='Send this code to your friend — they paste it into the Vault claim box to download this file!';
+            document.getElementById('shareModalDesc').textContent='Send this code to your friend â€” they paste it into the Vault claim box to download this file!';
             document.getElementById('shareCodeDisplay').textContent=code;
             document.getElementById('shareModal').classList.add('active');
-            showToast('File ready to share! 🔒');
+            showToast('File ready to share! ðŸ”’');
         }catch(e){showToast('Error: '+e.message);}
     }
     async function claimVaultFile(){
         const code=document.getElementById('vaultClaimInput').value.trim().toUpperCase();
         if(!code||code.length!==6){showToast('Enter a valid 6-letter code!');return;}
-        showToast('Looking up code…');
+        showToast('Looking up codeâ€¦');
         const{data,error}=await sb.from('vault_shares').select('*').eq('share_code',code);
         if(error){showToast('Error: '+error.message);return;}
         if(!data||!data.length){showToast('Invalid or expired code!');return;}
         const share=data[0];
-        showToast('Downloading file… please wait ⏳');
+        showToast('Downloading fileâ€¦ please wait â³');
         try{
             const{data:urlData}=sb.storage.from(BUCKET).getPublicUrl(share.filename);
             const resp=await fetch(urlData.publicUrl);
@@ -1774,7 +2099,7 @@
             await sb.from('vault_shares').delete().eq('share_code',code);
             await sb.storage.from(BUCKET).remove([share.filename]);
             document.getElementById('vaultClaimInput').value='';
-            showToast('✓ File saved to your Vault! 🔒');
+            showToast('âœ“ File saved to your Vault! ðŸ”’');
             renderVault();
         }catch(e){showToast('Error: '+e.message);}
     }
@@ -1796,11 +2121,11 @@
                     </div>
                     <div class="vault-info">
                         <div class="vault-name">${v.name}</div>
-                        <div class="vault-meta">${fmtSize(v.size)} · ${fmtDate(v.date)}</div>
+                        <div class="vault-meta">${fmtSize(v.size)} Â· ${fmtDate(v.date)}</div>
                         <div class="vault-actions">
-                            <button class="btn-vv bvv-watch" onclick="watchVideo('${su}','${sn}')">▶ WATCH</button>
-                            <button class="btn-vv bvv-share" onclick="shareVaultVideo('${sid}')">🔗 SHARE</button>
-                            <button class="btn-vv bvv-del" onclick="delVault('${sid}')">✕ DEL</button>
+                            <button class="btn-vv bvv-watch" onclick="watchVideo('${su}','${sn}')">â–¶ WATCH</button>
+                            <button class="btn-vv bvv-share" onclick="shareVaultVideo('${sid}')">ðŸ”— SHARE</button>
+                            <button class="btn-vv bvv-del" onclick="delVault('${sid}')">âœ• DEL</button>
                         </div>
                     </div>`;
                 grid.appendChild(card);
@@ -1818,8 +2143,8 @@
                     ${platBadge(c.platform)}
                     <div class="sc-title">${c.titel}</div>
                     <div class="sc-from">from ${c.from_user}</div>
-                    <button class="btn-sc" onclick="window.open('${su}','_blank')">Open ↗</button>
-                    <button class="btn-sc btn-sc-del" onclick="delShared('${c.id.replace(/'/g,"\\'")}')">✕</button>`;
+                    <button class="btn-sc" onclick="window.open('${su}','_blank')">Open â†—</button>
+                    <button class="btn-sc btn-sc-del" onclick="delShared('${c.id.replace(/'/g,"\\'")}')">âœ•</button>`;
                 scList.appendChild(div);
             });
         }
@@ -1827,7 +2152,7 @@
     async function delVault(id){if(!confirm('Delete?'))return;await dbDel('vault',id);showToast('Deleted!');renderVault();}
     async function delShared(id){await dbDel('sharedClips',id);showToast('Removed!');renderVault();}
 
-    // ══ CODE HELPER ══
+    // â•â• CODE HELPER â•â•
     const CH_EXAMPLES={
         auth:`How does login work in Scool? What happens step by step when I click LOGIN?`,
         vault:`What is the Private Vault? How does it store videos, and what's the difference between saving to vault vs saving for offline?`,
@@ -1844,9 +2169,9 @@
         const btn=document.getElementById('chAskBtn');
         const result=document.getElementById('chResult');
         const resultText=document.getElementById('chResultText');
-        btn.disabled=true;btn.textContent='Thinking…';
+        btn.disabled=true;btn.textContent='Thinkingâ€¦';
         result.classList.add('show');
-        resultText.innerHTML='<span class="ch-thinking">🤔 Reading the code…</span>';
+        resultText.innerHTML='<span class="ch-thinking">ðŸ¤” Reading the codeâ€¦</span>';
         const modeInstructions={explain:'Explain what this code does in plain English. Break it down step by step.',question:'Answer this question clearly and concisely, with examples if helpful.',debug:'Help debug this issue. Identify what might be wrong and suggest fixes.',improve:'Suggest improvements to this code. Focus on clarity, reliability, and user experience.'};
         const userMessage=`${modeInstructions[mode]}\n\n${input}`;
         try{
@@ -1860,124 +2185,275 @@
                 .replace(/`([^`]+)`/g,'<code style="background:#0d0d0f;padding:.1em .3em;border-radius:3px;font-family:monospace;font-size:.85em;color:#f0c040;">$1</code>')
                 .replace(/\n/g,'<br>');
         }catch(e){resultText.textContent='Error: '+e.message;}
-        finally{btn.disabled=false;btn.textContent='🎓 ASK AI';}
+        finally{btn.disabled=false;btn.textContent='ðŸŽ“ ASK AI';}
     }
     function copyChResult(){
         const text=document.getElementById('chResultText').innerText;
-        navigator.clipboard.writeText(text).then(()=>showToast('Answer copied! 📋')).catch(()=>showToast('Select and copy manually'));
+        navigator.clipboard.writeText(text).then(()=>showToast('Answer copied! ðŸ“‹')).catch(()=>showToast('Select and copy manually'));
     }
 
-    // ══ VIDEOS EXTENDED ══
+    // â•â• VIDEOS EXTENDED â•â•
     async function renderBigVideos(){
-        const loading=document.getElementById('vextLoading');
-        const empty=document.getElementById('vextEmpty');
-        const grid=document.getElementById('vextGrid');
-        loading.style.display='block';empty.style.display='none';grid.innerHTML='';
-        const{data:files,error:ferr}=await sb.storage.from(BIGBUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
-        const{data:posts}=await sb.from('big_video_posts').select('*');
-        loading.style.display='none';
-        if(ferr){
-            grid.innerHTML=`<div style="color:var(--red);font-size:.85rem;padding:.5rem;background:var(--bg);border:1px solid var(--red);border-left:3px solid var(--red);padding:1rem;line-height:1.7;">❌ <strong>Bucket not found.</strong><br><span style="color:var(--muted);">Create the <code style="color:#c084fc;">big-videos</code> bucket in Supabase Storage first (see the setup note above).</span></div>`;
+    const loading=document.getElementById('vextLoading');
+    const empty=document.getElementById('vextEmpty');
+    const grid=document.getElementById('vextGrid');
+    updateStaticLabels();
+    syncOneDriveUi();
+    loading.style.display='block';empty.style.display='none';grid.innerHTML='';
+    const useOD=localStorage.getItem('scool_use_onedrive')==='1';
+    if(useOD){
+        if(!getOneDriveToken()){
+            loading.style.display='none';
+            grid.innerHTML='<div style="color:#c084fc;font-size:.85rem;padding:1rem;background:#0d0919;border:1px solid #5b21b6;border-left:3px solid #c084fc;line-height:1.7;"><strong>OneDrive mode is on, but no connection is active.</strong><br><span style="color:var(--muted);">Use the Connect OneDrive button above, then try again.</span></div>';
+            await updateStorageQuotaNotice();
             return;
         }
-        const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
-        if(!vids.length){empty.style.display='block';return;}
-        const pm={};(posts||[]).forEach(p=>pm[p.filename]=p);
-        vids.forEach(file=>{
-            const{data:u}=sb.storage.from(BIGBUCKET).getPublicUrl(file.name);
-            const url=u.publicUrl;
-            const sn=file.name.replace(/'/g,"\\'");const su=url.replace(/'/g,"\\'");
-            const post=pm[file.name];
-            const poster=post?`<div class="video-poster">${rankBadge(post.rank)}<span class="video-poster-name">${post.username}</span></div>`:'';
-            const dname=post?post.display_name:file.name;
-            const dn=dname.replace(/'/g,"\\'");
+        try{await renderOneDriveVideos();}finally{loading.style.display='none';}
+        return;
+    }
+    const{data:files,error:ferr}=await sb.storage.from(BIGBUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
+    const{data:posts}=await sb.from('big_video_posts').select('*');
+    loading.style.display='none';
+    if(ferr){
+        grid.innerHTML='<div style="color:var(--red);font-size:.85rem;padding:1rem;background:var(--bg);border:1px solid var(--red);border-left:3px solid var(--red);line-height:1.7;"><strong>Bucket not found.</strong><br><span style="color:var(--muted);">Create the big-videos bucket in Supabase Storage first.</span></div>';
+        return;
+    }
+    const vids=(files||[]).filter(f=>f.name&&f.name!=='.emptyFolderPlaceholder');
+    if(!vids.length){empty.style.display='block';await updateStorageQuotaNotice();return;}
+    const pm={};(posts||[]).forEach(p=>pm[p.filename]=p);
+    vids.forEach(file=>{
+        const{data:u}=sb.storage.from(BIGBUCKET).getPublicUrl(file.name);
+        const url=u.publicUrl;
+        const sn=file.name.replace(/'/g,"\\'");const su=url.replace(/'/g,"\\'");
+        const post=pm[file.name];
+        const poster=post?`<div class="video-poster">${rankBadge(post.rank)}<span class="video-poster-name">${escapeHtml(post.username)}</span></div>`:'';
+        const dname=post?post.display_name:file.name;
+        const dn=dname.replace(/'/g,"\\'");
+        const card=document.createElement('div');card.className='video-card';
+        card.style.borderColor='#3b1f6e';
+        card.innerHTML=`
+            <div class="video-thumb" onclick="watchVideo('${su}','${dn}')">
+                <video src="${url}" muted preload="metadata"></video>
+                <div class="play-overlay"><div class="play-icon" style="background:#c084fc;"></div></div>
+            </div>
+            <div class="video-info">
+                ${poster}
+                <div class="video-name" title="${escapeHtml(dname)}">${escapeHtml(dname)} <span class="vext-card-badge">BIG</span></div>
+                <div class="video-meta">${fmtSize(file.metadata?.size)} · ${fmtDate(file.created_at)}</div>
+                <div class="card-actions">
+                    <button class="btn-v" style="background:#5b21b6;color:#fff;" onclick="watchVideo('${su}','${dn}')">WATCH</button>
+                    <button class="btn-v" style="background:#3b1f6e;color:#fff;" onclick="watchTempVideo('${su}','${dn}')">TEMP</button>
+                    <button class="btn-v bv-dl" onclick="dlVideo('${su}','${sn}')">SAVE</button>
+                    <button class="btn-v bv-off" onclick="saveOffline('${su}','${sn}')">OFFLINE</button>
+                    <button class="btn-v bv-del" onclick="delBigVideo('${sn}',this)">DEL</button>
+                </div>
+            </div>`;
+        grid.appendChild(card);
+    });
+    await updateStorageQuotaNotice();
+}
+
+const ONE_DRIVE_SCOPES='offline_access Files.ReadWrite.All openid profile';
+function syncOneDriveUi(){
+    const connectBtn=document.getElementById('oneDriveConnectBtn');
+    const toggle=document.getElementById('useOneDriveToggle');
+    const note=document.querySelector('.vext-onedrive-note');
+    const token=getOneDriveToken();
+    if(connectBtn)connectBtn.textContent=token?'OneDrive Connected':'Connect OneDrive';
+    if(note)note.textContent='OneDrive mode stores big videos in your connected OneDrive account instead of Supabase.';
+    if(toggle){
+        toggle.checked=localStorage.getItem('scool_use_onedrive')==='1' && !!token;
+        if(!token)localStorage.setItem('scool_use_onedrive','0');
+    }
+}
+function setOneDriveClientId(){
+    const cur=localStorage.getItem('scool_onedrive_client')||'';
+    const id=prompt('Enter your Azure App Client ID for OneDrive (OAuth client_id):',cur||'');
+    if(id){localStorage.setItem('scool_onedrive_client',id);showToast('Saved OneDrive client id.');syncOneDriveUi();}
+}
+function connectOneDrive(){
+    const clientId=localStorage.getItem('scool_onedrive_client');
+    if(!clientId){showToast('Set OneDrive client id first.');setOneDriveClientId();return;}
+    const redirectUri=location.origin+location.pathname;
+    const authUrl=`https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=${clientId}&response_type=token&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(ONE_DRIVE_SCOPES)}`;
+    window.location.href=authUrl;
+}
+function handleOneDriveRedirect(){
+    if(window.location.hash && window.location.hash.includes('access_token')){
+        const params=new URLSearchParams(window.location.hash.substring(1));
+        const token=params.get('access_token');
+        const expiresIn=parseInt(params.get('expires_in')||'0',10);
+        if(token){
+            const exp=Date.now()+expiresIn*1000;
+            sessionStorage.setItem('scool_onedrive_token',token);
+            sessionStorage.setItem('scool_onedrive_exp',String(exp));
+            history.replaceState(null,'',location.pathname+location.search);
+            syncOneDriveUi();
+            showToast('OneDrive connected!');
+        }
+    }
+}
+function getOneDriveToken(){
+    const t=sessionStorage.getItem('scool_onedrive_token');
+    const exp=parseInt(sessionStorage.getItem('scool_onedrive_exp')||'0',10);
+    if(!t || Date.now()>exp)return null;
+    return t;
+}
+function toggleUseOneDrive(){
+    const el=document.getElementById('useOneDriveToggle');
+    const on=el && el.checked;
+    if(on && !getOneDriveToken()){
+        showToast('Connect OneDrive first.');
+        if(el)el.checked=false;
+        return;
+    }
+    localStorage.setItem('scool_use_onedrive',on?'1':'0');
+    syncOneDriveUi();
+    updateStorageQuotaNotice();
+    showToast(on?'Using OneDrive for big videos':'Using Supabase for big videos');
+}
+async function graphFetch(path,method='GET',body=null,raw=false){
+    const token=getOneDriveToken();
+    if(!token)throw new Error('Not authenticated with OneDrive');
+    const url=path.startsWith('https://')?path:`https://graph.microsoft.com/v1.0${path}`;
+    const opts={method,headers:{Authorization:'Bearer '+token}};
+    if(body && !(body instanceof FormData) && typeof body==='object'){
+        opts.headers['Content-Type']='application/json';
+        opts.body=JSON.stringify(body);
+    }else if(body)opts.body=body;
+    const resp=await fetch(url,opts);
+    if(!resp.ok){const txt=await resp.text();throw new Error('Graph error: '+resp.status+' '+txt);}
+    if(raw)return resp;
+    return resp.json();
+}
+async function ensureODFolder(){
+    try{return await graphFetch('/me/drive/root:/ScoolBigVideos');}
+    catch(e){return await graphFetch('/me/drive/root/children','POST',{name:'ScoolBigVideos',folder:{}});}
+}
+async function uploadBigVideoOneDrive(file){
+    try{
+        await ensureODFolder();
+        const path=`/me/drive/root:/ScoolBigVideos/${encodeURIComponent(file.name)}:/createUploadSession`;
+        const sess=await graphFetch(path,'POST',{item:{'@microsoft.graph.conflictBehavior':'replace'}});
+        const uploadUrl=sess.uploadUrl;
+        const chunkSize=5*1024*1024;
+        let start=0;const size=file.size;
+        while(start<size){
+            const end=Math.min(start+chunkSize,size)-1;
+            const blob=file.slice(start,end+1);
+            const headers={'Content-Range':`bytes ${start}-${end}/${size}`};
+            const resp=await fetch(uploadUrl,{method:'PUT',headers,body:blob});
+            if(resp.status===201||resp.status===200){showToast('Uploaded to OneDrive.');await renderOneDriveVideos();return;}
+            if(!(resp.status>=200&&resp.status<300)){const txt=await resp.text();throw new Error('Upload chunk failed: '+resp.status+' '+txt);}
+            start=end+1;
+        }
+    }catch(e){console.error('OneDrive upload error',e);showToast('OneDrive upload failed: '+e.message);}
+}
+async function renderOneDriveVideos(){
+    try{
+        const list=await graphFetch('/me/drive/root:/ScoolBigVideos:/children');
+        const items=list.value||[];
+        const grid=document.getElementById('vextGrid');
+        grid.innerHTML='';
+        if(!items.length){document.getElementById('vextEmpty').style.display='block';await updateStorageQuotaNotice();return;}
+        document.getElementById('vextEmpty').style.display='none';
+        items.forEach(item=>{
+            const url=item['@microsoft.graph.downloadUrl']||`https://graph.microsoft.com/v1.0/me/drive/items/${item.id}/content`;
+            const safeUrl=url.replace(/'/g,"\\'");
+            const safeName=item.name.replace(/'/g,"\\'");
             const card=document.createElement('div');card.className='video-card';
-            card.style.borderColor='#3b1f6e';
             card.innerHTML=`
-                <div class="video-thumb" onclick="watchVideo('${su}','${dn}')">
+                <div class="video-thumb" onclick="watchVideo('${safeUrl}','${safeName}')">
                     <video src="${url}" muted preload="metadata"></video>
                     <div class="play-overlay"><div class="play-icon" style="background:#c084fc;"></div></div>
                 </div>
                 <div class="video-info">
-                    ${poster}
-                    <div class="video-name" title="${dname}">${dname} <span class="vext-card-badge">BIG</span></div>
-                    <div class="video-meta">${fmtSize(file.metadata?.size)} · ${fmtDate(file.created_at)}</div>
+                    <div class="video-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)} <span class="vext-card-badge">OD</span></div>
+                    <div class="video-meta">${fmtSize(item.size)} · ${fmtDate(item.lastModifiedDateTime)}</div>
                     <div class="card-actions">
-                        <button class="btn-v" style="background:#5b21b6;color:#fff;" onclick="watchVideo('${su}','${dn}')">▶ WATCH</button>
-                        <button class="btn-v" style="background:#3b1f6e;color:#fff;" onclick="watchTempVideo('${su}','${dn}')">⌛ TEMP</button>
-                        <button class="btn-v bv-dl" onclick="dlVideo('${su}','${sn}')">⬇ SAVE</button>
-                        <button class="btn-v bv-off" onclick="saveOffline('${su}','${sn}')">📴 OFFLINE</button>
-                        <button class="btn-v bv-del" onclick="delBigVideo('${sn}',this)">✕ DEL</button>
+                        <button class="btn-v" style="background:#5b21b6;color:#fff;" onclick="watchVideo('${safeUrl}','${safeName}')">WATCH</button>
+                        <button class="btn-v" style="background:#3b1f6e;color:#fff;" onclick="watchTempVideo('${safeUrl}','${safeName}')">TEMP</button>
+                        <button class="btn-v bv-dl" onclick="dlVideo('${safeUrl}','${safeName}')">SAVE</button>
+                        <button class="btn-v bv-del" onclick="delOneDriveFile('${item.id}',this)">DEL</button>
                     </div>
                 </div>`;
             grid.appendChild(card);
         });
         await updateStorageQuotaNotice();
+    }catch(e){console.error('OneDrive render error',e);showToast('Error listing OneDrive files: '+e.message);}
+}
+async function delOneDriveFile(id,btn){
+    if(!confirm('Delete this OneDrive file?'))return;
+    try{await graphFetch(`/me/drive/items/${id}`,'DELETE');showToast('Deleted!');renderOneDriveVideos();}catch(e){showToast('Delete failed: '+e.message);}
+}
+handleOneDriveRedirect();
+async function uploadBigVideo(file){
+    if(!file||!file.type.startsWith('video/')){showToast('Select a video file!');return;}
+    const MAX=getBigVideoUploadLimit();
+    if(file.size>MAX){showToast('Too big! Max '+getBigVideoUploadLimitLabel()+' for your rank (yours is '+fmtSize(file.size)+')');return;}
+    const useOD=localStorage.getItem('scool_use_onedrive')==='1';
+    if(useOD){
+        if(!getOneDriveToken()){showToast('Connect OneDrive first.');return;}
+        return uploadBigVideoOneDrive(file);
     }
-
-    async function uploadBigVideo(file){
-        if(!file||!file.type.startsWith('video/')){showToast('Select a video file!');return;}
-        const MAX=95*1024*1024;
-        if(file.size>MAX){showToast('Too big! Max 95 MB (yours is '+fmtSize(file.size)+')');return;}
-        const {usage,quota}=await updateStorageQuotaNotice();
-        if(usage>=quota){showToast('You have reached your big-video quota. Ask admin to increase your storage.');return;}
-        if(file.size + usage > quota){showToast('This upload would exceed your '+fmtSize(quota)+' quota. Ask admin to increase your storage or remove older files.');return;}
-        const wrap=document.getElementById('vextProgWrap');
-        const fill=document.getElementById('vextProgFill');
-        const label=document.getElementById('vextProgLabel');
-        const pct=document.getElementById('vextProgPct');
-        wrap.style.display='block';
-        fill.style.width='2%';fill.style.background='linear-gradient(90deg,#7c3aed,#c084fc)';
-        label.textContent='Preparing upload…';pct.textContent='0%';
-        const safeName=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-        try{
-            await new Promise((resolve,reject)=>{
-                const xhr=new XMLHttpRequest();
-                xhr.open('POST',`${SUPABASE_URL}/storage/v1/object/${BIGBUCKET}/${encodeURIComponent(safeName)}`);
-                xhr.setRequestHeader('Authorization',`Bearer ${SUPABASE_KEY}`);
-                xhr.setRequestHeader('Content-Type',file.type);
-                xhr.setRequestHeader('x-upsert','false');
-                xhr.upload.onprogress=e=>{
-                    if(e.lengthComputable){
-                        const p=Math.round(e.loaded/e.total*92);
-                        fill.style.width=p+'%';
-                        label.textContent='Uploading… '+fmtSize(e.loaded)+' of '+fmtSize(e.total);
-                        pct.textContent=p+'%';
-                    }
-                };
-                xhr.onload=()=>{
-                    if(xhr.status>=200&&xhr.status<300){resolve();}
-                    else{
-                        let msg=xhr.responseText;
-                        try{msg=JSON.parse(xhr.responseText).message||msg;}catch(ex){}
-                        reject(new Error(msg));
-                    }
-                };
-                xhr.onerror=()=>reject(new Error('Network error — check your connection'));
-                xhr.send(file);
-            });
-            fill.style.width='96%';label.textContent='Saving info…';pct.textContent='96%';
-            await sb.from('big_video_posts').insert([{filename:safeName,display_name:file.name,username:currentUser.username,rank:currentUser.rank}]);
-            fill.style.width='100%';label.textContent='✓ Upload complete!';pct.textContent='100%';
-            document.getElementById('vextFileInput').value='';
-            showToast('Big video uploaded! 🎉');
-            setTimeout(()=>{wrap.style.display='none';fill.style.width='0%';label.textContent='';pct.textContent='';},1800);
-            renderBigVideos();
-        }catch(err){
-            label.textContent='❌ '+err.message;pct.textContent='';
-            fill.style.background='var(--red)';
-            setTimeout(()=>{fill.style.background='linear-gradient(90deg,#7c3aed,#c084fc)';},2500);
-            showToast('Upload failed: '+err.message);
-        }
+    const {usage,quota}=await updateStorageQuotaNotice();
+    if(usage>=quota){showToast('You have reached your big-video quota. Ask admin to increase your storage.');return;}
+    if(file.size + usage > quota){showToast('This upload would exceed your '+fmtSize(quota)+' quota. Ask admin to increase your storage or remove older files.');return;}
+    const wrap=document.getElementById('vextProgWrap');
+    const fill=document.getElementById('vextProgFill');
+    const label=document.getElementById('vextProgLabel');
+    const pct=document.getElementById('vextProgPct');
+    wrap.style.display='block';
+    fill.style.width='2%';fill.style.background='linear-gradient(90deg,#7c3aed,#c084fc)';
+    label.textContent='Preparing upload...';pct.textContent='0%';
+    const safeName=Date.now()+'_'+file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+    try{
+        await new Promise((resolve,reject)=>{
+            const xhr=new XMLHttpRequest();
+            xhr.open('POST',`${SUPABASE_URL}/storage/v1/object/${BIGBUCKET}/${encodeURIComponent(safeName)}`);
+            xhr.setRequestHeader('Authorization',`Bearer ${SUPABASE_KEY}`);
+            xhr.setRequestHeader('Content-Type',file.type);
+            xhr.setRequestHeader('x-upsert','false');
+            xhr.upload.onprogress=e=>{
+                if(e.lengthComputable){
+                    const p=Math.round(e.loaded/e.total*92);
+                    fill.style.width=p+'%';
+                    label.textContent='Uploading... '+fmtSize(e.loaded)+' of '+fmtSize(e.total);
+                    pct.textContent=p+'%';
+                }
+            };
+            xhr.onload=()=>{
+                if(xhr.status>=200&&xhr.status<300)resolve();
+                else{
+                    let msg=xhr.responseText;
+                    try{msg=JSON.parse(xhr.responseText).message||msg;}catch(ex){}
+                    reject(new Error(msg));
+                }
+            };
+            xhr.onerror=()=>reject(new Error('Network error - check your connection'));
+            xhr.send(file);
+        });
+        fill.style.width='96%';label.textContent='Saving info...';pct.textContent='96%';
+        await sb.from('big_video_posts').insert([{filename:safeName,display_name:file.name,username:currentUser.username,rank:currentUser.rank}]);
+        fill.style.width='100%';label.textContent='Upload complete';pct.textContent='100%';
+        document.getElementById('vextFileInput').value='';
+        showToast('Big video uploaded!');
+        setTimeout(()=>{wrap.style.display='none';fill.style.width='0%';label.textContent='';pct.textContent='';},1800);
+        renderBigVideos();
+    }catch(err){
+        label.textContent='Error: '+err.message;pct.textContent='';
+        fill.style.background='var(--red)';
+        setTimeout(()=>{fill.style.background='linear-gradient(90deg,#7c3aed,#c084fc)';},2500);
+        showToast('Upload failed: '+err.message);
     }
-
-    async function delBigVideo(name,btn){
-        if(!confirm('Delete "'+name+'"?'))return;
-        btn.textContent='…';btn.disabled=true;
-        await sb.storage.from(BIGBUCKET).remove([name]);
-        await sb.from('big_video_posts').delete().eq('filename',name);
-        showToast('Deleted!');renderBigVideos();
-    }
+}
+async function delBigVideo(name,btn){
+    if(!confirm('Delete "'+name+'"?'))return;
+    btn.textContent='...';btn.disabled=true;
+    await sb.storage.from(BIGBUCKET).remove([name]);
+    await sb.from('big_video_posts').delete().eq('filename',name);
+    showToast('Deleted!');renderBigVideos();
+}
 
     // Drag & drop for Videos Extended
     const vextDropEl=document.getElementById('vextDrop');
@@ -1985,7 +2461,7 @@
     vextDropEl.addEventListener('dragleave',()=>vextDropEl.classList.remove('drag'));
     vextDropEl.addEventListener('drop',e=>{e.preventDefault();vextDropEl.classList.remove('drag');uploadBigVideo(e.dataTransfer.files[0]);});
 
-    // ══ ADMIN TAB ══
+    // â•â• ADMIN TAB â•â•
     async function loadAdminData(){
         const{data:vids}=await sb.storage.from(BUCKET).list('',{sortBy:{column:'created_at',order:'desc'}});
         const{data:shorts}=await sb.storage.from(SBUCKET).list('');
@@ -2004,12 +2480,12 @@
         document.getElementById('statP').textContent=pending.length;
         document.getElementById('statF').textContent=unreadFb.length+' new';
         const pl=document.getElementById('pendingList');
-        if(!pending.length){pl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No pending users ✓</div>';}
+        if(!pending.length){pl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No pending users âœ“</div>';}
         else{
             pl.innerHTML='';
             pending.forEach(u=>{
                 const item=document.createElement('div');item.className='admin-user-item';
-                item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div><div class="admin-user-actions"><button class="btn-approve" onclick="approveUser(${u.id},this)">✓ APPROVE</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REJECT</button></div>`;
+                item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}</div><div class="admin-user-actions"><button class="btn-approve" onclick="approveUser(${u.id},this)">âœ“ APPROVE</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">âœ• REJECT</button></div>`;
                 pl.appendChild(item);
             });
         }
@@ -2022,7 +2498,7 @@
                 const safeName=(u.username||'').replace(/'/g,"\\'");
                 const storedQuota=localStorage.getItem(`scool_storage_quota_${u.username}`);
                 const quotaLabel=fmtSize(storedQuota?parseInt(storedQuota,10):DEFAULT_STORAGE_QUOTA);
-                item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}<span style="margin-left:.6rem;font-size:.72rem;color:var(--muted);">Quota: ${quotaLabel}</span></div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-quota" onclick="setQuota(${u.id},'${safeName}')">Set Quota</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
+                item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}<span style="margin-left:.6rem;font-size:.72rem;color:var(--muted);">Quota: ${quotaLabel}</span></div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-quota" onclick="setQuota(${u.id},'${safeName}')">Set Quota</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">âœ• REMOVE</button></div>`;
                 al.appendChild(item);
             });
         }
@@ -2032,7 +2508,7 @@
             fl.innerHTML='';
             feedbacks.forEach(f=>{
                 const item=document.createElement('div');item.className='feedback-item'+(f.read?'':' unread');
-                item.innerHTML=`<div class="fb-header">${rankBadge(f.rank)}<strong>${f.username}</strong><span class="fb-date">${fmtDate(f.created_at||Date.now())}</span>${!f.read?`<button class="btn-fb-read" onclick="markFbRead(${f.id},this)">✓ Mark read</button>`:''}<button class="btn-fb-del" onclick="delFb(${f.id},this)">✕</button></div><div class="fb-msg">${f.message}</div>`;
+                item.innerHTML=`<div class="fb-header">${rankBadge(f.rank)}<strong>${f.username}</strong><span class="fb-date">${fmtDate(f.created_at||Date.now())}</span>${!f.read?`<button class="btn-fb-read" onclick="markFbRead(${f.id},this)">âœ“ Mark read</button>`:''}<button class="btn-fb-del" onclick="delFb(${f.id},this)">âœ•</button></div><div class="fb-msg">${f.message}</div>`;
                 fl.appendChild(item);
             });
         }
@@ -2042,12 +2518,12 @@
         files.forEach(f=>{
             const item=document.createElement('div');item.className='admin-vid-item';
             const sn=f.name.replace(/'/g,"\\'");
-            item.innerHTML=`<div class="admin-vid-name">${f.name}</div><div class="admin-vid-meta">${fmtSize(f.metadata?.size)} · ${fmtDate(f.created_at)}</div><button class="btn-adel" onclick="adminDelVid('${sn}',this)">✕ DELETE</button>`;
+            item.innerHTML=`<div class="admin-vid-name">${f.name}</div><div class="admin-vid-meta">${fmtSize(f.metadata?.size)} Â· ${fmtDate(f.created_at)}</div><button class="btn-adel" onclick="adminDelVid('${sn}',this)">âœ• DELETE</button>`;
             vl.appendChild(item);
         });
     }
-    async function approveUser(id,btn){btn.textContent='…';await sb.from('users').update({verified:true}).eq('id',id);showToast('User approved! ✓');loadAdminData();}
-    async function rejectUser(id,btn){if(!confirm('Remove this user?'))return;btn.textContent='…';await sb.from('users').delete().eq('id',id);showToast('Removed!');loadAdminData();}
+    async function approveUser(id,btn){btn.textContent='â€¦';await sb.from('users').update({verified:true}).eq('id',id);showToast('User approved! âœ“');loadAdminData();}
+    async function rejectUser(id,btn){if(!confirm('Remove this user?'))return;btn.textContent='â€¦';await sb.from('users').delete().eq('id',id);showToast('Removed!');loadAdminData();}
     async function setRank(id){const rank=document.getElementById('rk_'+id).value;await sb.from('users').update({rank}).eq('id',id);showToast('Rank set to '+rank+'!');loadAdminData();}
     async function setQuota(id,username){
         const answer=prompt('Enter storage quota for '+username+' in GB (example: 5):');
@@ -2059,11 +2535,11 @@
         showToast('Quota set to '+gb+' GB for '+username+'!');
         loadAdminData();
     }
-    async function adminDelVid(name,btn){if(!confirm('Delete?'))return;btn.textContent='…';await sb.storage.from(BUCKET).remove([name]);await sb.from('video_posts').delete().eq('filename',name);showToast('Deleted!');loadAdminData();renderVideos();}
+    async function adminDelVid(name,btn){if(!confirm('Delete?'))return;btn.textContent='â€¦';await sb.storage.from(BUCKET).remove([name]);await sb.from('video_posts').delete().eq('filename',name);showToast('Deleted!');loadAdminData();renderVideos();}
     async function markFbRead(id,btn){await sb.from('feedback').update({read:true}).eq('id',id);showToast('Marked as read');loadAdminData();}
     async function delFb(id,btn){await sb.from('feedback').delete().eq('id',id);showToast('Deleted!');loadAdminData();}
 
-    // ══ MODAL CLOSE ══
+    // â•â• MODAL CLOSE â•â•
     document.getElementById('uploadZone').addEventListener('click',e=>{if(e.target===document.getElementById('uploadZone'))closeUpload();});
     document.getElementById('playerModal').addEventListener('click',e=>{if(e.target===document.getElementById('playerModal'))closePlayer();});
     document.getElementById('shareModal').addEventListener('click',e=>{if(e.target===document.getElementById('shareModal'))document.getElementById('shareModal').classList.remove('active');});
@@ -2081,11 +2557,10 @@
     document.getElementById('vaultClaimInput').addEventListener('keydown',e=>{if(e.key==='Enter')claimVaultFile();});
     document.getElementById('chInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))askCodeHelper();});
 
-    // ══ MODERATOR ══
+    // â•â• MODERATOR â•â•
     let modUnlocked=false;
     let modCurrentTab='websites';
     let modData={websites:[],proxy:[],vpn:[]};
-    const MOD_PASSWORD='Digre';
 
     function isModerator(){
         if(!currentUser)return false;
@@ -2116,13 +2591,13 @@
     function checkModPassword(){
         const pass=document.getElementById('modPassInput').value;
         const err=document.getElementById('modPassError');
-        if(pass===MOD_PASSWORD){
+        if(pass===getModeratorPassword()){
             modUnlocked=true;
             document.getElementById('modPassModal').classList.remove('active');
             document.getElementById('modLocked').style.display='none';
             document.getElementById('modContent').classList.add('unlocked');
             loadModeratorData();
-            showToast('Moderator access granted! 👮');
+            showToast('Moderator access granted!');
         } else {
             err.textContent='Incorrect password. Try again.';
             document.getElementById('modPassInput').value='';
@@ -2134,7 +2609,7 @@
         document.getElementById('modContent').classList.remove('unlocked');
         document.getElementById('modLocked').style.display='flex';
         switchTab('videos',document.querySelectorAll('.nav-tab')[0]);
-        showToast('Moderator locked 🔒');
+        showToast('Moderator locked');
     }
 
     async function loadModeratorData(){
@@ -2158,9 +2633,9 @@
             const proxies = resPro.data || [];
             const vpns = resVpn.data || [];
 
-            modData.websites = websites.sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
-            modData.proxy = proxies.sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
-            modData.vpn = vpns.sort((a,b)=>new Date(b.timetz)-new Date(a.timetz));
+            modData.websites = sortByNewest(websites);
+            modData.proxy = sortByNewest(proxies);
+            modData.vpn = sortByNewest(vpns);
 
             renderModList('websites');
             renderModList('proxy');
@@ -2179,6 +2654,16 @@
         modCurrentTab=tabName;
     }
 
+    function buildModDetails(item,type){
+        if(type==='websites'){
+            return `<div class="mod-item-detail">${escapeHtml(item.url||'')}</div>`;
+        }
+        const key=`${type}:${item.id}`;
+        const visible=!!modSecretVisible[key];
+        const secret=visible?escapeHtml(item.password||''):'........';
+        return `<div class="mod-item-detail">User: ${escapeHtml(item.username||'')} | Port: ${escapeHtml(item.port||'')}</div><div class="mod-item-secret"><span>Password:</span><code class="mod-code">${secret}</code><button class="btn-mod-mini" onclick="toggleModSecret('${item.id}','${type}')">${visible?'HIDE':'SHOW'}</button></div>`;
+    }
+
     function renderModList(type){
         const items=modData[type]||[];
         const container=document.getElementById('mod-'+type+'List');
@@ -2192,22 +2677,14 @@
         items.forEach(item=>{
             const div=document.createElement('div');
             div.className='mod-item';
-            
-            let detailHTML='';
-            if(type==='websites'){
-                detailHTML=`<div class="mod-item-detail">${item.url}</div>`;
-            } else if(type==='proxy'||type==='vpn'){
-                detailHTML=`<div class="mod-item-detail">User: ${item.username} | Port: ${item.port}</div>`;
-            }
-            
             div.innerHTML=`
                 <div class="mod-item-info">
-                    <div class="mod-item-name">${item.name}</div>
-                    ${detailHTML}
+                    <div class="mod-item-name">${escapeHtml(item.name||'Untitled')}</div>
+                    ${buildModDetails(item,type)}
                 </div>
                 <div class="mod-item-actions">
-                    <button class="btn-mod-action btn-mod-copy" onclick="copyModItem('${item.id}','${type}')" title="Copy">📋</button>
-                    <button class="btn-mod-action btn-mod-del" onclick="delModItem('${item.id}','${type}')">✕</button>
+                    <button class="btn-mod-action btn-mod-copy" onclick="copyModItem('${item.id}','${type}')" title="Copy">COPY</button>
+                    <button class="btn-mod-action btn-mod-del" onclick="delModItem('${item.id}','${type}')">DEL</button>
                 </div>`;
             container.appendChild(div);
         });
@@ -2249,8 +2726,8 @@
                     ${detailHTML}
                 </div>
                 <div class="mod-item-actions">
-                    <button class="btn-mod-action btn-mod-copy" onclick="copyModItem('${item.id}','${type}')" title="Copy">📋</button>
-                    <button class="btn-mod-action btn-mod-del" onclick="delModItem('${item.id}','${type}')">✕</button>
+                    <button class="btn-mod-action btn-mod-copy" onclick="copyModItem('${item.id}','${type}')" title="Copy">ðŸ“‹</button>
+                    <button class="btn-mod-action btn-mod-del" onclick="delModItem('${item.id}','${type}')">âœ•</button>
                 </div>`;
             container.appendChild(div);
         });
@@ -2266,7 +2743,7 @@
                     <input class="mod-input" id="modAddName" placeholder="Website name (e.g., YouTube)" />
                     <input class="mod-input" id="modAddUrl" placeholder="URL (e.g., https://youtube.com)" />
                 </div>
-                <button class="btn-mod-add" onclick="saveModItem('${type}')">✓ ADD WEBSITE</button>`;
+                <button class="btn-mod-add" onclick="saveModItem('${type}')">âœ“ ADD WEBSITE</button>`;
         } else {
             html=`
                 <div class="mod-input-row">
@@ -2275,7 +2752,7 @@
                     <input class="mod-input" id="modAddPass" placeholder="Password" />
                     <input class="mod-input" id="modAddPort" placeholder="Port (e.g., 8080)" />
                 </div>
-                <button class="btn-mod-add" onclick="saveModItem('${type}')">✓ ADD ${typeLabel[type].toUpperCase()}</button>`;
+                <button class="btn-mod-add" onclick="saveModItem('${type}')">âœ“ ADD ${typeLabel[type].toUpperCase()}</button>`;
         }
         
         const modal=document.createElement('div');
@@ -2283,7 +2760,7 @@
         modal.id='modAddModal';
         modal.innerHTML=`
             <div class="modal-box">
-                <button class="modal-close" onclick="document.getElementById('modAddModal').remove()">✕</button>
+                <button class="modal-close" onclick="document.getElementById('modAddModal').remove()">âœ•</button>
                 <h2>+ ADD ${typeLabel[type].toUpperCase()}</h2>
                 ${html}
             </div>`;
@@ -2315,7 +2792,7 @@
         }
         
         document.getElementById('modAddModal').remove();
-        showToast('✓ Added!');
+        showToast('âœ“ Added!');
         loadModeratorData();
     }
 
@@ -2339,8 +2816,8 @@
         }
         
         navigator.clipboard.writeText(text)
-            .then(()=>showToast('Copied to clipboard! 📋'))
-            .catch(()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied! 📋');});
+            .then(()=>showToast('Copied to clipboard! ðŸ“‹'))
+            .catch(()=>{const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied! ðŸ“‹');});
     }
 
     // Add moderator button visibility on init
@@ -2353,9 +2830,11 @@
         }
     }
 
-    // ══ INIT ══
+    // â•â• INIT â•â•
     const saved=sessionStorage.getItem('scool_session');
     if(saved){currentUser=JSON.parse(saved);initSite();}
     </script>
     </body>
     </html>
+
+
