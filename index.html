@@ -553,6 +553,26 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .spinner{text-align:center;padding:2.5rem;color:var(--muted);font-size:.88rem;}
 .spinner::before{content:'';display:block;width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .8rem;}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* MOVIE VOTER */
+.movie-voter-top{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;margin:1.5rem 0 1rem;}
+.movie-voter-status{color:var(--text);font-size:.95rem;}
+.movie-voter-actions{display:flex;gap:.75rem;flex-wrap:wrap;}
+.movie-voter-summary{display:flex;justify-content:space-between;gap:1rem;color:var(--muted);margin-bottom:1rem;font-size:.95rem;}
+.movie-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.movie-card-mini{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:border-color .2s,transform .2s;}
+.movie-card-mini:hover{border-color:var(--accent);transform:translateY(-1px);}
+.movie-card-poster{padding:1rem;background:linear-gradient(135deg,rgba(224,90,43,.92),rgba(240,192,64,.92));color:#0d0d0f;font-weight:700;display:flex;flex-direction:column;gap:.4rem;min-height:130px;}
+.movie-card-title{font-size:1rem;text-transform:uppercase;letter-spacing:.08em;}
+.movie-card-vibe{font-size:.78rem;color:#1f1f25;opacity:.95;}
+.movie-card-body{padding:1rem;display:grid;gap:.85rem;}
+.movie-card-meta{display:flex;justify-content:space-between;gap:.5rem;font-size:.82rem;color:var(--muted);}
+.movie-card-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
+.movie-card-actions button{flex:1;min-width:0;padding:.65rem .8rem;font-size:.8rem;}
+.movie-voter-note{font-size:.85rem;color:var(--muted);margin-top:-.65rem;}
+.movie-form--compact{grid-template-columns:1fr 1fr auto;}
+.movie-form--compact label{display:grid;gap:.4rem;}
+.movie-helper-text{font-size:.88rem;color:var(--muted);margin-top:1rem;}
 </style>
 </head>
 <body>
@@ -702,6 +722,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <button class="nav-tab" onclick="switchTab('clips',this)">🎞 CLIPS</button>
         <button class="nav-tab" onclick="switchTab('shorts',this)">📱 SHORTS</button>
         <button class="nav-tab" onclick="switchTab('offline',this)">📴 OFFLINE</button>
+        <button class="nav-tab" onclick="switchTab('movies',this)">🎬 MOVIES</button>
         <button class="nav-tab" onclick="switchTab('test',this)">🔗 TEST</button>
         <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">👮 MODERATOR</button>
         <button class="nav-tab admin-tab" id="adminNavBtn" onclick="switchTab('admin',this)" style="display:none;">⚙ ADMIN</button>
@@ -775,8 +796,36 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="offline-grid" id="offlineGrid"></div>
 </div>
 
+<!-- MOVIES TAB -->
+<div class="tab-panel" id="tab-movies">
+    <div class="section-title">MOVIE NIGHT VOTER</div>
+    <div class="movie-voter-top">
+        <div class="movie-voter-status"><strong>Status:</strong> <span id="movieSessionStatus">Closed</span></div>
+        <div class="movie-voter-actions">
+            <button class="btn-modal-confirm" id="movieToggleBtn" onclick="toggleMovieSession()">Start voting</button>
+            <button class="btn-admin-lock" id="movieResetBtn" onclick="resetMovieVotes()" style="display:none;">Reset votes</button>
+        </div>
+    </div>
+    <div class="movie-voter-summary">
+        <div id="ballotStatus">Not voted yet</div>
+        <div id="totalVotes">0 votes cast</div>
+    </div>
+    <div class="movie-grid" id="movieList"></div>
+    <form id="movieForm" class="movie-form movie-form--compact" onsubmit="addMovie(event)">
+        <label>
+            <span>Movie title</span>
+            <input class="modal-input" id="movieTitle" type="text" maxlength="80" placeholder="Movie title" autocomplete="off"/>
+        </label>
+        <label>
+            <span>Vibe / note</span>
+            <input class="modal-input" id="movieVibe" type="text" maxlength="80" placeholder="Why this movie?" autocomplete="off"/>
+        </label>
+        <button class="btn-modal-confirm" type="submit">Add movie</button>
+    </form>
+    <div class="movie-helper-text">Moderators and above can start/end voting, reset all votes, and clear a movie's vote count.</div>
+</div>
+
 <!-- TEST TAB -->
-<div class="tab-panel" id="tab-test">
 <div class="test-panel">
     <div class="test-header-row">
         <div class="section-title" style="margin-bottom:0;">TEST LAB</div>
@@ -1052,7 +1101,150 @@ const BUCKET='videos', SBUCKET='shorts', BIGBUCKET='big-videos';
 const VAULT_SHARE_PREFIX='vault_share_';
 const DEFAULT_STORAGE_QUOTA=5*1024*1024*1024;
 let tempPlayerUrl=null;
+const MOVIE_VOTER_KEY='scool_movie_voter';
+const defaultMovies=[
+    {id:'spirited-away',title:'Spirited Away',vibe:'Animated adventure',votes:0,palette:['#651b18','#e5b84f']},
+    {id:'inception',title:'Inception',vibe:'Mind-bending sci-fi',votes:0,palette:['#141211','#246f72']},
+    {id:'knives-out',title:'Knives Out',vibe:'Mystery comedy',votes:0,palette:['#a92f24','#2f7c48']},
+    {id:'grand-budapest',title:'The Grand Budapest Hotel',vibe:'Stylish comedy',votes:0,palette:['#b84331','#e5b84f']}
+];
+let movieState=loadMovieState();
 
+function loadMovieState(){
+    try{
+        const saved=JSON.parse(localStorage.getItem(MOVIE_VOTER_KEY));
+        if(saved && Array.isArray(saved.movies)){
+            return {movies:saved.movies,votesByUser:saved.votesByUser||{},isOpen:saved.isOpen||false};
+        }
+    }catch(e){}
+    return {movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),votesByUser:{},isOpen:false};
+}
+function saveMovieState(){
+    localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
+}
+function getCurrentUserVoteId(){
+    if(!currentUser)return null;
+    return movieState.votesByUser[currentUser.username]||null;
+}
+function canModerateMovies(){
+    return ['Moderator','Admin','Owner'].includes(currentUser?.rank);
+}
+function recountMovieVotes(){
+    movieState.movies.forEach(movie=>movie.votes=0);
+    Object.values(movieState.votesByUser).forEach(id=>{
+        const movie=movieState.movies.find(m=>m.id===id);
+        if(movie)movie.votes=(movie.votes||0)+1;
+    });
+}
+
+async function renderMovieVoter(){
+    const sessionStatus=document.getElementById('movieSessionStatus');
+    const toggleBtn=document.getElementById('movieToggleBtn');
+    const resetBtn=document.getElementById('movieResetBtn');
+    const list=document.getElementById('movieList');
+    if(!sessionStatus||!toggleBtn||!resetBtn||!list)return;
+
+    sessionStatus.textContent=movieState.isOpen?'Voting open':'Voting closed';
+    toggleBtn.textContent=movieState.isOpen?'End voting':'Start voting';
+    resetBtn.style.display=canModerateMovies()?'inline-flex':'none';
+
+    const totalVotes=Object.keys(movieState.votesByUser).length;
+    document.getElementById('ballotStatus').textContent=getCurrentUserVoteId()?`Voted: ${movieState.movies.find(m=>m.id===getCurrentUserVoteId())?.title||'Unknown'}`:'Not voted yet';
+    document.getElementById('totalVotes').textContent=`${totalVotes} vote${totalVotes===1?'':'s'} cast`;
+    list.innerHTML='';
+
+    movieState.movies.slice().sort((a,b)=>Number(b.votes||0)-Number(a.votes||0)||a.title.localeCompare(b.title)).forEach(movie=>{
+        const card=document.createElement('div');card.className='movie-card-mini';
+        const palette=movie.palette||['#651b18','#246f72'];
+        card.innerHTML=`
+            <div class="movie-card-poster" style="background:linear-gradient(135deg, ${palette[0]}, ${palette[1]});">
+                <div class="movie-card-title">${movie.title}</div>
+                <div class="movie-card-vibe">${movie.vibe}</div>
+            </div>
+            <div class="movie-card-body">
+                <div class="movie-card-meta"><span>${movie.votes||0} vote${(movie.votes||0)===1?'':'s'}</span><span>${totalVotes?Math.round((movie.votes||0)/totalVotes*100):0}%</span></div>
+                <div class="movie-card-actions"></div>
+            </div>`;
+        const actions=card.querySelector('.movie-card-actions');
+        const votedId=getCurrentUserVoteId();
+        const voteBtn=document.createElement('button');
+        voteBtn.type='button';
+        voteBtn.textContent = movie.id===votedId ? 'Your pick' : (movieState.isOpen && !votedId ? 'Vote' : 'Locked');
+        voteBtn.disabled = !movieState.isOpen || !!votedId || !currentUser;
+        voteBtn.className='btn-modal-confirm';
+        voteBtn.onclick=()=>voteForMovie(movie.id);
+        actions.appendChild(voteBtn);
+
+        if(currentUser && votedId===movie.id){
+            const clearOwn=document.createElement('button');
+            clearOwn.type='button';
+            clearOwn.textContent='Clear my vote';
+            clearOwn.className='btn-reject';
+            clearOwn.onclick=clearMyVote;
+            actions.appendChild(clearOwn);
+        }
+        if(canModerateMovies()){
+            const clearAll=document.createElement('button');
+            clearAll.type='button';
+            clearAll.textContent='Clear votes';
+            clearAll.className='btn-adel';
+            clearAll.onclick=()=>clearMovieVotes(movie.id);
+            actions.appendChild(clearAll);
+        }
+
+        list.appendChild(card);
+    });
+}
+function voteForMovie(movieId){
+    if(!currentUser || !movieState.isOpen || getCurrentUserVoteId())return;
+    movieState.votesByUser[currentUser.username]=movieId;
+    recountMovieVotes();
+    saveMovieState();
+    renderMovieVoter();
+}
+function clearMyVote(){
+    if(!currentUser)return;
+    const voteId=getCurrentUserVoteId();
+    if(!voteId)return;
+    delete movieState.votesByUser[currentUser.username];
+    recountMovieVotes();
+    saveMovieState();
+    renderMovieVoter();
+}
+function clearMovieVotes(movieId){
+    if(!canModerateMovies())return;
+    Object.keys(movieState.votesByUser).forEach(user=>{
+        if(movieState.votesByUser[user]===movieId)delete movieState.votesByUser[user];
+    });
+    recountMovieVotes();
+    saveMovieState();
+    renderMovieVoter();
+}
+function toggleMovieSession(){
+    if(!canModerateMovies())return;
+    movieState.isOpen=!movieState.isOpen;
+    saveMovieState();
+    renderMovieVoter();
+}
+function resetMovieVotes(){
+    if(!canModerateMovies())return;
+    movieState.votesByUser={};
+    movieState.movies.forEach(m=>m.votes=0);
+    saveMovieState();
+    renderMovieVoter();
+}
+function addMovie(event){
+    event.preventDefault();
+    const title=document.getElementById('movieTitle').value.trim();
+    const vibe=document.getElementById('movieVibe').value.trim();
+    if(!title)return;
+    const slug=title.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'')||`movie-${Date.now().toString(36)}`;
+    movieState.movies.push({id:`${slug}-${Date.now().toString(36)}`,title,vibe:vibe||'Movie night pick',votes:0,palette:['#651b18','#e5b84f']});
+    document.getElementById('movieTitle').value='';
+    document.getElementById('movieVibe').value='';
+    saveMovieState();
+    renderMovieVoter();
+}
 async function getUserStorageQuota(username){
     const stored=localStorage.getItem(`scool_storage_quota_${username}`);
     return stored?parseInt(stored,10):DEFAULT_STORAGE_QUOTA;
@@ -1181,7 +1373,7 @@ function initSite(){
     document.getElementById('feedbackFab').style.display='flex';
     document.getElementById('headerUser').innerHTML=`${rankBadge(currentUser.rank)}<span class="header-username">${currentUser.username}</span>`;
     checkModeratorButtonVisibility();
-    openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();});
+    openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();renderMovieVoter();});
 }
 
 // ══ TAB SWITCHING ══
@@ -1196,6 +1388,7 @@ function switchTab(name,btn){
     if(name==='admin'&&adminUnlocked)loadAdminData();
     if(name==='moderator'&&modUnlocked)loadModeratorData();
     if(name==='offline')renderOffline();
+    if(name==='movies')renderMovieVoter();
     if(name==='test'&&curFeature==='vault')renderVault();
     if(name==='test'&&curFeature==='videosext')renderBigVideos();
     if(name==='shorts')renderShorts();
