@@ -640,19 +640,15 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <button class="btn-back" onclick="backToLogin()">← Back to Login</button>
 </div>
 
-<!-- ADMIN PIN LOCK -->
+<!-- ADMIN PASSWORD LOCK -->
 <div class="apl" id="aplModal">
-    <h2>🔒 ADMIN ACCESS</h2><p>Enter the admin PIN</p>
-    <div class="apl-dots"><div class="apl-dot" id="ad0"></div><div class="apl-dot" id="ad1"></div><div class="apl-dot" id="ad2"></div><div class="apl-dot" id="ad3"></div></div>
-    <div class="apl-grid">
-        <button class="apl-btn" onclick="aplPress('1')">1</button><button class="apl-btn" onclick="aplPress('2')">2</button><button class="apl-btn" onclick="aplPress('3')">3</button>
-        <button class="apl-btn" onclick="aplPress('4')">4</button><button class="apl-btn" onclick="aplPress('5')">5</button><button class="apl-btn" onclick="aplPress('6')">6</button>
-        <button class="apl-btn" onclick="aplPress('7')">7</button><button class="apl-btn" onclick="aplPress('8')">8</button><button class="apl-btn" onclick="aplPress('9')">9</button>
-        <button class="apl-btn" onclick="aplPress('0')" style="grid-column:2">0</button>
-        <button class="apl-btn del" onclick="aplDel()">⌫</button>
-    </div>
+    <h2>🔒 ADMIN ACCESS</h2><p>Enter the admin password</p>
+    <input class="modal-input" id="aplPasswordInput" type="password" placeholder="Admin password" autocomplete="current-password" />
     <div class="apl-error" id="aplError"></div>
-    <button class="apl-cancel" onclick="closeApl()">Cancel</button>
+    <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1rem;flex-wrap:wrap;">
+        <button class="btn-modal-confirm" onclick="checkApl()">UNLOCK →</button>
+        <button class="btn-modal-close" onclick="closeApl()">Cancel</button>
+    </div>
 </div>
 
 <!-- SHARE MODAL -->
@@ -729,7 +725,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <button class="nav-tab" onclick="switchTab('movies',this)">🎬 MOVIES</button>
         <button class="nav-tab" onclick="switchTab('test',this)">🔗 TEST</button>
         <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">👮 MODERATOR</button>
-        <button class="nav-tab admin-tab" id="adminNavBtn" onclick="switchTab('admin',this)" style="display:none;">⚙ ADMIN</button>
+        <button class="nav-tab admin-tab" id="adminNavBtn" onclick="openAdminTab(this)" style="display:none;">⚙ ADMIN</button>
     </nav>
     <div class="header-right">
         <div id="headerUser" style="display:flex;align-items:center;gap:.5rem;"></div>
@@ -1042,7 +1038,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 
 <!-- ADMIN TAB -->
 <div class="tab-panel" id="tab-admin">
-    <div class="admin-locked" id="adminLocked"><h2>🔒 ADMIN ONLY</h2><p>Use hamburger menu in TEST → Admin Mode</p></div>
+    <div class="admin-locked" id="adminLocked"><h2>🔒 ADMIN ONLY</h2><p>Use the ⚙ ADMIN tab above to unlock admin mode.</p></div>
     <div class="admin-content" id="adminContent">
         <div class="admin-hdr">
             <div><div class="section-title" style="margin-bottom:.3rem;">ADMIN PANEL</div><span class="admin-badge">ADMIN MODE</span></div>
@@ -1062,13 +1058,13 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <div class="admin-sec"><div class="admin-sec-title">🎬 MANAGE VIDEOS</div><div id="adminVidList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec"><div class="admin-sec-title">🎬 MOVIE NIGHT MANAGER</div><div id="adminMovieList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec">
-            <div class="admin-sec-title">🔑 CHANGE ADMIN PIN</div>
-            <div class="admin-pin-sec"><h3>Set New PIN</h3>
+            <div class="admin-sec-title">🔑 CHANGE ADMIN PASSWORD</div>
+            <div class="admin-pin-sec"><h3>Set New Admin Password</h3>
                 <div class="pin-change-row">
-                    <input class="pin-input" id="newPinInput" type="password" maxlength="4" placeholder="••••" inputmode="numeric"/>
-                    <button class="btn-change-pin" onclick="changeAdminPin()">SAVE PIN</button>
+                    <input class="pin-input" id="newPinInput" type="password" placeholder="New password" />
+                    <button class="btn-change-pin" onclick="changeAdminPassword()">SAVE PASSWORD</button>
                 </div>
-                <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">Default admin PIN is 1103.</div>
+                <div style="font-size:.78rem;color:var(--muted);margin-top:.5rem;">Default admin password is 1103.</div>
             </div>
         </div>
     </div>
@@ -1113,6 +1109,9 @@ const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const BUCKET='videos', SBUCKET='shorts', BIGBUCKET='big-videos';
 const VAULT_SHARE_PREFIX='vault_share_';
 const DEFAULT_STORAGE_QUOTA=5*1024*1024*1024;
+const VIP_STORAGE_QUOTA=10*1024*1024*1024;
+const ADMIN_STORAGE_QUOTA=50*1024*1024*1024;
+const OWNER_STORAGE_QUOTA=100*1024*1024*1024;
 let tempPlayerUrl=null;
 const MOVIE_VOTER_KEY='scool_movie_voter';
 const defaultMovies=[
@@ -1127,17 +1126,37 @@ function loadMovieState(){
     try{
         const saved=JSON.parse(localStorage.getItem(MOVIE_VOTER_KEY));
         if(saved && Array.isArray(saved.movies)){
-            return {movies:saved.movies,votesByUser:saved.votesByUser||{},isOpen:saved.isOpen||false};
+            return {
+                movies:saved.movies,
+                votesByUser:saved.votesByUser||{},
+                isOpen:saved.isOpen||false,
+                anonymousKey:saved.anonymousKey||localStorage.getItem('scool_movie_voter_anon')||''
+            };
         }
     }catch(e){}
-    return {movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),votesByUser:{},isOpen:false};
+    return {
+        movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),
+        votesByUser:{},
+        isOpen:false,
+        anonymousKey:localStorage.getItem('scool_movie_voter_anon')||''
+    };
 }
 function saveMovieState(){
+    if(movieState.anonymousKey){
+        localStorage.setItem('scool_movie_voter_anon',movieState.anonymousKey);
+    }
     localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
 }
+function getMovieVoterKey(){
+    if(currentUser) return currentUser.username;
+    if(!movieState.anonymousKey){
+        movieState.anonymousKey='anon_'+Math.random().toString(36).slice(2,12);
+        localStorage.setItem('scool_movie_voter_anon',movieState.anonymousKey);
+    }
+    return movieState.anonymousKey;
+}
 function getCurrentUserVoteId(){
-    if(!currentUser)return null;
-    return movieState.votesByUser[currentUser.username]||null;
+    return movieState.votesByUser[getMovieVoterKey()]||null;
 }
 function canModerateMovies(){
     return ['Moderator','Admin','Owner'].includes(currentUser?.rank);
@@ -1158,11 +1177,16 @@ async function renderMovieVoter(){
     if(!sessionStatus||!toggleBtn||!resetBtn||!list)return;
 
     sessionStatus.textContent=movieState.isOpen?'Voting open':'Voting closed';
+    sessionStatus.style.color=movieState.isOpen?'#4ade80':'#f87171';
     toggleBtn.textContent=movieState.isOpen?'End voting':'Start voting';
+    toggleBtn.style.background=movieState.isOpen?'#dc2626':'#2563eb';
     resetBtn.style.display=canModerateMovies()?'inline-flex':'none';
 
     const totalVotes=Object.keys(movieState.votesByUser).length;
-    document.getElementById('ballotStatus').textContent=getCurrentUserVoteId()?`Voted: ${movieState.movies.find(m=>m.id===getCurrentUserVoteId())?.title||'Unknown'}`:'Not voted yet';
+    const votedId=getCurrentUserVoteId();
+    const votedMovie=movieState.movies.find(m=>m.id===votedId);
+    const ballotText=votedId ? (currentUser ? `Voted: ${votedMovie?.title||'Unknown'}` : 'Anonymous vote cast') : 'Not voted yet';
+    document.getElementById('ballotStatus').textContent=ballotText;
     document.getElementById('totalVotes').textContent=`${totalVotes} vote${totalVotes===1?'':'s'} cast`;
     list.innerHTML='';
 
@@ -1182,13 +1206,13 @@ async function renderMovieVoter(){
         const votedId=getCurrentUserVoteId();
         const voteBtn=document.createElement('button');
         voteBtn.type='button';
-        voteBtn.textContent = movie.id===votedId ? 'Your pick' : (movieState.isOpen && !votedId ? 'Vote' : 'Locked');
-        voteBtn.disabled = !movieState.isOpen || !!votedId || !currentUser;
+        voteBtn.textContent = movie.id===votedId ? 'Your pick' : (movieState.isOpen ? 'Vote' : 'Locked');
+        voteBtn.disabled = !movieState.isOpen || !!votedId;
         voteBtn.className='btn-modal-confirm';
         voteBtn.onclick=()=>voteForMovie(movie.id);
         actions.appendChild(voteBtn);
 
-        if(currentUser && votedId===movie.id){
+        if(votedId===movie.id){
             const clearOwn=document.createElement('button');
             clearOwn.type='button';
             clearOwn.textContent='Clear my vote';
@@ -1218,17 +1242,17 @@ async function renderMovieVoter(){
     if(adminPanel)adminPanel.style.display=canModerateMovies()?'block':'none';
 }
 function voteForMovie(movieId){
-    if(!currentUser || !movieState.isOpen || getCurrentUserVoteId())return;
-    movieState.votesByUser[currentUser.username]=movieId;
+    if(!movieState.isOpen || getCurrentUserVoteId()) return;
+    movieState.votesByUser[getMovieVoterKey()]=movieId;
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
+    localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
 }
 function clearMyVote(){
-    if(!currentUser)return;
     const voteId=getCurrentUserVoteId();
-    if(!voteId)return;
-    delete movieState.votesByUser[currentUser.username];
+    if(!voteId) return;
+    delete movieState.votesByUser[getMovieVoterKey()];
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
@@ -1267,6 +1291,7 @@ function resetMovieVotes(){
     movieState.movies.forEach(m=>m.votes=0);
     saveMovieState();
     renderMovieVoter();
+    localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
 }
 function addMovie(event){
     event.preventDefault();
@@ -1280,9 +1305,18 @@ function addMovie(event){
     saveMovieState();
     renderMovieVoter();
 }
-async function getUserStorageQuota(username){
+function getDefaultStorageQuota(rank){
+    switch(rank){
+        case 'VIP': return VIP_STORAGE_QUOTA;
+        case 'Admin': return ADMIN_STORAGE_QUOTA;
+        case 'Owner': return OWNER_STORAGE_QUOTA;
+        default: return DEFAULT_STORAGE_QUOTA;
+    }
+}
+async function getUserStorageQuota(username, rank){
     const stored=localStorage.getItem(`scool_storage_quota_${username}`);
-    return stored?parseInt(stored,10):DEFAULT_STORAGE_QUOTA;
+    if(stored) return parseInt(stored,10);
+    return getDefaultStorageQuota(rank|| (currentUser?.username===username ? currentUser.rank : 'Member'));
 }
 function setUserStorageQuota(username,bytes){
     localStorage.setItem(`scool_storage_quota_${username}`,String(bytes));
@@ -1402,12 +1436,38 @@ function doLogout(){
     document.getElementById('modLocked').style.display='flex';
 }
 
+function isAdmin(){
+    return ['Admin','Owner'].includes(currentUser?.rank);
+}
+
+function checkAdminButtonVisibility(){
+    const adminBtn=document.getElementById('adminNavBtn');
+    if(isAdmin()){
+        adminBtn.style.display='';
+    } else {
+        adminBtn.style.display='none';
+    }
+}
+
+function openAdminTab(btn){
+    if(!isAdmin()){
+        showToast('Admin access only');
+        return;
+    }
+    if(!adminUnlocked){
+        openApl();
+        return;
+    }
+    switchTab('admin',btn);
+}
+
 // ══ SITE INIT ══
 function initSite(){
     document.getElementById('siteContainer').style.display='block';
     document.getElementById('feedbackFab').style.display='flex';
     document.getElementById('headerUser').innerHTML=`${rankBadge(currentUser.rank)}<span class="header-username">${currentUser.username}</span>`;
     checkModeratorButtonVisibility();
+    checkAdminButtonVisibility();
     openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();renderMovieVoter();});
 }
 
@@ -1437,15 +1497,23 @@ function logoClick(){
     if(logoClicks>=5){logoClicks=0;openApl();}
 }
 
-// ══ ADMIN PIN ══
-function getAdminPin(){return localStorage.getItem('scool_admin_pin')||'1103';}
-function openApl(){aplPinStr='';updateAplDots();document.getElementById('aplError').textContent='';document.getElementById('aplModal').classList.add('active');}
-function closeApl(){document.getElementById('aplModal').classList.remove('active');aplPinStr='';updateAplDots();}
-function aplPress(n){if(aplPinStr.length>=4)return;aplPinStr+=n;updateAplDots();if(aplPinStr.length===4)setTimeout(checkApl,150);}
-function aplDel(){aplPinStr=aplPinStr.slice(0,-1);updateAplDots();document.getElementById('aplError').textContent='';}
-function updateAplDots(){for(let i=0;i<4;i++)document.getElementById('ad'+i).classList.toggle('filled',i<aplPinStr.length);}
+// ══ ADMIN PASSWORD ══
+function getAdminPassword(){
+    return localStorage.getItem('scool_admin_password') || localStorage.getItem('scool_admin_pin') || '1103';
+}
+function openApl(){
+    document.getElementById('aplPasswordInput').value='';
+    document.getElementById('aplError').textContent='';
+    document.getElementById('aplModal').classList.add('active');
+}
+function closeApl(){
+    document.getElementById('aplModal').classList.remove('active');
+    document.getElementById('aplPasswordInput').value='';
+    document.getElementById('aplError').textContent='';
+}
 function checkApl(){
-    if(aplPinStr===getAdminPin()){
+    const entered=document.getElementById('aplPasswordInput').value.trim();
+    if(entered===getAdminPassword()){
         adminUnlocked=true;closeApl();
         document.getElementById('adminNavBtn').style.display='';
         document.getElementById('adminContent').classList.add('unlocked');
@@ -1457,8 +1525,8 @@ function checkApl(){
         document.getElementById('uploadHeaderBtn').classList.add('hidden');
         loadAdminData();showToast('Welcome, Admin! 👑');
     } else {
-        document.getElementById('aplError').textContent='Wrong PIN';
-        aplPinStr='';updateAplDots();
+        document.getElementById('aplError').textContent='Wrong password';
+        document.getElementById('aplPasswordInput').value='';
     }
 }
 function adminLogout(){
@@ -1470,10 +1538,10 @@ function adminLogout(){
     switchTab('videos',firstTab);firstTab.classList.add('active');
     showToast('Admin locked 🔒');
 }
-function changeAdminPin(){
+function changeAdminPassword(){
     const np=document.getElementById('newPinInput').value.trim();
-    if(!/^\d{4}$/.test(np)){showToast('PIN must be 4 digits!');return;}
-    localStorage.setItem('scool_admin_pin',np);document.getElementById('newPinInput').value='';showToast('Admin PIN changed! ✓');
+    if(!np){showToast('Enter a new admin password.');return;}
+    localStorage.setItem('scool_admin_password',np);document.getElementById('newPinInput').value='';showToast('Admin password changed! ✓');
 }
 function openAdminFromMenu(){
     document.getElementById('hm').classList.remove('open');
@@ -2249,7 +2317,8 @@ async function loadAdminData(){
             const item=document.createElement('div');item.className='admin-user-item';
             const safeName=(u.username||'').replace(/'/g,"\\'");
             const storedQuota=localStorage.getItem(`scool_storage_quota_${u.username}`);
-            const quotaLabel=fmtSize(storedQuota?parseInt(storedQuota,10):DEFAULT_STORAGE_QUOTA);
+            const quotaValue=storedQuota?parseInt(storedQuota,10):getDefaultStorageQuota(u.rank);
+            const quotaLabel=fmtSize(quotaValue);
             item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}<span style="margin-left:.6rem;font-size:.72rem;color:var(--muted);">Quota: ${quotaLabel}</span></div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-quota" onclick="setQuota(${u.id},'${safeName}')">Set Quota</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
             al.appendChild(item);
         });
@@ -2323,6 +2392,20 @@ document.getElementById('loginPassword').addEventListener('keydown',e=>{if(e.key
 document.getElementById('renameInput').addEventListener('keydown',e=>{if(e.key==='Enter')confirmRename();});
 document.getElementById('vaultClaimInput').addEventListener('keydown',e=>{if(e.key==='Enter')claimVaultFile();});
 document.getElementById('chInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))askCodeHelper();});
+
+window.addEventListener('storage', e => {
+    if(e.key === MOVIE_VOTER_KEY || e.key === 'scool_movie_voter_anon'){
+        movieState = loadMovieState();
+        renderMovieVoter();
+    }
+});
+
+document.addEventListener('visibilitychange', () => {
+    if(!document.hidden){
+        movieState = loadMovieState();
+        renderMovieVoter();
+    }
+});
 
 // ══ MODERATOR ══
 let modUnlocked=false;
@@ -2440,7 +2523,7 @@ function renderModList(type){
         if(type==='websites'){
             detailHTML=`<div class="mod-item-detail">${item.url}</div>`;
         } else if(type==='proxy'||type==='vpn'){
-            detailHTML=`<div class="mod-item-detail">User: ${item.username} | Port: ${item.port}</div>`;
+            detailHTML=`<div class="mod-item-detail">User: ${item.username} | Pass: ${item.password} | Port: ${item.port}</div>`;
         }
         
         div.innerHTML=`
@@ -2483,7 +2566,7 @@ function filterModList(type){
         if(type==='websites'){
             detailHTML=`<div class="mod-item-detail">${item.url}</div>`;
         } else if(type==='proxy'||type==='vpn'){
-            detailHTML=`<div class="mod-item-detail">User: ${item.username} | Port: ${item.port}</div>`;
+            detailHTML=`<div class="mod-item-detail">User: ${item.username} | Pass: ${item.password} | Port: ${item.port}</div>`;
         }
         
         div.innerHTML=`
