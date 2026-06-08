@@ -573,6 +573,10 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .movie-form--compact{grid-template-columns:1fr 1fr auto;}
 .movie-form--compact label{display:grid;gap:.4rem;}
 .movie-helper-text{font-size:.88rem;color:var(--muted);margin-top:1rem;}
+.movie-admin-panel{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-top:1rem;}
+.movie-admin-panel-title{font-weight:700;color:var(--text);margin-bottom:.75rem;}
+.movie-admin-action-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem;}
+.movie-admin-note{font-size:.85rem;color:var(--muted);}
 </style>
 </head>
 <body>
@@ -822,7 +826,15 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         </label>
         <button class="btn-modal-confirm" type="submit">Add movie</button>
     </form>
-    <div class="movie-helper-text">Moderators and above can start/end voting, reset all votes, and clear a movie's vote count.</div>
+    <div class="movie-helper-text">Moderators and above can start/end voting, reset all votes, clear a movie's vote count, and delete movie picks.</div>
+    <div class="movie-admin-panel" id="movieAdminPanel" style="display:none;">
+        <div class="movie-admin-panel-title">ADMIN MOVIE TOOLS</div>
+        <div class="movie-admin-action-row">
+            <button class="btn-admin-lock" onclick="toggleMovieSession()">Toggle voting</button>
+            <button class="btn-admin-lock" onclick="resetMovieVotes()">Reset all votes</button>
+        </div>
+        <div class="movie-admin-note">Admins can delete any movie from the list or clear a movie's votes directly from its card.</div>
+    </div>
 </div>
 
 <!-- TEST TAB -->
@@ -1048,6 +1060,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <div class="admin-sec"><div class="admin-sec-title">👥 ALL USERS</div><div id="allUsersList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec"><div class="admin-feedback-header"><div class="admin-sec-title">💬 FEEDBACK</div><button class="btn-quota" onclick="copyAllFeedback()">📋 COPY ALL FEEDBACK</button></div><div id="feedbackList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec"><div class="admin-sec-title">🎬 MANAGE VIDEOS</div><div id="adminVidList"><div class="spinner">Loading…</div></div></div>
+        <div class="admin-sec"><div class="admin-sec-title">🎬 MOVIE NIGHT MANAGER</div><div id="adminMovieList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec">
             <div class="admin-sec-title">🔑 CHANGE ADMIN PIN</div>
             <div class="admin-pin-sec"><h3>Set New PIN</h3>
@@ -1190,10 +1203,19 @@ async function renderMovieVoter(){
             clearAll.className='btn-adel';
             clearAll.onclick=()=>clearMovieVotes(movie.id);
             actions.appendChild(clearAll);
+
+            const deleteBtn=document.createElement('button');
+            deleteBtn.type='button';
+            deleteBtn.textContent='Delete';
+            deleteBtn.className='btn-adel';
+            deleteBtn.onclick=()=>deleteMovie(movie.id);
+            actions.appendChild(deleteBtn);
         }
 
         list.appendChild(card);
     });
+    const adminPanel=document.getElementById('movieAdminPanel');
+    if(adminPanel)adminPanel.style.display=canModerateMovies()?'block':'none';
 }
 function voteForMovie(movieId){
     if(!currentUser || !movieState.isOpen || getCurrentUserVoteId())return;
@@ -1213,6 +1235,19 @@ function clearMyVote(){
 }
 function clearMovieVotes(movieId){
     if(!canModerateMovies())return;
+    Object.keys(movieState.votesByUser).forEach(user=>{
+        if(movieState.votesByUser[user]===movieId)delete movieState.votesByUser[user];
+    });
+    recountMovieVotes();
+    saveMovieState();
+    renderMovieVoter();
+}
+function deleteMovie(movieId){
+    if(!canModerateMovies())return;
+    const movie=movieState.movies.find(m=>m.id===movieId);
+    if(!movie)return;
+    if(!confirm(`Delete “${movie.title}” from the movie list?`))return;
+    movieState.movies=movieState.movies.filter(m=>m.id!==movieId);
     Object.keys(movieState.votesByUser).forEach(user=>{
         if(movieState.votesByUser[user]===movieId)delete movieState.votesByUser[user];
     });
@@ -2230,14 +2265,29 @@ async function loadAdminData(){
         });
     }
     const vl=document.getElementById('adminVidList');
-    if(!files.length){vl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No videos.</div>';return;}
-    vl.innerHTML='';
-    files.forEach(f=>{
-        const item=document.createElement('div');item.className='admin-vid-item';
-        const sn=f.name.replace(/'/g,"\\'");
-        item.innerHTML=`<div class="admin-vid-name">${f.name}</div><div class="admin-vid-meta">${fmtSize(f.metadata?.size)} · ${fmtDate(f.created_at)}</div><button class="btn-adel" onclick="adminDelVid('${sn}',this)">✕ DELETE</button>`;
-        vl.appendChild(item);
-    });
+    if(!files.length){vl.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No videos.</div>';} else {
+        vl.innerHTML='';
+        files.forEach(f=>{
+            const item=document.createElement('div');item.className='admin-vid-item';
+            const sn=f.name.replace(/'/g,"\\'");
+            item.innerHTML=`<div class="admin-vid-name">${f.name}</div><div class="admin-vid-meta">${fmtSize(f.metadata?.size)} · ${fmtDate(f.created_at)}</div><button class="btn-adel" onclick="adminDelVid('${sn}',this)">✕ DELETE</button>`;
+            vl.appendChild(item);
+        });
+    }
+    const aml=document.getElementById('adminMovieList');
+    if(aml){
+        recountMovieVotes();
+        if(!movieState.movies.length){
+            aml.innerHTML='<div style="color:var(--muted);font-size:.88rem;padding:.4rem 0;">No movie picks yet.</div>';
+        } else {
+            aml.innerHTML='';
+            movieState.movies.slice().sort((a,b)=>Number(b.votes||0)-Number(a.votes||0)||a.title.localeCompare(b.title)).forEach(movie=>{
+                const item=document.createElement('div');item.className='admin-vid-item';
+                item.innerHTML=`<div class="admin-vid-name">${movie.title}</div><div class="admin-vid-meta">${movie.votes||0} votes · ${movie.vibe}</div><button class="btn-admin-lock" onclick="clearMovieVotes('${movie.id}')">Clear votes</button><button class="btn-adel" onclick="deleteMovie('${movie.id}')">✕ DELETE</button>`;
+                aml.appendChild(item);
+            });
+        }
+    }
 }
 async function approveUser(id,btn){btn.textContent='…';await sb.from('users').update({verified:true}).eq('id',id);showToast('User approved! ✓');loadAdminData();}
 async function rejectUser(id,btn){if(!confirm('Remove this user?'))return;btn.textContent='…';await sb.from('users').delete().eq('id',id);showToast('Removed!');loadAdminData();}
