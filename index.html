@@ -727,7 +727,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <button class="nav-tab" onclick="switchTab('clips',this)">🎞 CLIPS</button>
         <button class="nav-tab" onclick="switchTab('shorts',this)">📱 SHORTS</button>
         <button class="nav-tab" onclick="switchTab('offline',this)">📴 OFFLINE</button>
-        <button class="nav-tab" onclick="switchTab('movies',this)">🎬 MOVIES</button>
+        <button class="nav-tab" onclick="openMoviesTab(this)">🎬 MOVIES</button>
         <button class="nav-tab" onclick="switchTab('test',this)">🔗 TEST</button>
         <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">👮 MODERATOR</button>
         <button class="nav-tab admin-tab" id="adminNavBtn" onclick="openAdminTab(this)" style="display:none;">⚙ ADMIN</button>
@@ -837,6 +837,9 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <div class="movie-admin-action-row">
             <button class="btn-admin-lock" onclick="toggleMovieSession()">Toggle voting</button>
             <button class="btn-admin-lock" onclick="resetMovieVotes()">Reset all votes</button>
+            <button class="btn-admin-lock" onclick="exportMovieCSV()">Export CSV</button>
+            <button class="btn-admin-lock" onclick="document.getElementById('movieCsvInput').click()">Import CSV</button>
+            <input id="movieCsvInput" type="file" accept=".csv" style="display:none" onchange="handleMovieCsvUpload(event)">
         </div>
         <div class="movie-admin-note">Admins can delete any movie from the list or clear a movie's votes directly from its card.</div>
     </div>
@@ -1112,6 +1115,9 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 
 <script>
 // ══ SUPABASE ══
+// This page uses plain HTML + inline JavaScript only.
+// The movie voter reads and writes shared state to Supabase via `sb`.
+// It does not require a separate module file.
 const SUPABASE_URL='https://xptnaevvrwnsfklpqbhl.supabase.co';
 const SUPABASE_KEY='sb_publishable_IRt2VOMqhV-4mbDNbbiVZg_UQOVOt7P';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
@@ -1130,6 +1136,14 @@ const defaultMovies=[
     {id:'grand-budapest',title:'The Grand Budapest Hotel',vibe:'Stylish comedy',votes:0,palette:['#b84331','#e5b84f']}
 ];
 let movieState=loadMovieState();
+let movieStatePoll=null;
+const MOVIE_STATE_TABLE='movie_voter_state';
+const MOVIE_STATE_ID='main';
+// Supabase shared table structure required for movie voting:
+//   id: text primary key
+//   state: jsonb
+// The app stores one shared row with id='main'.
+// This app uses the public Supabase key, so the table must allow anon SELECT/UPSERT in Supabase policies.
 
 function loadMovieState(){
     try{
@@ -1156,6 +1170,36 @@ function saveMovieState(){
     }
     localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
 }
+async function fetchSharedMovieState(){
+    const {data,error}=await sb.from(MOVIE_STATE_TABLE).select('state').eq('id',MOVIE_STATE_ID);
+    if(error){
+        console.warn('Movie state load error',error);
+        return null;
+    }
+    if(!Array.isArray(data) || !data.length) return null;
+    return data[0].state;
+}
+async function saveSharedMovieState(){
+    try{
+        const {error}=await sb.from(MOVIE_STATE_TABLE).upsert([{id:MOVIE_STATE_ID,state:movieState}]);
+        if(error){
+            console.warn('Movie state save failed',error);
+        }
+    }catch(e){
+        console.warn('Movie state save failed',e);
+    }
+}
+async function refreshSharedMovieState(){
+    const shared=await fetchSharedMovieState();
+    if(!shared) return;
+    movieState = {
+        movies:Array.isArray(shared.movies)?shared.movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),
+        votesByUser:shared.votesByUser||{},
+        isOpen:shared.isOpen||false,
+        anonymousKey:movieState.anonymousKey||shared.anonymousKey||localStorage.getItem('scool_movie_voter_anon')||''
+    };
+    saveMovieState();
+}
 function getMovieVoterKey(){
     if(currentUser) return currentUser.username;
     if(!movieState.anonymousKey){
@@ -1176,6 +1220,88 @@ function recountMovieVotes(){
         const movie=movieState.movies.find(m=>m.id===id);
         if(movie)movie.votes=(movie.votes||0)+1;
     });
+}
+
+// ══ CSV EXPORT / IMPORT (simple manual sharing) ══
+function exportMovieCSV(){
+    if(!canModerateMovies()){showToast('Admin only');return;}
+    const lines=[];
+    lines.push('#MOVIE_VOTER_CSV');
+    lines.push('isOpen,'+encodeURIComponent(String(!!movieState.isOpen)));
+    lines.push('MOVIES');
+    lines.push(['id','title','vibe','votes','palette0','palette1'].join(','));
+    movieState.movies.forEach(m=>{
+        lines.push([
+            encodeURIComponent(m.id||''),
+            encodeURIComponent(m.title||''),
+            encodeURIComponent(m.vibe||''),
+            encodeURIComponent(String(m.votes||0)),
+            encodeURIComponent((m.palette&&m.palette[0])||''),
+            encodeURIComponent((m.palette&&m.palette[1])||'')
+        ].join(','));
+    });
+    lines.push('VOTES');
+    lines.push(['userId','movieId'].join(','));
+    Object.keys(movieState.votesByUser).forEach(u=>{
+        lines.push([encodeURIComponent(u),encodeURIComponent(movieState.votesByUser[u])].join(','));
+    });
+    const blob=new Blob([lines.join('\n')],{type:'text/csv'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;a.download='movie_state.csv';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
+}
+
+function handleMovieCsvUpload(e){
+    const f=e.target.files && e.target.files[0];
+    if(!f) return;
+    const r=new FileReader();
+    r.onload=function(){ try{ importMovieCSVFromText(String(r.result)); }catch(err){ showToast('Import failed'); console.error(err);} };
+    r.readAsText(f);
+    e.target.value='';
+}
+
+function importMovieCSVFromText(txt){
+    const lines=txt.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length);
+    if(!lines.length || lines[0] !== '#MOVIE_VOTER_CSV'){ showToast('Not a valid CSV'); return; }
+    const state={movies:[],votesByUser:{},isOpen:false,anonymousKey:movieState.anonymousKey||''};
+    let i=1;
+    // isOpen line
+    if(lines[i] && lines[i].startsWith('isOpen,')){
+        state.isOpen = decodeURIComponent(lines[i].split(',')[1])==='true';
+        i++;
+    }
+    // find MOVIES
+    while(i<lines.length && lines[i] !== 'MOVIES') i++;
+    i++;
+    // skip header
+    if(i<lines.length && lines[i].startsWith('id,')) i++;
+    // read movies until VOTES
+    for(; i<lines.length && lines[i] !== 'VOTES'; i++){
+        const parts=lines[i].split(',');
+        if(parts.length<3) continue;
+        const id=decodeURIComponent(parts[0]||'');
+        const title=decodeURIComponent(parts[1]||'');
+        const vibe=decodeURIComponent(parts[2]||'');
+        const votes=Number(decodeURIComponent(parts[3]||'0'))||0;
+        const p0=decodeURIComponent(parts[4]||'')||'#651b18';
+        const p1=decodeURIComponent(parts[5]||'')||'#e5b84f';
+        state.movies.push({id,title,vibe,votes,palette:[p0,p1]});
+    }
+    // read votes
+    for(; i<lines.length; i++){
+        if(lines[i] === 'VOTES' || lines[i].startsWith('userId')) continue;
+        const parts=lines[i].split(',');
+        if(parts.length<2) continue;
+        const u=decodeURIComponent(parts[0]||'');
+        const m=decodeURIComponent(parts[1]||'');
+        if(u && m) state.votesByUser[u]=m;
+    }
+    movieState = state;
+    recountMovieVotes();
+    saveMovieState();
+    saveSharedMovieState();
+    renderMovieVoter();
+    showToast('Imported CSV');
 }
 
 async function renderMovieVoter(){
@@ -1269,7 +1395,7 @@ function voteForMovie(movieId){
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
-    localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
+    saveSharedMovieState();
 }
 function clearMyVote(){
     const voteId=getCurrentUserVoteId();
@@ -1278,6 +1404,7 @@ function clearMyVote(){
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
+    saveSharedMovieState();
 }
 function clearMovieVotes(movieId){
     if(!canModerateMovies())return;
@@ -1287,6 +1414,7 @@ function clearMovieVotes(movieId){
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
+    saveSharedMovieState();
 }
 function deleteMovie(movieId){
     if(!canModerateMovies())return;
@@ -1300,12 +1428,14 @@ function deleteMovie(movieId){
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
+    saveSharedMovieState();
 }
 function toggleMovieSession(){
     if(!canModerateMovies())return;
     movieState.isOpen=!movieState.isOpen;
     saveMovieState();
     renderMovieVoter();
+    saveSharedMovieState();
 }
 function resetMovieVotes(){
     if(!canModerateMovies())return;
@@ -1313,7 +1443,7 @@ function resetMovieVotes(){
     movieState.movies.forEach(m=>m.votes=0);
     saveMovieState();
     renderMovieVoter();
-    localStorage.setItem(MOVIE_VOTER_KEY,JSON.stringify(movieState));
+    saveSharedMovieState();
 }
 function addMovie(event){
     event.preventDefault();
@@ -1326,6 +1456,7 @@ function addMovie(event){
     document.getElementById('movieVibe').value='';
     saveMovieState();
     renderMovieVoter();
+    saveSharedMovieState();
 }
 function getDefaultStorageQuota(rank){
     switch(rank){
@@ -1482,6 +1613,20 @@ function openAdminTab(btn){
     }
     switchTab('admin',btn);
 }
+async function openMoviesTab(btn){
+    switchTab('movies',btn);
+    await refreshSharedMovieState();
+    renderMovieVoter();
+}
+function startMovieStatePoll(){
+    if(movieStatePoll) return;
+    movieStatePoll = setInterval(async ()=>{
+        await refreshSharedMovieState();
+        if(document.getElementById('tab-movies')?.classList.contains('active')){
+            renderMovieVoter();
+        }
+    },5000);
+}
 
 // ══ SITE INIT ══
 function initSite(){
@@ -1490,7 +1635,10 @@ function initSite(){
     document.getElementById('headerUser').innerHTML=`${rankBadge(currentUser.rank)}<span class="header-username">${currentUser.username}</span>`;
     checkModeratorButtonVisibility();
     checkAdminButtonVisibility();
-    openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();renderMovieVoter();});
+    startMovieStatePoll();
+    refreshSharedMovieState().then(()=>{
+        openOfflineDB().then(()=>{renderVideos();renderClips();renderOffline();renderShorts();renderMovieVoter();});
+    });
 }
 
 // ══ TAB SWITCHING ══
