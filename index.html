@@ -569,6 +569,11 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .movie-card-meta{display:flex;justify-content:space-between;gap:.5rem;font-size:.82rem;color:var(--muted);}
 .movie-card-actions{display:flex;gap:.5rem;flex-wrap:wrap;}
 .movie-card-actions button{flex:1;min-width:0;padding:.65rem .8rem;font-size:.8rem;}
+.movie-top3{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem;margin-bottom:1rem;}
+.movie-top3-item{display:flex;justify-content:space-between;align-items:center;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border);}
+.movie-top3-item:last-child{border-bottom:none;}
+.movie-top3-rank{font-weight:700;color:var(--accent2);min-width:32px;}
+.movie-top3 .section-subtitle{font-size:.95rem;color:var(--muted);margin-bottom:.75rem;}
 .movie-voter-note{font-size:.85rem;color:var(--muted);margin-top:-.65rem;}
 .movie-form--compact{grid-template-columns:1fr 1fr auto;}
 .movie-form--compact label{display:grid;gap:.4rem;}
@@ -809,6 +814,10 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="movie-voter-summary">
         <div id="ballotStatus">Not voted yet</div>
         <div id="totalVotes">0 votes cast</div>
+    </div>
+    <div class="movie-top3" id="movieTop3" style="display:none;">
+        <div class="section-subtitle">Top 3 picks</div>
+        <div id="movieTop3List"></div>
     </div>
     <div class="movie-grid" id="movieList"></div>
     <form id="movieForm" class="movie-form movie-form--compact" onsubmit="addMovie(event)">
@@ -1188,8 +1197,21 @@ async function renderMovieVoter(){
     const ballotText=votedId ? (currentUser ? `Voted: ${votedMovie?.title||'Unknown'}` : 'Anonymous vote cast') : 'Not voted yet';
     document.getElementById('ballotStatus').textContent=ballotText;
     document.getElementById('totalVotes').textContent=`${totalVotes} vote${totalVotes===1?'':'s'} cast`;
-    list.innerHTML='';
 
+    const top3El=document.getElementById('movieTop3');
+    const top3List=document.getElementById('movieTop3List');
+    if(movieState.isOpen || totalVotes===0){
+        top3El.style.display='none';
+        if(movieState.isOpen){
+            document.getElementById('movieSessionStatus').textContent='Voting open — results hidden';
+        }
+    } else {
+        top3El.style.display='block';
+        const topMovies=movieState.movies.slice().sort((a,b)=>Number(b.votes||0)-Number(a.votes||0)||a.title.localeCompare(b.title)).slice(0,3);
+        top3List.innerHTML=topMovies.map((movie,index)=>`<div class="movie-top3-item"><span class="movie-top3-rank">#${index+1}</span><span>${movie.title}</span><span>${movie.votes||0} votes</span></div>`).join('');
+    }
+
+    list.innerHTML='';
     movieState.movies.slice().sort((a,b)=>Number(b.votes||0)-Number(a.votes||0)||a.title.localeCompare(b.title)).forEach(movie=>{
         const card=document.createElement('div');card.className='movie-card-mini';
         const palette=movie.palette||['#651b18','#246f72'];
@@ -1199,7 +1221,7 @@ async function renderMovieVoter(){
                 <div class="movie-card-vibe">${movie.vibe}</div>
             </div>
             <div class="movie-card-body">
-                <div class="movie-card-meta"><span>${movie.votes||0} vote${(movie.votes||0)===1?'':'s'}</span><span>${totalVotes?Math.round((movie.votes||0)/totalVotes*100):0}%</span></div>
+                <div class="movie-card-meta">${movieState.isOpen ? '<span>Results hidden until voting ends</span>' : `<span>${movie.votes||0} vote${(movie.votes||0)===1?'':'s'}</span><span>${totalVotes?Math.round((movie.votes||0)/totalVotes*100):0}%</span>`}</div>
                 <div class="movie-card-actions"></div>
             </div>`;
         const actions=card.querySelector('.movie-card-actions');
