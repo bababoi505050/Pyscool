@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Scool</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEwMCAxMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImRvdFBhdHRlcm4iIHg9IjAiIHk9IjAiIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PGNpcmNsZSBjeD0iNiIgY3k9IjYiIHI9IjIiIGZpbGw9IiMxYTFhMWEiIG9wYWNpdHk9IjAuNiIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMjAiIGZpbGw9InVybCgjZG90UGF0dGVybikiIHJ4PSI4Ii8+PHRleHQgeD0iMjUiIHk9Ijg1IiBmb250LWZhbWlseT0iJ0JlYmFzIE5ldWUnLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjcwIiBmb250LXdlaWdodD0iYm9sZCIgbGV0dGVyLXNwYWNpbmc9IjIiIGZpbGw9IiNGRkQ3MDAiPlA8L3RleHQ+PHRleHQgeD0iNTUiIHk9Ijk1IiBmb250LWZhbWlseT0iJ0JlYmFzIE5ldWUnLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjcwIiBmb250LXdlaWdodD0iYm9sZCIgbGV0dGVyLXNwYWNpbmc9IjIiIGZpbGw9IiNGRjlGNDMiPnk8L3RleHQ+PC9zdmc+">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -94,6 +95,7 @@ nav::-webkit-scrollbar{display:none;}
 .rank-Admin{background:#2a1010;color:var(--accent2);}
 .rank-Owner{background:linear-gradient(90deg,#f0c040,#e05a2b);color:#000;}
 .header-username{font-weight:600;font-size:.82rem;}
+.header-user-tag{font-size:.75rem;color:var(--muted);margin-left:.35rem;}
 .btn-logout{background:none;border:1px solid var(--border);color:var(--muted);padding:.3rem .6rem;font-size:.75rem;cursor:pointer;transition:border-color .2s;}
 .btn-logout:hover{border-color:var(--red);color:var(--red);}
 .header-btn{background:var(--accent);color:#0d0d0f;border:none;padding:.45rem 1rem;font-family:'DM Sans',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;letter-spacing:1px;transition:background .2s;clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);white-space:nowrap;}
@@ -589,7 +591,18 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 <!-- AUTH -->
 <div id="authScreen">
 <div class="auth-wrap">
-    <div class="auth-logo">SC<span>OO</span>L</div>
+    <div class="auth-logo">
+        <svg width="140" height="140" viewBox="0 0 100 120" style="display:inline-block;vertical-align:middle;">
+            <defs>
+                <pattern id="dotPatternAuth" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <circle cx="6" cy="6" r="2" fill="#1a1a1a" opacity="0.6"/>
+                </pattern>
+            </defs>
+            <rect width="100" height="120" fill="url(#dotPatternAuth)" rx="8"/>
+            <text x="25" y="85" font-family="'Bebas Neue', sans-serif" font-size="70" font-weight="bold" letter-spacing="2" fill="#FFD700">P</text>
+            <text x="55" y="95" font-family="'Bebas Neue', sans-serif" font-size="70" font-weight="bold" letter-spacing="2" fill="#FF9F43">y</text>
+        </svg>
+    </div>
     <div class="auth-sub">ONLY FOR THE CREW 🔒</div>
     <div class="auth-tabs">
         <button class="auth-tab active" onclick="switchAuthTab('login',this)">LOGIN</button>
@@ -619,7 +632,18 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 
 <!-- PIN SCREEN -->
 <div id="pinScreen">
-    <div class="ps-logo">SC<span>OO</span>L</div>
+    <div class="ps-logo">
+        <svg width="120" height="120" viewBox="0 0 100 120" style="display:inline-block;vertical-align:middle;">
+            <defs>
+                <pattern id="dotPatternPin" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <circle cx="6" cy="6" r="2" fill="#1a1a1a" opacity="0.6"/>
+                </pattern>
+            </defs>
+            <rect width="100" height="120" fill="url(#dotPatternPin)" rx="8"/>
+            <text x="25" y="85" font-family="'Bebas Neue', sans-serif" font-size="70" font-weight="bold" letter-spacing="2" fill="#FFD700">P</text>
+            <text x="55" y="95" font-family="'Bebas Neue', sans-serif" font-size="70" font-weight="bold" letter-spacing="2" fill="#FF9F43">y</text>
+        </svg>
+    </div>
     <div class="ps-user" id="psUser"></div>
     <div class="ps-title">ENTER YOUR PIN</div>
     <div class="pin-dots" id="psDots">
@@ -716,12 +740,34 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     </div>
 </div>
 
+<div class="modal-backdrop" id="profileModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="profileModal.classList.remove('active')">✕</button>
+        <h2>🧑 PROFILE SETTINGS</h2>
+        <p>Customize how your name appears across the app.</p>
+        <input class="modal-input" id="profileDisplayName" type="text" placeholder="Display name (optional)" />
+        <input class="modal-input" id="profileTag" type="text" placeholder="Name tag / short title (optional)" maxlength="20" />
+        <button class="btn-modal-confirm" onclick="saveUserProfile()">SAVE PROFILE</button>
+    </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- SITE -->
 <div id="siteContainer">
 <header>
-    <div class="logo" onclick="logoClick()">SC<span>OO</span>L</div>
+    <div class="logo" onclick="logoClick()">
+        <svg width="48" height="48" viewBox="0 0 100 120" style="display:inline-block;vertical-align:middle;">
+            <defs>
+                <pattern id="dotPattern" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+                    <circle cx="6" cy="6" r="2" fill="#1a1a1a" opacity="0.6"/>
+                </pattern>
+            </defs>
+            <rect width="100" height="120" fill="url(#dotPattern)" rx="8"/>
+            <text x="25" y="85" font-family="'Bebas Neue', sans-serif" font-size="70" font-weight="bold" letter-spacing="2" fill="#FFD700">P</text>
+            <text x="55" y="95" font-family="'Bebas Neue', sans-serif" font-size="70" font-weight="bold" letter-spacing="2" fill="#FF9F43">y</text>
+        </svg>
+    </div>
     <nav>
         <button class="nav-tab active" onclick="switchTab('videos',this)">📁 VIDEOS</button>
         <button class="nav-tab" onclick="switchTab('clips',this)">🎞 CLIPS</button>
@@ -735,6 +781,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     </nav>
     <div class="header-right">
         <div id="headerUser" style="display:flex;align-items:center;gap:.5rem;"></div>
+        <button class="header-btn" id="profileBtn" onclick="openProfile()">PROFILE</button>
         <button class="header-btn" id="uploadHeaderBtn" onclick="openUpload()">+ UPLOAD</button>
         <button class="btn-logout" onclick="doLogout()">logout</button>
     </div>
@@ -863,6 +910,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="movie-voter-summary">
         <div id="ballotStatus">Not voted yet</div>
         <div id="totalVotes">0 votes cast</div>
+        <div id="movieAnonInfo" class="movie-voter-note"></div>
     </div>
     <div id="movieSupabaseWarning" class="movie-voter-note" style="display:none;color:#f87171;font-weight:700;">Shared voting setup issue: cannot reach Supabase. Check project URL/key and table policies.</div>
     <div class="movie-top3" id="movieTop3" style="display:none;">
@@ -885,6 +933,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="movie-admin-panel" id="movieAdminPanel" style="display:none;">
         <div class="movie-admin-panel-title">ADMIN MOVIE TOOLS</div>
         <div class="movie-admin-action-row">
+            <button class="btn-admin-lock" id="movieAnonToggleBtn" onclick="toggleAnonymousVoting()">Anonymous voting: OFF</button>
             <button class="btn-admin-lock" onclick="toggleMovieSession()">Toggle voting</button>
             <button class="btn-admin-lock" onclick="resetMovieVotes()">Reset all votes</button>
             <button class="btn-admin-lock" onclick="exportMovieCSV()">Export CSV</button>
@@ -1204,8 +1253,9 @@ function loadMovieState(){
         if(saved && Array.isArray(saved.movies)){
             return {
                 movies:saved.movies,
-                votesByUser:saved.votesByUser||{},
+                votesByUser:normalizeMovieVotes(saved.votesByUser||{}),
                 isOpen:saved.isOpen||false,
+                allowAnonymousVoting:!!saved.allowAnonymousVoting,
                 anonymousKey:saved.anonymousKey||localStorage.getItem('scool_movie_voter_anon')||''
             };
         }
@@ -1214,6 +1264,7 @@ function loadMovieState(){
         movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),
         votesByUser:{},
         isOpen:false,
+        allowAnonymousVoting:false,
         anonymousKey:localStorage.getItem('scool_movie_voter_anon')||''
     };
 }
@@ -1268,31 +1319,78 @@ async function refreshSharedMovieState(){
     }
     movieState = {
         movies:Array.isArray(shared.movies)?shared.movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),
-        votesByUser:shared.votesByUser||{},
+        votesByUser:normalizeMovieVotes(shared.votesByUser||{}),
         isOpen:shared.isOpen||false,
+        allowAnonymousVoting:typeof shared.allowAnonymousVoting==='boolean' ? shared.allowAnonymousVoting : false,
         anonymousKey:movieState.anonymousKey||shared.anonymousKey||localStorage.getItem('scool_movie_voter_anon')||''
     };
     saveMovieState();
 }
+function normalizeMovieVotes(rawVotes){
+    const normalized={};
+    Object.keys(rawVotes||{}).forEach(key=>{
+        const value=rawVotes[key];
+        if(Array.isArray(value)){
+            normalized[key]=value.filter(v=>v!=null && String(v).trim()!=='').map(String);
+        } else if(value==null){
+            normalized[key]=[];
+        } else if(typeof value==='string'){
+            normalized[key]=value.trim() ? [value.trim()] : [];
+        } else if(typeof value==='number'){
+            normalized[key]=[String(value)];
+        } else {
+            normalized[key]=[];
+        }
+    });
+    return normalized;
+}
 function getMovieVoterKey(){
     if(currentUser) return currentUser.username;
+    if(!movieState.allowAnonymousVoting) return null;
     if(!movieState.anonymousKey){
         movieState.anonymousKey='anon_'+Math.random().toString(36).slice(2,12);
         localStorage.setItem('scool_movie_voter_anon',movieState.anonymousKey);
     }
     return movieState.anonymousKey;
 }
+function getMoviesForUser(userKey){
+    if(userKey==null) return [];
+    const voteValue=movieState.votesByUser[userKey];
+    if(Array.isArray(voteValue)) return voteValue;
+    if(voteValue==null) return [];
+    return [String(voteValue)];
+}
+function getCurrentUserVotes(){
+    const key=getMovieVoterKey();
+    return key ? getMoviesForUser(key) : [];
+}
+function getCurrentUserVoteLimit(){
+    if(currentUser) return currentUser.rank==='VIP' ? 2 : 1;
+    return movieState.allowAnonymousVoting ? 1 : 0;
+}
+function getCurrentUserVotesUsed(){
+    return getCurrentUserVotes().length;
+}
+function getCurrentUserVotesRemaining(){
+    return Math.max(0, getCurrentUserVoteLimit()-getCurrentUserVotesUsed());
+}
+function hasCurrentUserVotedMovie(movieId){
+    return getCurrentUserVotes().includes(movieId);
+}
 function getCurrentUserVoteId(){
-    return movieState.votesByUser[getMovieVoterKey()]||null;
+    return getCurrentUserVotes()[0]||null;
 }
 function canModerateMovies(){
     return ['Moderator','Admin','Owner'].includes(currentUser?.rank);
 }
 function recountMovieVotes(){
     movieState.movies.forEach(movie=>movie.votes=0);
-    Object.values(movieState.votesByUser).forEach(id=>{
-        const movie=movieState.movies.find(m=>m.id===id);
-        if(movie)movie.votes=(movie.votes||0)+1;
+    Object.values(movieState.votesByUser).forEach(voteValue=>{
+        const votes=Array.isArray(voteValue) ? voteValue : (voteValue ? [String(voteValue)] : []);
+        votes.forEach(id=>{
+            const movie=movieState.movies.find(m=>m.id===id);
+            if(movie) movie.votes=(movie.votes||0)+1;
+        });
     });
 }
 
@@ -1317,7 +1415,10 @@ function exportMovieCSV(){
     lines.push('VOTES');
     lines.push(['userId','movieId'].join(','));
     Object.keys(movieState.votesByUser).forEach(u=>{
-        lines.push([encodeURIComponent(u),encodeURIComponent(movieState.votesByUser[u])].join(','));
+        const votes=getMoviesForUser(u);
+        votes.forEach(movieId=>{
+            lines.push([encodeURIComponent(u),encodeURIComponent(movieId)].join(','));
+        });
     });
     const blob=new Blob([lines.join('\n')],{type:'text/csv'});
     const url=URL.createObjectURL(blob);
@@ -1337,11 +1438,15 @@ function handleMovieCsvUpload(e){
 function importMovieCSVFromText(txt){
     const lines=txt.split(/\r?\n/).map(l=>l.trim()).filter(l=>l.length);
     if(!lines.length || lines[0] !== '#MOVIE_VOTER_CSV'){ showToast('Not a valid CSV'); return; }
-    const state={movies:[],votesByUser:{},isOpen:false,anonymousKey:movieState.anonymousKey||''};
+    const state={movies:[],votesByUser:{},isOpen:false,allowAnonymousVoting:false,anonymousKey:movieState.anonymousKey||''};
     let i=1;
     // isOpen line
     if(lines[i] && lines[i].startsWith('isOpen,')){
         state.isOpen = decodeURIComponent(lines[i].split(',')[1])==='true';
+        i++;
+    }
+    if(lines[i] && lines[i].startsWith('allowAnonymousVoting,')){
+        state.allowAnonymousVoting = decodeURIComponent(lines[i].split(',')[1])==='true';
         i++;
     }
     // find MOVIES
@@ -1368,7 +1473,10 @@ function importMovieCSVFromText(txt){
         if(parts.length<2) continue;
         const u=decodeURIComponent(parts[0]||'');
         const m=decodeURIComponent(parts[1]||'');
-        if(u && m) state.votesByUser[u]=m;
+        if(u && m){
+            state.votesByUser[u] = state.votesByUser[u] || [];
+            state.votesByUser[u].push(m);
+        }
     }
     movieState = state;
     recountMovieVotes();
@@ -1393,10 +1501,13 @@ async function renderMovieVoter(){
     resetBtn.style.display=canModerateMovies()?'inline-flex':'none';
     if(warningEl) warningEl.style.display=movieStateSupabaseAvailable ? 'none' : 'block';
 
-    const totalVotes=Object.keys(movieState.votesByUser).length;
-    const votedId=getCurrentUserVoteId();
-    const votedMovie=movieState.movies.find(m=>m.id===votedId);
-    const ballotText=votedId ? (currentUser ? `Voted: ${votedMovie?.title||'Unknown'}` : 'Anonymous vote cast') : 'Not voted yet';
+    const totalVotes=Object.values(movieState.votesByUser).reduce((sum,value)=>{
+        const votes=Array.isArray(value) ? value : (value ? [String(value)] : []);
+        return sum + votes.length;
+    },0);
+    const used=getCurrentUserVotesUsed();
+    const limit=getCurrentUserVoteLimit();
+    const ballotText = used ? `${currentUser ? `You used ${used}/${limit} vote${limit===1?'':'s'}` : 'Anonymous votes cast'}` : 'Not voted yet';
     document.getElementById('ballotStatus').textContent=ballotText;
     document.getElementById('totalVotes').textContent=`${totalVotes} vote${totalVotes===1?'':'s'} cast`;
 
@@ -1427,19 +1538,20 @@ async function renderMovieVoter(){
                 <div class="movie-card-actions"></div>
             </div>`;
         const actions=card.querySelector('.movie-card-actions');
-        const votedId=getCurrentUserVoteId();
+        const alreadyVotedThis=hasCurrentUserVotedMovie(movie.id);
+        const remaining=getCurrentUserVotesRemaining();
         const voteBtn=document.createElement('button');
         voteBtn.type='button';
-        voteBtn.textContent = movie.id===votedId ? 'Your pick' : (movieState.isOpen ? 'Vote' : 'Locked');
-        voteBtn.disabled = !movieState.isOpen || !!votedId;
+        voteBtn.textContent = alreadyVotedThis ? 'Voted' : (movieState.isOpen ? 'Vote' : 'Locked');
+        voteBtn.disabled = !movieState.isOpen || (remaining===0 && !alreadyVotedThis);
         voteBtn.className='btn-modal-confirm';
         voteBtn.onclick=()=>voteForMovie(movie.id);
         actions.appendChild(voteBtn);
 
-        if(votedId===movie.id){
+        if(alreadyVotedThis){
             const clearOwn=document.createElement('button');
             clearOwn.type='button';
-            clearOwn.textContent='Clear my vote';
+            clearOwn.textContent='Remove vote';
             clearOwn.className='btn-reject';
             clearOwn.onclick=clearMyVote;
             actions.appendChild(clearOwn);
@@ -1462,21 +1574,45 @@ async function renderMovieVoter(){
 
         list.appendChild(card);
     });
+    const anonInfo=document.getElementById('movieAnonInfo');
+    if(anonInfo){
+        anonInfo.textContent = currentUser ? '' : (movieState.allowAnonymousVoting ? 'Anonymous voting is enabled. Log in to unlock VIP perks.' : 'Anonymous voting is disabled. Please log in to vote.');
+    }
+    const anonBtn=document.getElementById('movieAnonToggleBtn');
+    if(anonBtn){
+        anonBtn.textContent = `Anonymous voting: ${movieState.allowAnonymousVoting ? 'ON' : 'OFF'}`;
+        anonBtn.style.background = movieState.allowAnonymousVoting ? '#16a34a' : '#6b7280';
+    }
     const adminPanel=document.getElementById('movieAdminPanel');
     if(adminPanel)adminPanel.style.display=canModerateMovies()?'block':'none';
 }
 function voteForMovie(movieId){
-    if(!movieState.isOpen || getCurrentUserVoteId()) return;
-    movieState.votesByUser[getMovieVoterKey()]=movieId;
+    if(!movieState.isOpen) return;
+    const key=getMovieVoterKey();
+    if(!key){
+        showToast('Anonymous voting is disabled. Please log in to vote.');
+        return;
+    }
+    if(hasCurrentUserVotedMovie(movieId)){
+        showToast('You already voted for this movie');
+        return;
+    }
+    const votes=getMoviesForUser(key);
+    if(votes.length>=getCurrentUserVoteLimit()){
+        showToast('You have no votes left');
+        return;
+    }
+    votes.push(movieId);
+    movieState.votesByUser[key]=votes;
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
     saveSharedMovieState();
 }
 function clearMyVote(){
-    const voteId=getCurrentUserVoteId();
-    if(!voteId) return;
-    delete movieState.votesByUser[getMovieVoterKey()];
+    const key=getMovieVoterKey();
+    if(!getCurrentUserVotes().length) return;
+    delete movieState.votesByUser[key];
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
@@ -1485,7 +1621,9 @@ function clearMyVote(){
 function clearMovieVotes(movieId){
     if(!canModerateMovies())return;
     Object.keys(movieState.votesByUser).forEach(user=>{
-        if(movieState.votesByUser[user]===movieId)delete movieState.votesByUser[user];
+        const votes=getMoviesForUser(user).filter(id=>id!==movieId);
+        if(votes.length) movieState.votesByUser[user]=votes;
+        else delete movieState.votesByUser[user];
     });
     recountMovieVotes();
     saveMovieState();
@@ -1499,13 +1637,23 @@ function deleteMovie(movieId){
     if(!confirm(`Delete “${movie.title}” from the movie list?`))return;
     movieState.movies=movieState.movies.filter(m=>m.id!==movieId);
     Object.keys(movieState.votesByUser).forEach(user=>{
-        if(movieState.votesByUser[user]===movieId)delete movieState.votesByUser[user];
+        const votes=getMoviesForUser(user).filter(id=>id!==movieId);
+        if(votes.length) movieState.votesByUser[user]=votes;
+        else delete movieState.votesByUser[user];
     });
     recountMovieVotes();
     saveMovieState();
     renderMovieVoter();
     saveSharedMovieState();
 }
+function toggleAnonymousVoting(){
+    movieState.allowAnonymousVoting = !movieState.allowAnonymousVoting;
+    saveMovieState();
+    saveSharedMovieState();
+    showToast(`Anonymous voting ${movieState.allowAnonymousVoting ? 'enabled' : 'disabled'}`);
+    renderMovieVoter();
+}
+
 function toggleMovieSession(){
     if(!canModerateMovies())return;
     movieState.isOpen=!movieState.isOpen;
@@ -1581,6 +1729,39 @@ let shareModalMode='clip';
 function showToast(msg,dur=2800){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function fmtSize(b){if(!b)return'';if(b<1048576)return(b/1024).toFixed(1)+' KB';if(b<1073741824)return(b/1048576).toFixed(1)+' MB';return(b/1073741824).toFixed(2)+' GB';}
 function fmtDate(ts){return new Date(ts).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});}
+function profileStorageKey(username){return `scool_profile_${username}`;}
+function loadUserProfile(){
+    if(!currentUser?.username) return;
+    const saved=localStorage.getItem(profileStorageKey(currentUser.username));
+    if(!saved) return;
+    try{
+        const data=JSON.parse(saved);
+        currentUser.displayName=data.displayName||currentUser.username;
+        currentUser.nameTag=data.nameTag||'';
+    }catch(e){console.warn('Profile load failed',e);}
+}
+function saveUserProfile(){
+    if(!currentUser) return;
+    const displayName=document.getElementById('profileDisplayName').value.trim();
+    const nameTag=document.getElementById('profileTag').value.trim();
+    currentUser.displayName=displayName||currentUser.username;
+    currentUser.nameTag=nameTag;
+    localStorage.setItem(profileStorageKey(currentUser.username),JSON.stringify({displayName:currentUser.displayName,nameTag:currentUser.nameTag}));
+    updateHeaderUser();
+    showToast('Profile updated');
+    document.getElementById('profileModal').classList.remove('active');
+}
+function openProfile(){
+    if(!currentUser) return;
+    document.getElementById('profileDisplayName').value=currentUser.displayName||currentUser.username;
+    document.getElementById('profileTag').value=currentUser.nameTag||'';
+    document.getElementById('profileModal').classList.add('active');
+}
+function updateHeaderUser(){
+    const displayName=currentUser?.displayName||currentUser?.username||'Guest';
+    const tag=currentUser?.nameTag ? `<span class="header-user-tag">${currentUser.nameTag}</span>` : '';
+    document.getElementById('headerUser').innerHTML=`${rankBadge(currentUser.rank)}<span class="header-username">${displayName}</span>${tag}`;
+}
 function rankBadge(r){return`<span class="rank-badge rank-${r||'Member'}">${r||'Member'}</span>`;}
 
 // ══ AUTH ══
@@ -1643,6 +1824,7 @@ function checkAccPin(){
     if(!pendingUser)return;
     if(accPinStr===pendingUser.pin){
         currentUser=pendingUser;
+        loadUserProfile();
         sessionStorage.setItem('scool_session',JSON.stringify(currentUser));
         document.getElementById('pinScreen').classList.remove('active');
         initSite();
@@ -2628,6 +2810,7 @@ document.getElementById('shareModal').addEventListener('click',e=>{if(e.target==
 document.getElementById('claimModal').addEventListener('click',e=>{if(e.target===document.getElementById('claimModal'))document.getElementById('claimModal').classList.remove('active');});
 document.getElementById('feedbackModal').addEventListener('click',e=>{if(e.target===document.getElementById('feedbackModal'))document.getElementById('feedbackModal').classList.remove('active');});
 document.getElementById('renameModal').addEventListener('click',e=>{if(e.target===document.getElementById('renameModal'))document.getElementById('renameModal').classList.remove('active');});
+document.getElementById('profileModal').addEventListener('click',e=>{if(e.target===document.getElementById('profileModal'))document.getElementById('profileModal').classList.remove('active');});
 
 // Keyboard shortcuts
 document.getElementById('clipUrlInput').addEventListener('keydown',e=>{if(e.key==='Enter')addClip();});
@@ -2927,7 +3110,7 @@ function checkModeratorButtonVisibility(){
 
 // ══ INIT ══
 const saved=sessionStorage.getItem('scool_session');
-if(saved){currentUser=JSON.parse(saved);initSite();}
+if(saved){currentUser=JSON.parse(saved);loadUserProfile();initSite();}
 </script>
 <script>
 function openAdminFeedback(){
