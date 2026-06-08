@@ -815,6 +815,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <div id="ballotStatus">Not voted yet</div>
         <div id="totalVotes">0 votes cast</div>
     </div>
+    <div id="movieSupabaseWarning" class="movie-voter-note" style="display:none;color:#f87171;font-weight:700;">Shared voting setup issue: cannot reach Supabase. Check project URL/key and table policies.</div>
     <div class="movie-top3" id="movieTop3" style="display:none;">
         <div class="section-subtitle">Top 3 picks</div>
         <div id="movieTop3List"></div>
@@ -1137,6 +1138,7 @@ const defaultMovies=[
 ];
 let movieState=loadMovieState();
 let movieStatePoll=null;
+let movieStateSupabaseAvailable=true;
 const MOVIE_STATE_TABLE='movie_voter_state';
 const MOVIE_STATE_ID='main';
 // Supabase shared table structure required for movie voting:
@@ -1144,6 +1146,8 @@ const MOVIE_STATE_ID='main';
 //   state: jsonb
 // The app stores one shared row with id='main'.
 // This app uses the public Supabase key, so the table must allow anon SELECT/UPSERT in Supabase policies.
+// If the browser console shows 401, the URL/key do not match the project or anon access is blocked.
+// Replace SUPABASE_URL and SUPABASE_KEY with your own Supabase project's values.
 
 function loadMovieState(){
     try{
@@ -1174,6 +1178,10 @@ async function fetchSharedMovieState(){
     const {data,error}=await sb.from(MOVIE_STATE_TABLE).select('state').eq('id',MOVIE_STATE_ID);
     if(error){
         console.warn('Movie state load error',error);
+        if(error.status===401 || String(error.message).toLowerCase().includes('unauthorized')){
+            movieStateSupabaseAvailable=false;
+            showToast('Supabase denied access. Check your project URL/key and anonymous policies.');
+        }
         return null;
     }
     if(!Array.isArray(data) || !data.length) return null;
@@ -1181,17 +1189,34 @@ async function fetchSharedMovieState(){
 }
 async function saveSharedMovieState(){
     try{
+        if(!movieStateSupabaseAvailable) return false;
         const {error}=await sb.from(MOVIE_STATE_TABLE).upsert([{id:MOVIE_STATE_ID,state:movieState}]);
         if(error){
             console.warn('Movie state save failed',error);
+            if(error.status===401 || String(error.message).toLowerCase().includes('unauthorized')){
+                movieStateSupabaseAvailable=false;
+                showToast('Supabase denied access. Verify your anon key and table policies.');
+            }
+            return false;
         }
+        return true;
     }catch(e){
         console.warn('Movie state save failed',e);
+        if(String(e).toLowerCase().includes('unauthorized')){
+            movieStateSupabaseAvailable=false;
+            showToast('Supabase denied access. Verify your anon key and table policies.');
+        }
+        return false;
     }
 }
 async function refreshSharedMovieState(){
     const shared=await fetchSharedMovieState();
-    if(!shared) return;
+    if(!shared){
+        if(movieStateSupabaseAvailable){
+            await saveSharedMovieState();
+        }
+        return;
+    }
     movieState = {
         movies:Array.isArray(shared.movies)?shared.movies:defaultMovies.map(m=>({...m, palette:[...m.palette]})),
         votesByUser:shared.votesByUser||{},
@@ -1308,6 +1333,7 @@ async function renderMovieVoter(){
     const sessionStatus=document.getElementById('movieSessionStatus');
     const toggleBtn=document.getElementById('movieToggleBtn');
     const resetBtn=document.getElementById('movieResetBtn');
+    const warningEl=document.getElementById('movieSupabaseWarning');
     const list=document.getElementById('movieList');
     if(!sessionStatus||!toggleBtn||!resetBtn||!list)return;
 
@@ -1316,6 +1342,7 @@ async function renderMovieVoter(){
     toggleBtn.textContent=movieState.isOpen?'End voting':'Start voting';
     toggleBtn.style.background=movieState.isOpen?'#dc2626':'#2563eb';
     resetBtn.style.display=canModerateMovies()?'inline-flex':'none';
+    if(warningEl) warningEl.style.display=movieStateSupabaseAvailable ? 'none' : 'block';
 
     const totalVotes=Object.keys(movieState.votesByUser).length;
     const votedId=getCurrentUserVoteId();
