@@ -729,7 +729,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <button class="nav-tab" onclick="switchTab('offline',this)">📴 OFFLINE</button>
         <button class="nav-tab" onclick="openMoviesTab(this)">🎬 MOVIES</button>
         <button class="nav-tab" onclick="switchTab('test',this)">🔗 TEST</button>
-        <button class="nav-tab" onclick="window.open('admin_feedback_analysis.html','_blank')">📝 Admin Feedback</button>
+        <button class="nav-tab" onclick="openAdminFeedback()">📝 Admin Feedback</button>
         <button class="nav-tab" id="modNavBtn" onclick="switchTab('moderator',this);openModeratorCheck()" style="display:none;">👮 MODERATOR</button>
         <button class="nav-tab admin-tab" id="adminNavBtn" onclick="openAdminTab(this)" style="display:none;">⚙ ADMIN</button>
     </nav>
@@ -739,6 +739,54 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <button class="btn-logout" onclick="doLogout()">logout</button>
     </div>
 </header>
+    <!-- Admin Feedback Modal (embedded) -->
+    <div id="adminFeedbackModal" style="display:none;position:fixed;inset:0;z-index:1200;align-items:center;justify-content:center;">
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,.55);"></div>
+        <div style="background:var(--card);color:var(--text);max-width:1000px;width:94%;height:86%;margin:4% auto;border-radius:8px;overflow:auto;position:relative;padding:20px;z-index:1201;">
+            <button onclick="closeAdminFeedback()" style="position:absolute;right:12px;top:12px;border:none;background:transparent;font-size:1.2rem;cursor:pointer">✕</button>
+            <h2>Admin Feedback Analysis</h2>
+            <p><strong>Summary:</strong> Owners and admins requested VIP features (extra vote, custom name tags), group-scoped voting and role-based session control, and live UX improvements (live updates, persistent login, numpad PIN input, PIN toggle).</p>
+            <h3>Feature list</h3>
+            <ul>
+                <li><strong>VIP Double-Vote & Profile Tags</strong> — Owner: VIPs get two votes and can set a short display tag.</li>
+                <li><strong>Group-Scoped Voting & Role Starters</strong> — Admin: Sessions scoped to groups; roles can start sessions for others.</li>
+                <li><strong>Live Updates & Login UX</strong> — Owner: Live voting state, persistent login, numpad PIN input, disable PIN option.</li>
+            </ul>
+            <h3>Acceptance (examples)</h3>
+            <ul>
+                <li>VIP users begin a session with `votes_left`=2; non-VIP with 1.</li>
+                <li>Scoped sessions only accept votes from group members.</li>
+                <li>Clients reflect session state within 2–5s or via realtime subscriptions.</li>
+            </ul>
+            <h3>DB / Policies</h3>
+            <ul>
+                <li>Add `users.is_vip`, `users.display_tag`, `users.votes_left`.</li>
+                <li>Create `groups`, `group_memberships`, `voting_sessions`, and `votes` tables.</li>
+                <li>RLS: allow SELECT/INSERT/UPDATE for auth roles and membership checks.</li>
+            </ul>
+            <h3>Quick SQL (example)</h3>
+            <pre style="white-space:pre-wrap;background:#0f172a;color:#e6eef8;padding:10px;border-radius:6px;">-- Add VIP flag and votes_left
+    ALTER TABLE public.users
+        ADD COLUMN IF NOT EXISTS is_vip BOOLEAN DEFAULT false,
+        ADD COLUMN IF NOT EXISTS display_tag TEXT NULL,
+        ADD COLUMN IF NOT EXISTS votes_left INT DEFAULT 1;
+
+    -- Groups
+    CREATE TABLE IF NOT EXISTS public.groups (id TEXT PRIMARY KEY, name TEXT);
+    CREATE TABLE IF NOT EXISTS public.group_memberships (user_id UUID REFERENCES auth.users(id), group_id TEXT REFERENCES public.groups(id), PRIMARY KEY (user_id, group_id));
+
+    -- Sessions & votes
+    CREATE TABLE IF NOT EXISTS public.voting_sessions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), title TEXT, scope TEXT DEFAULT 'public', created_by UUID REFERENCES auth.users(id), starts_at TIMESTAMPTZ, ends_at TIMESTAMPTZ);
+    CREATE TABLE IF NOT EXISTS public.votes (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), session_id UUID REFERENCES public.voting_sessions(id), user_id UUID, movie_id TEXT, display_tag TEXT, created_at TIMESTAMPTZ DEFAULT now());</pre>
+            <h3>Top next steps</h3>
+            <ol>
+                <li>Run the SQL to add VIP and sessions tables.</li>
+                <li>Implement atomic vote decrement for `votes_left`.</li>
+                <li>Enable realtime subscriptions and update clients.</li>
+            </ol>
+        </div>
+    </div>
+
 
 <main id="mainContent">
 
@@ -2880,6 +2928,18 @@ function checkModeratorButtonVisibility(){
 // ══ INIT ══
 const saved=sessionStorage.getItem('scool_session');
 if(saved){currentUser=JSON.parse(saved);initSite();}
+</script>
+<script>
+function openAdminFeedback(){
+    const m=document.getElementById('adminFeedbackModal');
+    if(!m) return;
+    m.style.display='flex';
+}
+function closeAdminFeedback(){
+    const m=document.getElementById('adminFeedbackModal');
+    if(!m) return;
+    m.style.display='none';
+}
 </script>
 </body>
 </html>
