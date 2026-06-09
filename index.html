@@ -1821,6 +1821,7 @@ function openGroupVotingModal(){
 }
 function createGroup(){
     if(!movieState)movieState=loadMovieState();
+    if(!movieState.groups)movieState.groups=[];
     const name=document.getElementById('newGroupName').value.trim();
     const weight=parseInt(document.getElementById('newGroupVoteWeight').value)||1;
     if(!name)return showToast('Group name required');
