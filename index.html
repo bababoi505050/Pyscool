@@ -584,6 +584,85 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .movie-admin-panel-title{font-weight:700;color:var(--text);margin-bottom:.75rem;}
 .movie-admin-action-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-bottom:.75rem;}
 .movie-admin-note{font-size:.85rem;color:var(--muted);}
+
+@media (max-width: 860px) {
+  header{padding:0 .75rem;gap:.6rem;}
+  .logo{font-size:1.7rem;letter-spacing:3px;}
+  nav{height:auto;align-items:center;}
+  .nav-tab{padding:.55rem .6rem;height:auto;line-height:1.4;}
+  .header-right{gap:.45rem;flex-wrap:wrap;justify-content:flex-end;}
+  .header-btn,.btn-logout{padding:.45rem .85rem;font-size:.78rem;}
+  main{padding:1.4rem;}
+  .section-title{font-size:1.4rem;}
+  .empty-state{padding:3rem 1rem;}
+  .modal-box,.upload-box,.share-box,.claim-box,.feedback-box,.apl,.mod-pass-box{width:94vw;max-width:460px;}
+  .modal-box{padding:1.6rem;}
+  .upload-box,.share-box,.claim-box,.feedback-box,.apl,.mod-pass-box{padding:1.5rem;}
+  .video-grid,.offline-grid,.vault-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));}
+  .video-info,.offline-info,.vault-info{padding:.75rem;}
+  .video-name{font-size:.86rem;}
+  .video-meta,.offline-meta,.vault-meta{font-size:.72rem;}
+  .card-actions,.offline-actions,.vault-actions,.movie-admin-action-row{flex-direction:column;}
+  .btn-v,.btn-off,.btn-vv{padding:.55rem .6rem;}
+  .player-header{flex-direction:column;align-items:flex-start;gap:.75rem;}
+  .player-title{max-width:100%;}
+  .player-controls{flex-wrap:wrap;}
+  .player-video{width:100%;max-height:55vh;}
+  .clips-toolbar,.offline-toolbar,.mod-toolbar,.test-header-row,.movie-voter-top{flex-direction:column;align-items:flex-start;}
+  .clip-input-row,.test-input-row,.comp-row,.vault-claim-row,.mod-input-row,.movie-form--compact{flex-direction:column;}
+  .clip-input,.test-url-input,.comp-select,.vault-claim-input,.mod-input{width:100%;}
+  .btn-add-clip,.btn-claim-top,.btn-test-load,.btn-compress,.btn-vault-claim,.btn-mod-add{width:100%;}
+  .clips-feed,.movie-grid,.movie-top3,.movie-admin-panel{width:100%;}
+  .shorts-header{padding:1rem;flex-direction:column;align-items:flex-start;gap:.75rem;}
+  .short-side{right:.8rem;bottom:5.5rem;}
+  .short-overlay{padding:1rem .85rem .9rem;}
+  .feedback-btn-row{flex-direction:column;}
+  .btn-feedback-send,.btn-feedback-ai{width:100%;}
+  .feedback-box{padding:1.2rem;}
+  .pin-grid,.apl-grid{grid-template-columns:repeat(3,minmax(60px,1fr));gap:.55rem;}
+  .pin-btn,.apl-btn{height:60px;font-size:1.2rem;}
+  .pin-btn.del,.apl-btn.del{font-size:.95rem;}
+  .pin-dots,.apl-dots{gap:.75rem;}
+  .pending-text{max-width:100%;}
+  .auth-wrap{width:min(100%,94vw);}
+  .auth-logo{font-size:2.3rem;}
+  .auth-tabs{gap:.3rem;}
+  .auth-tab{padding:.6rem .5rem;font-size:.9rem;}
+  .auth-form{gap:.85rem;}
+  .auth-input{padding:.7rem .9rem;font-size:.92rem;}
+  .btn-auth{padding:.8rem;}
+}
+
+@media (max-width: 560px) {
+  .logo{font-size:1.4rem;}
+  .nav-tab{padding:.5rem .45rem;font-size:.8rem;}
+  .header-btn,.btn-logout{padding:.4rem .7rem;font-size:.75rem;}
+  .section-title{font-size:1.2rem;}
+  .video-grid,.offline-grid,.vault-grid{grid-template-columns:1fr;}
+  .movie-grid{grid-template-columns:1fr;}
+  .movie-voter-summary{flex-direction:column;align-items:flex-start;gap:.5rem;}
+  .movie-card-poster{min-height:120px;}
+  .movie-card-title{font-size:.95rem;}
+  .movie-card-meta{flex-direction:column;align-items:flex-start;}
+  .movie-form--compact{grid-template-columns:1fr;}
+  .movie-form--compact label{width:100%;}
+  .video-name{font-size:.84rem;}
+  .clip-header,.clip-footer,.admin-user-item,.admin-vid-item{flex-direction:column;align-items:flex-start;gap:.65rem;}
+  .btn-open{width:100%;}
+  .clip-action-btn{padding:.3rem .4rem;}
+  .short-side{position:absolute;right:.6rem;bottom:5rem;}
+  .short-progress{height:4px;}
+  .feedback-box h2,.share-box h3,.claim-box h3{font-size:1.35rem;}
+  .feedback-box p,.share-box p,.claim-box p{font-size:.82rem;}
+  .feedback-textarea{min-height:90px;}
+  .feedback-btn-row{gap:.5rem;}
+  .comp-box,.vext-box{padding:1.2rem;}
+  .vext-drop{padding:1.8rem 1.25rem;}
+  .vext-drop-title{font-size:1rem;}
+  .vext-drop-sub{font-size:.8rem;}
+  .feedback-fab{bottom:1.5rem;right:1.5rem;width:42px;height:42px;font-size:1rem;}
+}
+
 </style>
 </head>
 <body>
