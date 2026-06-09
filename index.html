@@ -1820,6 +1820,7 @@ function openGroupVotingModal(){
     renderGroupVotingUI();
 }
 function createGroup(){
+    if(!movieState)movieState=loadMovieState();
     const name=document.getElementById('newGroupName').value.trim();
     const weight=parseInt(document.getElementById('newGroupVoteWeight').value)||1;
     if(!name)return showToast('Group name required');
@@ -1833,6 +1834,7 @@ function createGroup(){
     showToast(`Group "${name}" created with ${weight}x vote weight`);
 }
 function deleteGroup(groupId){
+    if(!movieState)movieState=loadMovieState();
     movieState.groups=movieState.groups.filter(g=>g.id!==groupId);
     saveMovieState();
     renderGroupsList();
@@ -1840,6 +1842,7 @@ function deleteGroup(groupId){
     showToast('Group deleted');
 }
 function renderGroupsList(){
+    if(!movieState)movieState=loadMovieState();
     const list=document.getElementById('groupsList');
     if(!list)return;
     list.innerHTML=(movieState.groups||[]).map(g=>`
@@ -1850,6 +1853,7 @@ function renderGroupsList(){
     `).join('');
 }
 function renderGroupVotingUI(){
+    if(!movieState)movieState=loadMovieState();
     const select=document.getElementById('groupSelectDiv');
     if(!select)return;
     const scope=document.getElementById('votingScope').value;
@@ -1860,6 +1864,7 @@ function renderGroupVotingUI(){
     }
 }
 function startScopedVote(){
+    if(!movieState)movieState=loadMovieState();
     const scope=document.getElementById('votingScope').value;
     if(scope==='group'){
         const groupSelect=document.getElementById('scopeGroupSelect');
@@ -1877,6 +1882,7 @@ function startScopedVote(){
     showToast(`Vote started for ${scope==='everyone'?'everyone':'the selected group'}`);
 }
 function closeScopedVote(){
+    if(!movieState)movieState=loadMovieState();
     movieState.isOpen=false;
     movieState.votingScope='everyone';
     movieState.scopedGroups=[];
