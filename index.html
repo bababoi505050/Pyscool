@@ -1021,30 +1021,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
             <button class="btn-admin-lock" onclick="resetMovieVotes()">Reset all votes</button>
             <button class="btn-admin-lock" onclick="exportMovieCSV()">Export CSV</button>
             <button class="btn-admin-lock" onclick="document.getElementById('movieCsvInput').click()">Import CSV</button>
-            <button class="btn-admin-lock" onclick="openGroupMgmt()">👥 Manage Groups</button>
-            <button class="btn-admin-lock" onclick="openGroupVotingModal()">🗳 Group Vote</button>
             <input id="movieCsvInput" type="file" accept=".csv" style="display:none" onchange="handleMovieCsvUpload(event)">
-        </div>
-        <div id="groupMgmtPanel" style="display:none;margin-top:1rem;background:var(--bg);border:1px solid var(--border);padding:1rem;border-radius:8px;">
-            <div class="movie-admin-panel-title">👥 MANAGE GROUPS</div>
-            <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;">
-                <input class="modal-input" id="newGroupName" type="text" placeholder="Group name" style="flex:1;min-width:150px;"/>
-                <input class="modal-input" id="newGroupVoteWeight" type="number" placeholder="Vote weight (1-10)" min="1" max="10" value="1" style="flex:0 0 140px;"/>
-                <button class="btn-admin-lock" onclick="createGroup()">+ Add Group</button>
-            </div>
-            <div id="groupsList" style="display:flex;flex-direction:column;gap:.6rem;max-height:200px;overflow-y:auto;"></div>
-        </div>
-        <div id="groupVotingPanel" style="display:none;margin-top:1rem;background:var(--bg);border:1px solid var(--border);padding:1rem;border-radius:8px;">
-            <div class="movie-admin-panel-title">🗳 START GROUP-SPECIFIC VOTE</div>
-            <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center;">
-                <select class="modal-input" id="votingScope" style="flex:1;min-width:180px;">
-                    <option value="everyone">Everyone</option>
-                    <option value="group">Specific Group(s)</option>
-                </select>
-                <div id="groupSelectDiv" style="display:none;flex:1;min-width:180px;"></div>
-                <button class="btn-admin-lock success" onclick="startScopedVote()">▶ Start Vote</button>
-                <button class="btn-admin-lock danger" onclick="closeScopedVote()">Stop Vote</button>
-            </div>
         </div>
         <div class="movie-admin-note">Admins can delete any movie from the list or clear a movie's votes directly from its card. Create groups to enable group-specific voting.</div>
     </div>
@@ -1276,7 +1253,28 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <div class="admin-sec"><div class="admin-sec-title">🎬 MANAGE VIDEOS</div><div id="adminVidList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec"><div class="admin-sec-title">🎬 MOVIE NIGHT MANAGER</div><div id="adminMovieList"><div class="spinner">Loading…</div></div></div>
         <div class="admin-sec">
-            <div class="admin-sec-title">🔑 CHANGE ADMIN PASSWORD</div>
+            <div class="admin-sec-title">� MANAGE GROUPS</div>
+            <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;">
+                <input class="modal-input" id="newGroupName" type="text" placeholder="Group name" style="flex:1;min-width:150px;"/>
+                <input class="modal-input" id="newGroupVoteWeight" type="number" placeholder="Vote weight (1-10)" min="1" max="10" value="1" style="flex:0 0 140px;"/>
+                <button class="btn-admin-lock" onclick="createGroup()">+ Add Group</button>
+            </div>
+            <div id="groupsList" style="display:flex;flex-direction:column;gap:.6rem;max-height:200px;overflow-y:auto;"></div>
+        </div>
+        <div class="admin-sec">
+            <div class="admin-sec-title">🗳 GROUP-SPECIFIC VOTING</div>
+            <div style="display:flex;gap:.6rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center;">
+                <select class="modal-input" id="votingScope" style="flex:1;min-width:180px;">
+                    <option value="everyone">Everyone</option>
+                    <option value="group">Specific Group(s)</option>
+                </select>
+                <div id="groupSelectDiv" style="display:none;flex:1;min-width:180px;"></div>
+                <button class="btn-admin-lock success" onclick="startScopedVote()">▶ Start Vote</button>
+                <button class="btn-admin-lock danger" onclick="closeScopedVote()">Stop Vote</button>
+            </div>
+        </div>
+        <div class="admin-sec">
+            <div class="admin-sec-title">�🔑 CHANGE ADMIN PASSWORD</div>
             <div class="admin-pin-sec"><h3>Set New Admin Password</h3>
                 <div class="pin-change-row">
                     <input class="pin-input" id="newPinInput" type="password" placeholder="New password" />
@@ -1816,13 +1814,9 @@ function addMovie(event){
 
 // GROUP VOTING FUNCTIONS
 function openGroupMgmt(){
-    const panel=document.getElementById('groupMgmtPanel');
-    panel.style.display=panel.style.display==='none'?'block':'none';
     renderGroupsList();
 }
 function openGroupVotingModal(){
-    const panel=document.getElementById('groupVotingPanel');
-    panel.style.display=panel.style.display==='none'?'block':'none';
     renderGroupVotingUI();
 }
 function createGroup(){
@@ -3021,6 +3015,9 @@ async function setQuota(id,username){
 async function adminDelVid(name,btn){if(!confirm('Delete?'))return;btn.textContent='…';await sb.storage.from(BUCKET).remove([name]);await sb.from('video_posts').delete().eq('filename',name);showToast('Deleted!');loadAdminData();renderVideos();}
 async function markFbRead(id,btn){await sb.from('feedback').update({read:true}).eq('id',id);showToast('Marked as read');loadAdminData();}
 async function delFb(id,btn){await sb.from('feedback').delete().eq('id',id);showToast('Deleted!');loadAdminData();}
+// Render group panels when loading admin
+renderGroupsList();
+renderGroupVotingUI();
 
 // ══ MODAL CLOSE ══
 document.getElementById('uploadZone').addEventListener('click',e=>{if(e.target===document.getElementById('uploadZone'))closeUpload();});
