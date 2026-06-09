@@ -79,14 +79,14 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 header{background:var(--surface);border-bottom:2px solid var(--accent);padding:0 1rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;gap:.8rem;}
 .logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:4px;color:var(--accent);flex-shrink:0;cursor:pointer;user-select:none;}
 .logo span{color:var(--accent2);}
-nav{display:flex;height:100%;align-items:flex-end;overflow-x:auto;scrollbar-width:none;}
+nav{display:flex;flex:1;min-width:0;height:100%;align-items:flex-end;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
 nav::-webkit-scrollbar{display:none;}
 .nav-tab{font-family:'Bebas Neue',sans-serif;letter-spacing:2px;font-size:.9rem;color:var(--muted);padding:0 .8rem;height:42px;line-height:42px;cursor:pointer;border:none;background:none;border-bottom:3px solid transparent;transition:color .2s,border-color .2s;white-space:nowrap;}
 .nav-tab:hover{color:var(--text);}
 .nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .nav-tab.admin-tab{color:#444;font-size:.7rem;}
 .nav-tab.admin-tab.active{color:var(--accent2);border-bottom-color:var(--accent2);}
-.header-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0;}
+.header-right{display:flex;align-items:center;gap:.6rem;flex-shrink:0;min-width:0;}
 .rank-badge{font-size:.68rem;padding:.15rem .45rem;border-radius:2px;font-weight:700;letter-spacing:.5px;white-space:nowrap;}
 .rank-Member{background:#2a2a35;color:var(--muted);}
 .rank-Regular{background:#1a2e1a;color:var(--green);}
@@ -586,11 +586,11 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .movie-admin-note{font-size:.85rem;color:var(--muted);}
 
 @media (max-width: 860px) {
-  header{padding:0 .75rem;gap:.6rem;}
+  header{padding:0 .75rem;gap:.6rem;flex-wrap:wrap;align-items:flex-start;}
   .logo{font-size:1.7rem;letter-spacing:3px;}
-  nav{height:auto;align-items:center;}
+  nav{width:100%;height:auto;align-items:center;}
   .nav-tab{padding:.55rem .6rem;height:auto;line-height:1.4;}
-  .header-right{gap:.45rem;flex-wrap:wrap;justify-content:flex-end;}
+  .header-right{width:100%;gap:.45rem;flex-wrap:wrap;justify-content:flex-end;}
   .header-btn,.btn-logout{padding:.45rem .85rem;font-size:.78rem;}
   main{padding:1.4rem;}
   .section-title{font-size:1.4rem;}
@@ -1024,7 +1024,8 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 </div>
 
 <!-- TEST TAB -->
-<div class="test-panel">
+<div class="tab-panel" id="tab-test">
+  <div class="test-panel">
     <div class="test-header-row">
         <div class="section-title" style="margin-bottom:0;">TEST LAB</div>
         <div class="hamburger-wrap">
