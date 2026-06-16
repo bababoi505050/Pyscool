@@ -1842,14 +1842,48 @@ function deleteGroup(groupId){
     renderGroupVotingUI();
     showToast('Group deleted');
 }
+function addMemberToGroup(groupId){
+    if(!movieState)movieState=loadMovieState();
+    const group=movieState.groups.find(g=>g.id===groupId);
+    if(!group)return showToast('Group not found');
+    const input=document.getElementById(`addMember_${groupId}`);
+    if(!input)return;
+    const username=input.value.trim();
+    if(!username)return showToast('Enter a username');
+    if(group.members.includes(username))return showToast('User already in group');
+    group.members.push(username);
+    input.value='';
+    saveMovieState();
+    renderGroupsList();
+    showToast(`Added ${username} to group`);
+}
+function removeMemberFromGroup(groupId,username){
+    if(!movieState)movieState=loadMovieState();
+    const group=movieState.groups.find(g=>g.id===groupId);
+    if(!group)return;
+    group.members=group.members.filter(m=>m!==username);
+    saveMovieState();
+    renderGroupsList();
+    showToast(`Removed ${username} from group`);
+}
 function renderGroupsList(){
     if(!movieState)movieState=loadMovieState();
     const list=document.getElementById('groupsList');
     if(!list)return;
     list.innerHTML=(movieState.groups||[]).map(g=>`
-        <div style="display:flex;align-items:center;justify-content:space-between;background:var(--border);padding:.6rem;border-radius:4px;">
-            <div><strong>${g.name}</strong> <span style="color:var(--muted);font-size:.75rem;">${g.members.length} members · ${g.voteWeight}x votes</span></div>
-            <button class="btn-admin-lock danger" onclick="deleteGroup('${g.id}')">🗑 Delete</button>
+        <div style="background:var(--border);padding:.8rem;border-radius:4px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;">
+                <div><strong>${g.name}</strong> <span style="color:var(--muted);font-size:.75rem;">${g.voteWeight}x votes · ${g.members.length} members</span></div>
+                <button class="btn-admin-lock danger" onclick="deleteGroup('${g.id}')" style="font-size:.7rem;padding:.25rem .6rem;">Delete</button>
+            </div>
+            <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.5rem;">
+                <input type="text" class="modal-input" id="addMember_${g.id}" placeholder="Username to add" style="flex:1;min-width:120px;padding:.35rem .6rem;font-size:.8rem;"/>
+                <button class="btn-admin-lock" onclick="addMemberToGroup('${g.id}')" style="font-size:.7rem;padding:.25rem .6rem;white-space:nowrap;">+ Add</button>
+            </div>
+            <div style="display:flex;gap:.3rem;flex-wrap:wrap;">
+                ${g.members.map(m=>`<span style="background:var(--card);padding:.2rem .5rem;border-radius:2px;font-size:.7rem;display:flex;align-items:center;gap:.4rem;"><span>${m}</span><button onclick="removeMemberFromGroup('${g.id}','${m}')" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem;padding:0;">✕</button></span>`).join('')}
+                ${g.members.length===0?'<span style="color:var(--muted);font-size:.75rem;font-style:italic;">No members yet</span>':''}
+            </div>
         </div>
     `).join('');
 }
@@ -1859,8 +1893,14 @@ function renderGroupVotingUI(){
     if(!select)return;
     const scope=document.getElementById('votingScope').value;
     if(scope==='group'){
+        if(!movieState.groups || movieState.groups.length===0){
+            select.style.display='none';
+            select.innerHTML='';
+            showToast('No groups created yet. Create one in the admin panel first.');
+            return;
+        }
         select.style.display='flex';
-        select.innerHTML=`<select id="scopeGroupSelect" class="modal-input" style="min-width:180px;"><option value="">-- Select groups --</option>${(movieState.groups||[]).map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select>`;
+        select.innerHTML=`<select id="scopeGroupSelect" class="modal-input" style="min-width:180px;"><option value="">-- Select a group --</option>${(movieState.groups||[]).map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select>`;
     }else{
         select.style.display='none';
         select.innerHTML='';
@@ -1871,9 +1911,22 @@ function startScopedVote(){
     const scope=document.getElementById('votingScope').value;
     if(scope==='group'){
         const groupSelect=document.getElementById('scopeGroupSelect');
-        if(!groupSelect||!groupSelect.value)return showToast('Select a group');
+        if(!groupSelect){
+            showToast('Group selector not found. Try refreshing or switching tabs.');
+            return;
+        }
+        if(!groupSelect.value){
+            showToast('Please select a group first');
+            return;
+        }
+        const selectedGroupId=groupSelect.value;
+        const selectedGroup=movieState.groups.find(g=>g.id===selectedGroupId);
+        if(!selectedGroup){
+            showToast('Selected group not found');
+            return;
+        }
         movieState.votingScope='group';
-        movieState.scopedGroups=[groupSelect.value];
+        movieState.scopedGroups=[selectedGroupId];
     }else{
         movieState.votingScope='everyone';
         movieState.scopedGroups=[];
@@ -1882,7 +1935,8 @@ function startScopedVote(){
     saveMovieState();
     saveSharedMovieState();
     renderMovieVoter();
-    showToast(`Vote started for ${scope==='everyone'?'everyone':'the selected group'}`);
+    const groupName=movieState.scopedGroups.length>0 ? movieState.groups.find(g=>g.id===movieState.scopedGroups[0])?.name : 'everyone';
+    showToast(`Vote started for ${scope==='everyone'?'everyone':'group: '+groupName}`);
 }
 function closeScopedVote(){
     if(!movieState)movieState=loadMovieState();
