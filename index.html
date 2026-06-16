@@ -827,7 +827,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="modal-box">
         <button class="modal-close" onclick="profileModal.classList.remove('active')">✕</button>
         <h2>🧑 PROFILE SETTINGS</h2>
-        <p>Customize how your name appears across the app.</p>
+        <!-- <p>Customize how your name appears across the app.</p> -->
         <input class="modal-input" id="profileDisplayName" type="text" placeholder="Display name (optional)" />
         <input class="modal-input" id="profileTag" type="text" placeholder="Name tag / short title (optional)" maxlength="20" />
         <button class="btn-modal-confirm" onclick="saveUserProfile()">SAVE PROFILE</button>
@@ -1859,8 +1859,10 @@ function renderGroupVotingUI(){
     if(!select)return;
     const scope=document.getElementById('votingScope').value;
     if(scope==='group'){
+        select.style.display='flex';
         select.innerHTML=`<select id="scopeGroupSelect" class="modal-input" style="min-width:180px;"><option value="">-- Select groups --</option>${(movieState.groups||[]).map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select>`;
     }else{
+        select.style.display='none';
         select.innerHTML='';
     }
 }
