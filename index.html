@@ -833,6 +833,18 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
         <input class="modal-input" id="profileDisplayName" type="text" placeholder="Display name (optional)" />
         <input class="modal-input" id="profileTag" type="text" placeholder="Name tag / short title (optional)" maxlength="20" />
         <button class="btn-modal-confirm" onclick="saveUserProfile()">SAVE PROFILE</button>
+        
+        <!-- Google Drive Storage -->
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);">
+            <h3 style="font-size:1rem;margin-bottom:.8rem;color:var(--accent);">☁️ CLOUD BACKUP</h3>
+            <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:1rem;padding:.8rem;background:var(--card);border-radius:6px;">
+                <div>
+                    <div style="font-size:.9rem;color:var(--text);margin-bottom:.3rem;"><strong id="googledriveStatus">Not Connected</strong></div>
+                    <div style="font-size:.8rem;color:var(--muted);">15 GB Google Drive Backup</div>
+                </div>
+                <button class="btn-modal-confirm" id="googledriveBtn" onclick="connectGoogleDrive()" style="margin-left:auto;padding:.4rem .8rem;font-size:.85rem;">CONNECT</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -1841,18 +1853,18 @@ function createGroup(){
     saveMovieState();
     saveSharedMovieState();
     renderGroupsList();
-    renderGroupVotingUI();
+    renderGroupVotingUI().catch(e=>console.log('Error rendering group voting UI:',e));
     showToast(`Group "${name}" created with ${weight}x vote weight`);
-}
+}}
 function deleteGroup(groupId){
     if(!movieState)movieState=loadMovieState();
     movieState.groups=movieState.groups.filter(g=>g.id!==groupId);
     saveMovieState();
     saveSharedMovieState();
     renderGroupsList();
-    renderGroupVotingUI();
+    renderGroupVotingUI().catch(e=>console.log('Error rendering group voting UI:',e));
     showToast('Group deleted');
-}
+}}
 function addMemberToGroup(groupId){
     if(!movieState)movieState=loadMovieState();
     const group=movieState.groups.find(g=>g.id===groupId);
@@ -1900,10 +1912,14 @@ function renderGroupsList(){
         </div>
     `).join('');
 }
-function renderGroupVotingUI(){
+async function renderGroupVotingUI(){
     if(!movieState)movieState=loadMovieState();
     const select=document.getElementById('groupSelectDiv');
     if(!select)return;
+    
+    // Always refresh groups from Supabase first
+    await refreshSharedMovieState();
+    
     const scope=document.getElementById('votingScope').value;
     if(scope==='group'){
         if(!movieState.groups || movieState.groups.length===0){
@@ -1913,7 +1929,7 @@ function renderGroupVotingUI(){
             return;
         }
         select.style.display='flex';
-        select.innerHTML=`<select id="scopeGroupSelect" class="modal-input" style="min-width:180px;"><option value="">-- Select a group --</option>${(movieState.groups||[]).map(g=>`<option value="${g.id}">${g.name}</option>`).join('')}</select>`;
+        select.innerHTML=`<select id="scopeGroupSelect" class="modal-input" style="min-width:180px;"><option value="">-- Select a group --</option>${(movieState.groups||[]).map(g=>`<option value="${g.id}">${g.name} (${g.voteWeight||1}x)</option>`).join('')}</select>`;
     }else{
         select.style.display='none';
         select.innerHTML='';
@@ -2093,6 +2109,9 @@ function openProfile(){
     }
     perksContainer.innerHTML = perksHTML;
     
+    // Check Google Drive status
+    checkGoogleDriveStatus();
+    
     document.getElementById('profileModal').classList.add('active');
 }
 function updateHeaderUser(){
@@ -2102,6 +2121,163 @@ function updateHeaderUser(){
 }
 function rankBadge(r){return`<span class="rank-badge rank-${r||'Member'}">${r||'Member'}</span>`;}
 
+// ══ Google Drive Integration ══
+const GOOGLE_DRIVE_CONFIG = {
+    clientId: '67859377689-sqltt1dg2j8e708aof2lsbek1ola9qr1.apps.googleusercontent.com',
+    redirectUri: window.location.origin,
+    scopes: ['https://www.googleapis.com/auth/drive.file'],
+    discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest']
+};
+
+async function connectGoogleDrive() {
+    if(!currentUser) return showToast('Not logged in');
+    
+    // Check if already connected
+    const userFromDb = await sb.from('users').select('google_drive_connected').eq('username', currentUser.username).single();
+    if(userFromDb.data?.google_drive_connected) {
+        showToast('✓ Google Drive already connected!');
+        document.getElementById('googledriveStatus').textContent = 'Connected ✓';
+        return;
+    }
+    
+    try {
+        // Load Google API
+        if(!window.gapi) {
+            const script = document.createElement('script');
+            script.src = 'https://apis.google.com/js/api.js';
+            script.onload = () => initGoogleAuth();
+            document.head.appendChild(script);
+        } else {
+            initGoogleAuth();
+        }
+    } catch(e) {
+        showToast('Error: ' + e.message);
+    }
+}
+
+async function initGoogleAuth() {
+    gapi.load('auth2', () => {
+        gapi.auth2.init({
+            client_id: GOOGLE_DRIVE_CONFIG.clientId,
+            scope: GOOGLE_DRIVE_CONFIG.scopes.join(' ')
+        }).then(auth => {
+            auth.signIn().then(() => {
+                saveGoogleDriveToken(auth.currentUser.get().getAuthResponse().id_token);
+            }).catch(err => showToast('Google sign-in failed: ' + err.error));
+        });
+    });
+}
+
+async function saveGoogleDriveToken(idToken) {
+    if(!currentUser) return;
+    
+    try {
+        const { error } = await sb.from('users').update({
+            google_drive_token: idToken,
+            google_drive_connected: true
+        }).eq('username', currentUser.username);
+        
+        if(error) throw error;
+        
+        currentUser.google_drive_connected = true;
+        showToast('✓ Google Drive connected! 15GB ready for backup');
+        document.getElementById('googledriveStatus').textContent = 'Connected ✓';
+        document.getElementById('googledriveBtn').textContent = 'DISCONNECT';
+    } catch(e) {
+        showToast('Error saving token: ' + e.message);
+    }
+}
+
+async function disconnectGoogleDrive() {
+    if(!currentUser) return;
+    
+    try {
+        await sb.from('users').update({
+            google_drive_token: null,
+            google_drive_connected: false
+        }).eq('username', currentUser.username);
+        
+        currentUser.google_drive_connected = false;
+        showToast('✓ Google Drive disconnected');
+        document.getElementById('googledriveStatus').textContent = 'Not Connected';
+        document.getElementById('googledriveBtn').textContent = 'CONNECT';
+    } catch(e) {
+        showToast('Error: ' + e.message);
+    }
+}
+
+async function uploadToGoogleDrive(file) {
+    if(!currentUser?.google_drive_connected) {
+        showToast('Connect Google Drive first');
+        return false;
+    }
+    
+    try {
+        // Get token
+        let user = await sb.from('users').select('google_drive_token').eq('username', currentUser.username).single();
+        let token = user.data?.google_drive_token;
+        
+        if(!token) {
+            showToast('Token expired. Reconnect Google Drive.');
+            await disconnectGoogleDrive();
+            return false;
+        }
+        
+        // Create metadata
+        const metadata = {
+            name: file.name,
+            mimeType: file.type || 'application/octet-stream',
+            parents: ['Pyscool Backups'] // Google Drive folder name
+        };
+        
+        // Create form data
+        const form = new FormData();
+        form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+        form.append('file', file);
+        
+        // Upload to Google Drive
+        const response = await fetch(
+            'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+            {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: form
+            }
+        );
+        
+        if(!response.ok) {
+            if(response.status === 401) {
+                showToast('Token expired. Reconnect Google Drive.');
+                await disconnectGoogleDrive();
+                return false;
+            }
+            throw new Error(`Upload failed: ${response.statusText}`);
+        }
+        
+        showToast(`✓ Backed up to Google Drive (15GB available)`);
+        return true;
+    } catch(e) {
+        showToast(`❌ Upload failed: ${e.message}`);
+        return false;
+    }
+}
+
+// Google Drive tokens auto-refresh via browser, so no manual refresh needed
+
+// Check Google Drive status when opening profile
+function checkGoogleDriveStatus() {
+    if(currentUser?.google_drive_connected) {
+        document.getElementById('googledriveStatus').textContent = '✓ Connected';
+        document.getElementById('googledriveBtn').textContent = 'DISCONNECT';
+        document.getElementById('googledriveBtn').onclick = disconnectGoogleDrive;
+    } else {
+        document.getElementById('googledriveStatus').textContent = 'Not Connected';
+        document.getElementById('googledriveBtn').textContent = 'CONNECT';
+        document.getElementById('googledriveBtn').onclick = connectGoogleDrive;
+    }
+}
 // ══ AUTH ══
 function switchAuthTab(n,btn){
     document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));
