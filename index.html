@@ -3750,7 +3750,14 @@ function checkModeratorButtonVisibility(){
 
 // ══ INIT ══
 const saved=sessionStorage.getItem('scool_session');
-if(saved){currentUser=JSON.parse(saved);loadUserProfile();initSite();}
+if(saved){
+    currentUser=JSON.parse(saved);
+    loadUserProfile();
+    document.getElementById('authScreen').style.display='none';
+    document.getElementById('pinScreen').classList.remove('active');
+    document.getElementById('pendingScreen').classList.remove('active');
+    initSite();
+}
 </script>
 <script>
 function openAdminFeedback(){
