@@ -3302,16 +3302,29 @@ async function uploadBigVideo(file){
             drive_web_view_url:driveFile.webViewLink,
             size_bytes:driveFile.size
         };
-        const {error:postError}=await sb.from('big_video_posts').insert([post]);
+        let {error:postError}=await sb.from('big_video_posts').insert([post]);
         if(postError){
-            await deleteGoogleDriveFile(driveFile.id).catch(()=>{});
             const msg=String(postError.message||postError).toLowerCase();
             if(msg.includes('drive_download_url') || msg.includes('drive_preview_url') || msg.includes('drive_web_view_url') || msg.includes('drive_file_id') || msg.includes('size_bytes') || msg.includes('storage_provider')){
-                showToast('Upload succeeded to Drive, but database schema is missing columns. Check your Supabase table.');
                 console.warn('Big video insert schema issue:', postError);
-                return;
+                const fallback={
+                    filename:driveFile.id,
+                    display_name:file.name,
+                    username:currentUser.username,
+                    rank:currentUser.rank,
+                    storage_provider:'google_drive',
+                    size_bytes:driveFile.size
+                };
+                const {error:fallbackError}=await sb.from('big_video_posts').insert([fallback]);
+                if(fallbackError){
+                    await deleteGoogleDriveFile(driveFile.id).catch(()=>{});
+                    throw fallbackError;
+                }
+                showToast('Uploaded to Drive and saved with minimal record. Update table schema for full metadata.');
+            } else {
+                await deleteGoogleDriveFile(driveFile.id).catch(()=>{});
+                throw postError;
             }
-            throw postError;
         }
         fill.style.width='100%';label.textContent='✓ Upload complete!';pct.textContent='100%';
         document.getElementById('vextFileInput').value='';
