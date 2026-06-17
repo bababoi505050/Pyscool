@@ -3305,8 +3305,11 @@ async function uploadBigVideo(file){
         const {error:postError}=await sb.from('big_video_posts').insert([post]);
         if(postError){
             await deleteGoogleDriveFile(driveFile.id).catch(()=>{});
-            if(String(postError.message).includes('storage_provider')||String(postError.message).includes('drive_file_id')||String(postError.message).includes('size_bytes')){
-                throw new Error('Run the updated SQL setup for Google Drive big-video columns, then try again.');
+            const msg=String(postError.message||postError).toLowerCase();
+            if(msg.includes('drive_download_url') || msg.includes('drive_preview_url') || msg.includes('drive_web_view_url') || msg.includes('drive_file_id') || msg.includes('size_bytes') || msg.includes('storage_provider')){
+                showToast('Upload succeeded to Drive, but database schema is missing columns. Check your Supabase table.');
+                console.warn('Big video insert schema issue:', postError);
+                return;
             }
             throw postError;
         }
