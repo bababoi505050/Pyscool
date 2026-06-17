@@ -2129,15 +2129,20 @@ let googleApiLoadPromise=null;
 
 async function connectGoogleDrive() {
     if(!currentUser) return showToast('Not logged in');
+    if(window.location.protocol === 'file:'){
+        return showToast('Google Drive auth requires a web server. Run the page via http://localhost or HTTPS.');
+    }
     try {
         const token=await getGoogleDriveAccessToken(true);
         await saveGoogleDriveToken(token);
+        checkGoogleDriveStatus();
     } catch(e) {
-        showToast('Error: ' + e.message);
+        showToast('Error: ' + (e?.message||e));
     }
 }
 
 async function initGoogleAuth() {
+    if(window.location.protocol === 'file:') return;
     const token=await getGoogleDriveAccessToken(true);
     await saveGoogleDriveToken(token);
 }
@@ -2165,15 +2170,22 @@ function getGoogleDriveAccessToken(forcePrompt=false){
             const cached=sessionStorage.getItem(googleDriveTokenKey());
             if(cached&&!forcePrompt){resolve(cached);return;}
             await loadGoogleApi();
-            gapi.load('auth2',()=>{
-                gapi.auth2.init({
-                    client_id:GOOGLE_DRIVE_CONFIG.clientId,
-                    scope:GOOGLE_DRIVE_CONFIG.scopes.join(' ')
-                }).then(auth=>{
-                    googleAuthInstance=auth;
-                    const googleUser=auth.currentUser.get();
-                    const hasSession=googleUser&&googleUser.isSignedIn&&googleUser.isSignedIn();
-                    const finish=user=>{
+            gapi.load('auth2',async ()=>{
+                try{
+                    let auth = null;
+                    if(gapi.auth2 && gapi.auth2.getAuthInstance){
+                        try{ auth = gapi.auth2.getAuthInstance(); }catch(e){}
+                    }
+                    if(!auth){
+                        auth = await gapi.auth2.init({
+                            client_id:GOOGLE_DRIVE_CONFIG.clientId,
+                            scope:GOOGLE_DRIVE_CONFIG.scopes.join(' ')
+                        });
+                    }
+                    googleAuthInstance = auth;
+                    const googleUser = auth.currentUser.get();
+                    const hasSession = googleUser && googleUser.isSignedIn && googleUser.isSignedIn();
+                    const finish = user => {
                         const authResponse=user.getAuthResponse(true);
                         if(!authResponse?.access_token){
                             reject(new Error('No Google Drive access token received'));
@@ -2182,9 +2194,11 @@ function getGoogleDriveAccessToken(forcePrompt=false){
                         sessionStorage.setItem(googleDriveTokenKey(),authResponse.access_token);
                         resolve(authResponse.access_token);
                     };
-                    if(hasSession&&!forcePrompt)finish(googleUser);
-                    else auth.signIn().then(finish).catch(err=>reject(new Error(err?.error||'Google sign-in failed')));
-                }).catch(err=>reject(new Error(err?.details||err?.message||'Google auth failed')));
+                    if(hasSession && !forcePrompt) return finish(googleUser);
+                    auth.signIn().then(finish).catch(err=>reject(new Error(err?.error||err?.details||'Google sign-in failed')));
+                }catch(err){
+                    reject(new Error(err?.details||err?.message||'Google auth failed'));
+                }
             });
         }catch(e){reject(e);}
     });
@@ -2193,42 +2207,44 @@ function getGoogleDriveAccessToken(forcePrompt=false){
 async function saveGoogleDriveToken(accessToken) {
     if(!currentUser) return;
     sessionStorage.setItem(googleDriveTokenKey(),accessToken);
+    currentUser.google_drive_connected = true;
+    document.getElementById('googledriveStatus').textContent = 'Connected ✓';
+    document.getElementById('googledriveBtn').textContent = 'DISCONNECT';
+    document.getElementById('googledriveBtn').onclick = disconnectGoogleDrive;
     try {
         const { error } = await sb.from('users').update({
-            google_drive_token: null,
             google_drive_connected: true
         }).eq('username', currentUser.username);
-        
         if(error) throw error;
-        
-        currentUser.google_drive_connected = true;
         showToast('✓ Google Drive connected! 15GB ready for backup');
-        document.getElementById('googledriveStatus').textContent = 'Connected ✓';
-        document.getElementById('googledriveBtn').textContent = 'DISCONNECT';
     } catch(e) {
-        showToast('Error saving token: ' + e.message);
+        console.warn('Could not save Google Drive status to Supabase:', e?.message||e);
+        showToast('✓ Google Drive connected! (Saved locally only)');
     }
 }
 
 async function disconnectGoogleDrive() {
     if(!currentUser) return;
-    
     try {
         sessionStorage.removeItem(googleDriveTokenKey());
-        if(googleAuthInstance){
-            googleAuthInstance.signOut().catch(()=>{});
+        if(googleAuthInstance && googleAuthInstance.signOut){
+            await googleAuthInstance.signOut().catch(()=>{});
         }
-        await sb.from('users').update({
-            google_drive_token: null,
-            google_drive_connected: false
-        }).eq('username', currentUser.username);
-        
         currentUser.google_drive_connected = false;
         showToast('✓ Google Drive disconnected');
         document.getElementById('googledriveStatus').textContent = 'Not Connected';
         document.getElementById('googledriveBtn').textContent = 'CONNECT';
+        document.getElementById('googledriveBtn').onclick = connectGoogleDrive;
+        try {
+            const { error } = await sb.from('users').update({
+                google_drive_connected: false
+            }).eq('username', currentUser.username);
+            if(error) throw error;
+        } catch(e) {
+            console.warn('Could not update Google Drive disconnect status to Supabase:', e?.message||e);
+        }
     } catch(e) {
-        showToast('Error: ' + e.message);
+        showToast('Error: ' + (e?.message||e));
     }
 }
 
@@ -2324,14 +2340,18 @@ async function deleteGoogleDriveFile(fileId){
 
 // Check Google Drive status when opening profile
 function checkGoogleDriveStatus() {
-    if(currentUser?.google_drive_connected) {
+    const hasToken = !!sessionStorage.getItem(googleDriveTokenKey());
+    const isConnected = Boolean(currentUser?.google_drive_connected) || hasToken;
+    if(isConnected) {
         document.getElementById('googledriveStatus').textContent = '✓ Connected';
         document.getElementById('googledriveBtn').textContent = 'DISCONNECT';
         document.getElementById('googledriveBtn').onclick = disconnectGoogleDrive;
+        currentUser && (currentUser.google_drive_connected = true);
     } else {
         document.getElementById('googledriveStatus').textContent = 'Not Connected';
         document.getElementById('googledriveBtn').textContent = 'CONNECT';
         document.getElementById('googledriveBtn').onclick = connectGoogleDrive;
+        currentUser && (currentUser.google_drive_connected = false);
     }
 }
 // ══ AUTH ══
