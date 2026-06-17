@@ -827,7 +827,9 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
     <div class="modal-box">
         <button class="modal-close" onclick="profileModal.classList.remove('active')">✕</button>
         <h2>🧑 PROFILE SETTINGS</h2>
-        <!-- <p>Customize how your name appears across the app.</p> -->
+        <div style="margin-bottom:1.2rem;padding:.8rem;background:var(--border);border-radius:6px;font-size:.85rem;color:var(--muted);line-height:1.5;">
+            <strong style="color:var(--accent);">💫 VIP Feature:</strong> Profile customization (display name & name tag) is a VIP-only feature.
+        </div>
         <input class="modal-input" id="profileDisplayName" type="text" placeholder="Display name (optional)" />
         <input class="modal-input" id="profileTag" type="text" placeholder="Name tag / short title (optional)" maxlength="20" />
         <button class="btn-modal-confirm" onclick="saveUserProfile()">SAVE PROFILE</button>
@@ -1433,7 +1435,10 @@ async function refreshSharedMovieState(){
         votesByUser:normalizeMovieVotes(shared.votesByUser||{}),
         isOpen:shared.isOpen||false,
         allowAnonymousVoting:typeof shared.allowAnonymousVoting==='boolean' ? shared.allowAnonymousVoting : false,
-        anonymousKey:movieState.anonymousKey||shared.anonymousKey||localStorage.getItem('scool_movie_voter_anon')||''
+        anonymousKey:movieState.anonymousKey||shared.anonymousKey||localStorage.getItem('scool_movie_voter_anon')||'',
+        groups:Array.isArray(shared.groups)?shared.groups:[],
+        votingScope:shared.votingScope||'everyone',
+        scopedGroups:Array.isArray(shared.scopedGroups)?shared.scopedGroups:[]
     };
     saveMovieState();
 }
@@ -1476,7 +1481,11 @@ function getCurrentUserVotes(){
     return key ? getMoviesForUser(key) : [];
 }
 function getCurrentUserVoteLimit(){
-    if(currentUser) return currentUser.rank==='VIP' ? 2 : 1;
+    if(currentUser){
+        // Admins and Owners also get 2 votes
+        if(['VIP', 'Admin', 'Owner'].includes(currentUser.rank)) return 2;
+        return 1;
+    }
     return movieState.allowAnonymousVoting ? 1 : 0;
 }
 function getCurrentUserVotesUsed(){
@@ -1830,6 +1839,7 @@ function createGroup(){
     document.getElementById('newGroupName').value='';
     document.getElementById('newGroupVoteWeight').value='1';
     saveMovieState();
+    saveSharedMovieState();
     renderGroupsList();
     renderGroupVotingUI();
     showToast(`Group "${name}" created with ${weight}x vote weight`);
@@ -1838,6 +1848,7 @@ function deleteGroup(groupId){
     if(!movieState)movieState=loadMovieState();
     movieState.groups=movieState.groups.filter(g=>g.id!==groupId);
     saveMovieState();
+    saveSharedMovieState();
     renderGroupsList();
     renderGroupVotingUI();
     showToast('Group deleted');
@@ -1854,6 +1865,7 @@ function addMemberToGroup(groupId){
     group.members.push(username);
     input.value='';
     saveMovieState();
+    saveSharedMovieState();
     renderGroupsList();
     showToast(`Added ${username} to group`);
 }
@@ -1863,6 +1875,7 @@ function removeMemberFromGroup(groupId,username){
     if(!group)return;
     group.members=group.members.filter(m=>m!==username);
     saveMovieState();
+    saveSharedMovieState();
     renderGroupsList();
     showToast(`Removed ${username} from group`);
 }
@@ -2015,19 +2028,71 @@ function loadUserProfile(){
 }
 function saveUserProfile(){
     if(!currentUser) return;
+    // Only VIPs and Admins can customize their profile
+    const isVipOrAdmin = ['VIP', 'Admin', 'Owner'].includes(currentUser.rank);
+    if(!isVipOrAdmin){
+        showToast('🌟 Profile customization is a VIP feature. Upgrade to VIP to unlock it!');
+        return;
+    }
     const displayName=document.getElementById('profileDisplayName').value.trim();
     const nameTag=document.getElementById('profileTag').value.trim();
     currentUser.displayName=displayName||currentUser.username;
     currentUser.nameTag=nameTag;
     localStorage.setItem(profileStorageKey(currentUser.username),JSON.stringify({displayName:currentUser.displayName,nameTag:currentUser.nameTag}));
     updateHeaderUser();
-    showToast('Profile updated');
+    showToast('✓ Profile updated! 🌟');
     document.getElementById('profileModal').classList.remove('active');
 }
 function openProfile(){
     if(!currentUser) return;
+    const isVip = currentUser.rank === 'VIP';
+    const isAdminOrOwner = ['Admin', 'Owner'].includes(currentUser.rank);
+    const isVipOrAdmin = isVip || isAdminOrOwner;
+    
     document.getElementById('profileDisplayName').value=currentUser.displayName||currentUser.username;
     document.getElementById('profileTag').value=currentUser.nameTag||'';
+    
+    // Enable/disable profile fields based on VIP status
+    document.getElementById('profileDisplayName').disabled = !isVipOrAdmin;
+    document.getElementById('profileTag').disabled = !isVipOrAdmin;
+    
+    // Add VIP perks display
+    let perksHTML = '<div style="margin-top:1.5rem;padding:1rem;background:var(--card);border-radius:6px;border-left:3px solid var(--accent);">';
+    perksHTML += '<div style="font-weight:600;margin-bottom:.5rem;">🌟 Your Stats:</div>';
+    perksHTML += `<div style="font-size:.85rem;line-height:1.6;color:var(--muted);">`;
+    perksHTML += `<div>📊 Rank: <strong>${currentUser.rank}</strong></div>`;
+    perksHTML += `<div>🗳️ Votes per session: <strong>${isVip ? '2 votes' : '1 vote'}</strong></div>`;
+    perksHTML += `<div>💾 Storage: <strong>${isAdminOrOwner ? '50 GB' : isVip ? '10 GB' : '5 GB'}</strong></div>`;
+    
+    if(!isVipOrAdmin){
+        perksHTML += `<div style="margin-top:.8rem;padding:.6rem;background:var(--border);border-radius:4px;">`;
+        perksHTML += `<strong style="color:var(--accent);">⭐ Upgrade to VIP to:</strong><ul style="margin:.4rem 0 0 1rem;list-style:none;">`;
+        perksHTML += `<li>✓ Get 2 votes instead of 1</li>`;
+        perksHTML += `<li>✓ Double storage (10 GB)</li>`;
+        perksHTML += `<li>✓ Customize your display name & tag</li>`;
+        perksHTML += `<li>✓ Special VIP badge in chat</li>`;
+        perksHTML += `</ul></div>`;
+    } else if(isVip){
+        perksHTML += `<div style="margin-top:.8rem;padding:.6rem;background:rgba(147, 51, 234, 0.1);border-radius:4px;border-left:2px solid var(--accent);">`;
+        perksHTML += `<strong style="color:var(--accent);">✨ VIP Perks Active:</strong><ul style="margin:.4rem 0 0 1rem;list-style:none;">`;
+        perksHTML += `<li>🗳️ Double voting power</li>`;
+        perksHTML += `<li>💾 10 GB cloud storage</li>`;
+        perksHTML += `<li>🎨 Custom profile name & tag</li>`;
+        perksHTML += `<li>⭐ Special VIP badge</li>`;
+        perksHTML += `</ul></div>`;
+    }
+    perksHTML += `</div></div>`;
+    
+    // Insert perks HTML after the profile fields
+    const profileModal = document.getElementById('profileModal');
+    let perksContainer = profileModal.querySelector('[data-vip-perks]');
+    if(!perksContainer){
+        perksContainer = document.createElement('div');
+        perksContainer.setAttribute('data-vip-perks', 'true');
+        profileModal.querySelector('.modal-box').appendChild(perksContainer);
+    }
+    perksContainer.innerHTML = perksHTML;
+    
     document.getElementById('profileModal').classList.add('active');
 }
 function updateHeaderUser(){
