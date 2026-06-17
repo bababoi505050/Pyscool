@@ -3312,8 +3312,7 @@ async function uploadBigVideo(file){
                     display_name:file.name,
                     username:currentUser.username,
                     rank:currentUser.rank,
-                    storage_provider:'google_drive',
-                    size_bytes:driveFile.size
+                    storage_provider:'google_drive'
                 };
                 const {error:fallbackError}=await sb.from('big_video_posts').insert([fallback]);
                 if(fallbackError){
