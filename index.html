@@ -530,6 +530,7 @@ main{padding:2rem;max-width:1200px;margin:0 auto;}
 .btn-reject{background:#3a1818;color:var(--red);border:none;padding:.28rem .7rem;font-size:.75rem;font-weight:600;cursor:pointer;transition:opacity .2s;}
 .btn-reject:hover{opacity:.8;}
 .rank-select{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.28rem .45rem;font-family:'DM Sans',sans-serif;font-size:.75rem;outline:none;cursor:pointer;}
+.role-expiry{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:.25rem .4rem;font-family:'DM Sans',sans-serif;font-size:.75rem;outline:none;}
 .btn-set-rank{background:var(--border);color:var(--text);border:none;padding:.28rem .6rem;font-size:.75rem;font-weight:600;cursor:pointer;}
 .btn-set-rank:hover{opacity:.8;}
 .admin-vid-item{background:var(--card);border:1px solid var(--border);padding:.65rem .9rem;display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap;margin-bottom:.4rem;}
@@ -2370,13 +2371,15 @@ async function doLogin(){
     err.textContent='';err.style.color='var(--red)';
     if(!u||!p){err.textContent='Fill in all fields.';return;}
     const{data,error}=await sb.from('users').select('*').eq('username',u).eq('password',p);
-    if(error||!data||!data.length){err.textContent='Wrong username or password.';return;}
+    if(error){err.textContent='Login unavailable: '+error.message;return;}
+    if(!data||!data.length){err.textContent='Wrong username or password.';return;}
     const user=data[0];
     if(user.verified!==true){
         document.getElementById('authScreen').style.display='none';
         document.getElementById('pendingScreen').classList.add('active');
         return;
     }
+    user.rank=effectiveRank(user);
     pendingUser=user;
     document.getElementById('authScreen').style.display='none';
     document.getElementById('psUser').textContent='Welcome back, '+user.username+'!';
@@ -2440,7 +2443,13 @@ function doLogout(){
 }
 
 function isAdmin(){
-    return ['Admin','Owner'].includes(currentUser?.rank);
+    return ['Admin','Owner'].includes(effectiveRank(currentUser));
+}
+
+function effectiveRank(user){
+    if(!user)return 'Member';
+    if(user.role_expires_at && new Date(user.role_expires_at).getTime() <= Date.now())return 'Member';
+    return user.rank||'Member';
 }
 
 function checkAdminButtonVisibility(){
@@ -3398,9 +3407,11 @@ async function loadAdminData(){
             const item=document.createElement('div');item.className='admin-user-item';
             const safeName=(u.username||'').replace(/'/g,"\\'");
             const storedQuota=localStorage.getItem(`scool_storage_quota_${u.username}`);
-            const quotaValue=storedQuota?parseInt(storedQuota,10):getDefaultStorageQuota(u.rank);
+            const quotaValue=storedQuota?parseInt(storedQuota,10):getDefaultStorageQuota(effectiveRank(u));
             const quotaLabel=fmtSize(quotaValue);
-            item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(u.rank)}<span style="margin-left:.6rem;font-size:.72rem;color:var(--muted);">Quota: ${quotaLabel}</span></div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><button class="btn-set-rank" onclick="setRank(${u.id})">Set Rank</button><button class="btn-quota" onclick="setQuota(${u.id},'${safeName}')">Set Quota</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
+            const expiry=u.role_expires_at?new Date(u.role_expires_at).toISOString().slice(0,10):'';
+            const expiryLabel=expiry?`expires ${expiry}`:'never expires';
+            item.innerHTML=`<div class="admin-user-info"><span class="admin-user-name">${u.username}</span>${rankBadge(effectiveRank(u))}<span style="margin-left:.6rem;font-size:.72rem;color:var(--muted);">${expiryLabel} · Quota: ${quotaLabel}</span></div><div class="admin-user-actions"><select class="rank-select" id="rk_${u.id}"><option ${u.rank==='Member'?'selected':''}>Member</option><option ${u.rank==='Regular'?'selected':''}>Regular</option><option ${u.rank==='VIP'?'selected':''}>VIP</option><option ${u.rank==='Admin'?'selected':''}>Admin</option><option ${u.rank==='Owner'?'selected':''}>Owner</option></select><input class="role-expiry" id="rx_${u.id}" type="date" value="${expiry}" title="Leave empty for no expiry"><button class="btn-set-rank" onclick="setRank(${u.id})">Save Role</button><button class="btn-quota" onclick="setQuota(${u.id},'${safeName}')">Set Quota</button><button class="btn-reject" onclick="rejectUser(${u.id},this)">✕ REMOVE</button></div>`;
             al.appendChild(item);
         });
     }
@@ -3441,7 +3452,14 @@ async function loadAdminData(){
 }
 async function approveUser(id,btn){btn.textContent='…';await sb.from('users').update({verified:true}).eq('id',id);showToast('User approved! ✓');loadAdminData();}
 async function rejectUser(id,btn){if(!confirm('Remove this user?'))return;btn.textContent='…';await sb.from('users').delete().eq('id',id);showToast('Removed!');loadAdminData();}
-async function setRank(id){const rank=document.getElementById('rk_'+id).value;await sb.from('users').update({rank}).eq('id',id);showToast('Rank set to '+rank+'!');loadAdminData();}
+async function setRank(id){
+    const rank=document.getElementById('rk_'+id).value;
+    const expiry=document.getElementById('rx_'+id).value;
+    const role_expires_at=expiry?new Date(`${expiry}T23:59:59`).toISOString():null;
+    const{error}=await sb.from('users').update({rank,role_expires_at}).eq('id',id);
+    if(error){showToast('Role update failed: '+error.message);return;}
+    showToast(`${rank} role saved${expiry?' until '+expiry:' with no expiry'}!`);loadAdminData();
+}
 async function setQuota(id,username){
     const answer=prompt('Enter storage quota for '+username+' in GB (example: 5):');
     if(!answer)return;
@@ -3501,7 +3519,7 @@ const MOD_PASSWORD='Digre';
 function isModerator(){
     if(!currentUser)return false;
     const ranks=['Moderator','Admin','Owner'];
-    return ranks.includes(currentUser.rank);
+    return ranks.includes(effectiveRank(currentUser));
 }
 
 function openModeratorCheck(){
@@ -3767,12 +3785,15 @@ function checkModeratorButtonVisibility(){
 // ══ INIT ══
 const saved=sessionStorage.getItem('scool_session');
 if(saved){
-    currentUser=JSON.parse(saved);
-    loadUserProfile();
-    document.getElementById('authScreen').style.display='none';
-    document.getElementById('pinScreen').classList.remove('active');
-    document.getElementById('pendingScreen').classList.remove('active');
-    initSite();
+    try{
+        currentUser=JSON.parse(saved);
+        currentUser.rank=effectiveRank(currentUser);
+        loadUserProfile();
+        document.getElementById('authScreen').style.display='none';
+        document.getElementById('pinScreen').classList.remove('active');
+        document.getElementById('pendingScreen').classList.remove('active');
+        initSite();
+    }catch(e){sessionStorage.removeItem('scool_session');}
 }
 </script>
 <script>
